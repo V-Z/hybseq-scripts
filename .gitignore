@@ -1,0 +1,10 @@
+# Ignore backup files anywhere
+**~
+**.backup
+**.bak
+
+# Ignore all installed R packages
+rpackages/*
+# But include README
+!rpackages/README.md
+
