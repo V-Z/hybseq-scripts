@@ -45,8 +45,7 @@ echo
 for ALN in $(find . -maxdepth 1 -name "*.FNA" -o -name "*.fasta" | sort); do
 	ALNB="$(basename "$ALN")"
 	echo "Processing $ALNB"
-	export ALNF="$ALNB" || exit 1
-	qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=6gb:scratch_local=1gb -q ibot -m abe -N HybSeq.alignment."${ALNB%.*}" -V ~/hybseq/bin/hybseq_4_alignment_2_qsub.sh || exit 1
+	qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=6gb:scratch_local=1gb -q ibot -m abe -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="$WORKDIR",DATADIR="$DATADIR",ALNF="$ALNB" ~/hybseq/bin/hybseq_4_alignment_2_qsub.sh || exit 1
 	echo
 	done
 

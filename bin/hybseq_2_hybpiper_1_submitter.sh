@@ -14,30 +14,30 @@
 # Setting initial variables
 
 # Set data directories
-export HYBPIPDIR="/auto/pruhonice1-ibot/home/$LOGNAME/bin/HybPiper" # HybPiper installation path
-export WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq" # Data and scripts for hybseq
+HYBPIPDIR="/auto/pruhonice1-ibot/home/$LOGNAME/bin/HybPiper" # HybPiper installation path
+WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq" # Data and scripts for hybseq
 
 # Data to process
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/2_dedup"
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/2_dedup"
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/1_data/2_dedup"
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/1_data/2_dedup"
-export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/2_dedup"
-# export DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/2_dedup"
-# export DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/2_dedup"
-# export DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/2_dedup"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/2_dedup"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/2_dedup"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/1_data/2_dedup"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/1_data/2_dedup"
+DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/2_dedup"
+# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/2_dedup"
+# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/2_dedup"
+# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/2_dedup"
 
 # List of samples to process
 SAMPLES='samples_list.txt' # samples_list.txt is created by hybseq_1_prep.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
 
 # Reference bait FASTA files - relative path within $WORKDIR
-# export BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
-# export BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
-export BAITFILE='ref/oxalis/input_seq_without_cpdna_1086_loci_renamed_concat.fasta' # Reference for Oxalis
-# export BAITFILE='ref/oxalis/red_soa_probes_gen_comp_concat.fasta' # Reduced reference for Oxalis
+# BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
+# BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
+BAITFILE='ref/oxalis/input_seq_without_cpdna_1086_loci_renamed_concat.fasta' # Reference for Oxalis
+# BAITFILE='ref/oxalis/red_soa_probes_gen_comp_concat.fasta' # Reduced reference for Oxalis
 
 # Number of CPU threads to use in parallel operations
-export NCPU='8'
+NCPU='8'
 
 # Submitting individual tasks
 
@@ -51,8 +51,7 @@ echo "Processing all samples at $(date)..."
 echo
 while read -r SAMPLE; do
 	echo "Processing $SAMPLE"
-	export HYBS="$SAMPLE" || exit 1
-	qsub -l walltime=12:0:0 -l select=1:ncpus="$NCPU":mem=8gb:scratch_local=10gb -q ibot -m abe -N HybPiper."$SAMPLE" -V ~/hybseq/bin/hybseq_2_hybpiper_2_qsub.sh || exit 1
+	qsub -l walltime=48:0:0 -l select=1:ncpus="$NCPU":mem=8gb:scratch_local=10gb -q ibot -m abe -N HybPiper."$SAMPLE" -v HYBPIPDIR="$HYBPIPDIR",WORKDIR="$WORKDIR",DATADIR="$DATADIR",BAITFILE="$BAITFILE",NCPU="$NCPU",SAMPLE="$SAMPLE" ~/hybseq/bin/hybseq_2_hybpiper_2_qsub.sh || exit 1
 	echo
 	done < "$SAMPLES"
 

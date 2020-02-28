@@ -11,15 +11,15 @@
 # Setting initial variables
 
 # Set data directories
-export WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq"
+WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq"
 
 # Data to process
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/3_aligned/"
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/3_aligned"
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/3_aligned"
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/3_aligned"
-export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/3_aligned"
-# export DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/3_aligned/"
+DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/3_aligned"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/3_aligned"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/3_aligned"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/3_aligned"
+# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned"
 
 # Submitting individual tasks
 
@@ -39,8 +39,7 @@ echo
 for ALN in $(find . -name "*.aln.fasta" | sed 's/^\.\///' | sort); do
 	ALNB="$(basename "$ALN")"
 	echo "Processing $ALNB"
-	export ALNF="$ALN" || exit 1
-	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -m abe -N HybSeq.genetree."${ALNB%.*}" -V ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1
+	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -m abe -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="$WORKDIR",DATADIR="$DATADIR",ALNF="$ALN" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1
 	echo
 	done
 

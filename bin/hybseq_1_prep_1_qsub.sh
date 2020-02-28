@@ -54,8 +54,8 @@ echo
 
 # Running the task
 echo "Preprocessing the FASTQ files..."
-./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o trimmed -d dedup -q qual_rep -a adaptors.fa -m 4 -t "$TRIMMOMATIC_BIN" | tee hybseq_prepare.log
-# ./hybseq_1_prep_2_run.sh -f 0_data -c 8 -o trimmed -d dedup -q qual_rep -a adaptors.fa -m 32 -t "$TRIMMOMATIC_BIN" | tee wgs_prepare.log
+./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o trimmed -d dedup -q qual_rep -a adaptors.fa -m 4 -t "$TRIMMOMATIC_BIN" | tee hybseq_prepare.log # HybSeq
+# ./hybseq_1_prep_2_run.sh -f 0_data -c 8 -o trimmed -d dedup -q qual_rep -a adaptors.fa -m 32 -t "$TRIMMOMATIC_BIN" | tee wgs_prepare.log # WGS
 echo
 
 # Remove unneeded file

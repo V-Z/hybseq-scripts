@@ -15,7 +15,7 @@ trap 'clean_scratch' TERM EXIT
 trap 'cp -ar $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
 
 # Checking if all required variables are provided
-if [ -z "$HYBS" ]; then
+if [ -z "$SAMPLE" ]; then
 	echo "Error! Sample name not provided!"
 	exit 1
 	fi
@@ -62,19 +62,19 @@ echo "HybPiper - $HYBPIPDIR"
 cp -a "$HYBPIPDIR" "$SCRATCHDIR"/ || exit 1
 echo "HybSeq data - $WORKDIR"
 cp -a "$WORKDIR"/{bin/hybseq_2_hybpiper_3_run.sh,ref} "$SCRATCHDIR"/ || exit 1
-echo "Data to process - $DATADIR/$HYBS"
-cp "$DATADIR"/"$HYBS".* "$SCRATCHDIR"/ || exit 1
+echo "Data to process - $DATADIR/$SAMPLE"
+cp "$DATADIR"/"$SAMPLE".* "$SCRATCHDIR"/ || exit 1
 echo
 
 # Runing the task (HibPiper)
 echo "Running HybPiper..."
-./hybseq_2_hybpiper_3_run.sh "$HYBS" "$HYBPIPDIR" "$BAITFILE" "$NCPU" | tee hybseq_hybpiper."$HYBS".log
+./hybseq_2_hybpiper_3_run.sh "$SAMPLE" "$HYBPIPDIR" "$BAITFILE" "$NCPU" | tee hybseq_hybpiper."$SAMPLE".log
 echo
 
 # Copy results back to storage
 echo "Copying results back to $DATADIR"
-cp -a "$SCRATCHDIR"/"$HYBS" "$DATADIR"/ || export CLEAN_SCRATCH='false'
-cp "$SCRATCHDIR"/hybseq_hybpiper."$HYBS".log "$DATADIR"/"$HYBS"/ || export CLEAN_SCRATCH='false'
+cp -a "$SCRATCHDIR"/"$SAMPLE" "$DATADIR"/ || export CLEAN_SCRATCH='false'
+cp "$SCRATCHDIR"/hybseq_hybpiper."$SAMPLE".log "$DATADIR"/"$SAMPLE"/ || export CLEAN_SCRATCH='false'
 echo
 
 # After everything is done, it's possible to move report files into their directories by 'while read L; do mv HybPiper."$L".[eo]* "$L"/; done < samples_list.txt' in DATADIR
