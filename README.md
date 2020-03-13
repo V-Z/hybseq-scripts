@@ -51,6 +51,7 @@ For usage of presented scripts, data are recommended to be stored in following s
 * GNU Parallel <https://www.gnu.org/software/parallel/>
 * HybPiper <https://github.com/mossmatters/HybPiper/wiki>
 * Python <https://www.python.org/>
+* R <https://www.r-project.org/>
 * Samtools <http://www.htslib.org/>
 * SPAdes <https://github.com/ablab/spades>
 * Trimmomatic <http://www.usadellab.org/cms/?page=trimmomatic>
@@ -65,7 +66,9 @@ Scripts `hybseq_2_hybpiper_1_submitter.sh`, `hybseq_4_alignment_1_submitter.sh` 
 
 Used scripts: `hybseq_1_prep_1_qsub.sh` and `hybseq_1_prep_2_run.sh`.
 
-Script `hybseq_1_prep_1_qsub.sh` contains settings for submission of the task on cluster using `PBS Pro` and runs `hybseq_1_prep_2_run.sh` to trimm, deduplicate and quality check all FASTQ files in a given directory. It requires [BBMap](https://sourceforge.net/projects/bbmap/), [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [GNU Parallel](https://www.gnu.org/software/parallel/) and [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic).
+Script `hybseq_1_prep_1_qsub.sh` contains settings for submission of the task on cluster using `PBS Pro` and runs `hybseq_1_prep_2_run.sh` to trimm, deduplicate and quality check all FASTQ files in a given directory.
+
+It requires [BBMap](https://sourceforge.net/projects/bbmap/), [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [GNU Parallel](https://www.gnu.org/software/parallel/) and [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic).
 
 Edit in `hybseq_1_prep_1_qsub.sh` variables to point correct locations:
 
@@ -91,7 +94,7 @@ Used scripts: `hybseq_2_hybpiper_1_submitter.sh`, `hybseq_2_hybpiper_2_qsub.sh` 
 
 Used scripts: `hybseq_2_hybpiper_1_submitter.sh`, `hybseq_2_hybpiper_2_qsub.sh` and `hybseq_2_hybpiper_3_run.sh`.
 
-Each sample (i.e. pair of files `sampleXY.dedup.R1.fq.bz2` and `sampleXY.dedup.R2.fq.bz2` produced by `hybseq_1_prep_2_run.sh`) is processed as separate job. File `samples_list.txt` created by `hybseq_1_prep_2_run.sh` is used by `hybseq_2_hybpiper_1_submitter.sh` to drive the submission.
+Each sample (i.e. pair of files `sampleXY.dedup.R1.fq.bz2` and `sampleXY.dedup.R2.fq.bz2` produced by `hybseq_1_prep_2_run.sh`) is processed as separate job. File `samples_list.txt` created by `hybseq_1_prep_2_run.sh` is used by `hybseq_2_hybpiper_1_submitter.sh` to drive the job submission.
 
 Script `hybseq_2_hybpiper_1_submitter.sh` contains settings (paths etc.) needed for submission of the task on cluster using `PBS Pro`. It is using `qsub` to submit `hybseq_2_hybpiper_2_qsub.sh` to process all deduplicated FASTQ files (in directory like `1_data/lib_01/2_dedup`) with [HybPiper](https://github.com/mossmatters/HybPiper/wiki). For every sample listed in `samples_list.txt` (created by `hybseq_1_prep_2_run.sh`) script `hybseq_2_hybpiper_1_submitter.sh` submits individual job with `hybseq_2_hybpiper_2_qsub.sh`. Finally, `hybseq_2_hybpiper_3_run.sh` is using [HybPiper](https://github.com/mossmatters/HybPiper/wiki) to process the sample. This script can be edited to use different HybPiper settings.
 
@@ -114,7 +117,7 @@ When done with edits, simply run the `hybseq_2_hybpiper_1_submitter.sh` script -
 ./hybseq_2_hybpiper_1_submitter.sh
 ```
 
-Result for each library will be in `DATADIR`, e.g. `XXX/1_data/lib_01/2_dedup`. It's possible to move report files into their directories by something like:
+Result for each library will be copied back into `DATADIR`, e.g. `XXX/1_data/lib_01/2_dedup`. It's possible to move report files into their directories by something like:
 
 ```shell
 while read L; do mv HybPiper."$L".[eo]* "$L"/; done < samples_list.txt
@@ -125,4 +128,36 @@ All outputs can be moved from `XXX/1_data/lib_01/2_dedup` to `XXX/2_seqs` by run
 ```shell
 mv *.dedup ../../../2_seqs/
 ```
+
+Finally, all processed samples (directories created by HybPiper) should be in directory `2_seqs`.
+
+### 2.2. Retrieving sequences and obtain statistics with HybPiper
+
+Used scripts: `hybseq_3_hybpiper_postprocess_1_qsub.sh` and `hybseq_3_hybpiper_postprocess_2_run.sh`.
+
+All processed samples (directories created by HybPiper) should be in directory `2_seqs`. If merging multiple libraries, either merge the `samples_list.txt` from each library, or run in `2_seqs` directory something like:
+
+```shell
+find . -maxdepth 1 -type d | sed 's/^\.\///' | sort | tail -n+2 > samples_list.txt
+```
+
+to create new `samples_list.txt` listing all samples.
+
+Script `hybseq_3_hybpiper_postprocess_1_qsub.sh` contains settings for submission of the task on cluster using `PBS Pro` and runs `hybseq_3_hybpiper_postprocess_2_run.sh` to retrieve sequences from HybPiper outputs and to obtain retrieval statistics.
+
+It requires [Biopython](https://biopython.org/), [HybPiper](https://github.com/mossmatters/HybPiper/wiki), [Python](https://www.python.org/), [R](https://www.r-project.org/) and [Samtools](http://www.htslib.org/).
+
+Edit variables in `hybseq_3_hybpiper_postprocess_1_qsub.sh`:
+
+* `HYBPIPDIR` --- Point to directory containing [HybPiper](https://github.com/mossmatters/HybPiper/wiki).
+* `WORKDIR` --- Point to `hybseq` directory containing this script set.
+* `BAITFILE` --- Reference bait FASTA file (see <https://github.com/mossmatters/HybPiper/wiki#target-file> for details) --- must be relative path within `WORKDIR`
+* `DATADIR` --- Point to directory containing all outputs of HybPiper from previous step and `samples_list.txt`, e.g..`XXX/2_seqs`.
+* `SAMPLES` --- File name of list of samples according to [HybPiper requirements](https://github.com/mossmatters/HybPiper/wiki#running-the-pipeline) to be processed.
+
+See `README.md` in the `rpackages` directory for information regarding installation of `R` packages needed by `hybseq_3_hybpiper_postprocess_2_run.sh`.
+
+Results will be copied back into `DATADIR`, e.g. `XXX/2_dedup`. After adding new sequenced library, this step and all following steps must be re-runned.
+
+## 3. Alignments of all contigs
 
