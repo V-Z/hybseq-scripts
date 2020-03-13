@@ -106,7 +106,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 				echo
 				else
 					echo "Output directory for trimmed sequences $TRIMDIR doesn't exist - creating."
-					mkdir "$TRIMDIR" || { echo "Error! Can't create $TRIMDIR!"; echo; exit 1 }
+					mkdir "$TRIMDIR" || { echo "Error! Can't create $TRIMDIR!"; echo; exit 1; }
 					echo
 					fi
 			;;
@@ -117,7 +117,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 				echo
 				else
 					echo "Output directory for deduplicated sequences $DEDUPDIR doesn't exist - creating."
-					mkdir "$DEDUPDIR" || { echo "Error! Can't create $DEDUPDIR!"; echo; exit 1 }
+					mkdir "$DEDUPDIR" || { echo "Error! Can't create $DEDUPDIR!"; echo; exit 1; }
 					echo
 					fi
 			;;
@@ -128,7 +128,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 				echo
 				else
 					echo "Output directory for quality reports $QUALDIR doesn't exist - creating."
-					mkdir "$QUALDIR" || { echo "Error! Can't create $QUALDIR!"; echo; exit 1 }
+					mkdir "$QUALDIR" || { echo "Error! Can't create $QUALDIR!"; echo; exit 1; }
 					echo
 					fi
 			;;

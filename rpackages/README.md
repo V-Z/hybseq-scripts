@@ -4,8 +4,10 @@ Required [R](https://www.r-project.org/) packages are `ape`, `ggplot2`, `gplots`
 
 Within `R` command line started in `hybseq` directory use e.g. command
 
-	install.packages(pkgs=c("ape", "ggplot", "gplots", "heatmap.plus", "ips", "reshape"),
-	lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports")
+```R
+install.packages(pkgs=c("ape", "ggplot", "gplots", "heatmap.plus", "ips", "reshape"),
+lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports")
+```
 
 to install needed packages.
 

@@ -50,11 +50,13 @@ For usage of presented scripts, data are recommended to be stored in following s
 
 # Description and usage of the scripts
 
-Scripts `hybseq_1_prep_1_qsub.sh`, `hybseq_2_hybpiper_1_submitter.sh`, `hybseq_2_hybpiper_2_qsub.sh`, `hybseq_3_hybpiper_postprocess_1_qsub.sh`, `hybseq_4_alignment_1_submitter.sh`, `hybseq_4_alignment_2_qsub.sh`, `hybseq_5_gene_trees_1_submitter.sh`, `hybseq_5_gene_trees_2_qsub.sh` and `hybseq_6_sp_tree_1_qsub.sh` contain settings for submission of each step (see further) on clusters using `PBS Pro`. **These scripts require edits.** At least paths must be changed there. According to cluster settings, commands `module add` and `qsub` will have to be edited.
+Scripts `hybseq_1_prep_1_qsub.sh`, `hybseq_2_hybpiper_1_submitter.sh`, `hybseq_2_hybpiper_2_qsub.sh`, `hybseq_3_hybpiper_postprocess_1_qsub.sh`, `hybseq_4_alignment_1_submitter.sh`, `hybseq_4_alignment_2_qsub.sh`, `hybseq_5_gene_trees_1_submitter.sh`, `hybseq_5_gene_trees_2_qsub.sh` and `hybseq_6_sp_tree_1_qsub.sh` (scripts named `hybseq_*_qsub.sh` and `hybseq_*_submitter.sh`) contain settings for submission of each step (see further) on clusters using `PBS Pro`. **These scripts require edits.** At least paths must be changed there. According to cluster settings, commands `module add` and `qsub` (and probably some other things) will have to be edited. So they are rather inspiration for users of another clusters than [MetaCentrum](https://www.metacentrum.cz/en/).
 
 Scripts `hybseq_2_hybpiper_1_submitter.sh`, `hybseq_4_alignment_1_submitter.sh` and `hybseq_5_gene_trees_1_submitter.sh` process in given directory all files (HybPiper, alignments and reconstruction of gene trees, respectively) and prepare individual task (job) for each file to be submitted by `hybseq_2_hybpiper_2_qsub.sh`, `hybseq_4_alignment_2_qsub.sh` and `hybseq_5_gene_trees_2_qsub.sh`, respectively.
 
 ## 1. Pre-processing data --- trimming, deduplication, quality checks and statistics
+
+Used scripts: `hybseq_1_prep_1_qsub.sh` and `hybseq_1_prep_2_run.sh`.
 
 Script `hybseq_1_prep_1_qsub.sh` contains settings for submission of the task on cluster using `PBS Pro` and runs `hybseq_1_prep_2_run.sh` to trimm, deduplicate and quality check all FASTQ files in a given directory. It requires [BBMap](https://sourceforge.net/projects/bbmap/), [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [GNU Parallel](https://www.gnu.org/software/parallel/) and [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic).
 
@@ -65,8 +67,14 @@ Edit in `hybseq_1_prep_1_qsub.sh` variables to point correct locations:
 
 and submit the job by something like:
 
-	qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=16gb:scratch_local=100gb -q ibot -m ab
-	~/hybseq/bin/hybseq_run_1_prep.sh
+```shell
+qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=16gb:scratch_local=100gb -q ibot -m abe \
+~/hybseq/bin/hybseq_1_prep_1_qsub.sh
+```
 
-Results will be copyied back to `DATADIR`.
+Results will be copied back to `DATADIR`.
+
+## 2. Running HybPiper
+
+Used scripts: `hybseq_2_hybpiper_1_submitter.sh`, `hybseq_2_hybpiper_2_qsub.sh` and `hybseq_2_hybpiper_3_run.sh` to run [HybPiper](https://github.com/mossmatters/HybPiper/wiki) for each input sample, and `hybseq_3_hybpiper_postprocess_1_qsub.sh` and `hybseq_3_hybpiper_postprocess_2_run.sh` to retrieve contig sequences and obtain statistics.
 
