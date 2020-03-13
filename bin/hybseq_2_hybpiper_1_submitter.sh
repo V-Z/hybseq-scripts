@@ -28,7 +28,7 @@ DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/2_dedup"
 # DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/2_dedup"
 
 # List of samples to process
-SAMPLES='samples_list.txt' # samples_list.txt is created by hybseq_1_prep.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
+SAMPLES='samples_list.txt' # samples_list.txt is created by hybseq_1_prep_2_run.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
 
 # Reference bait FASTA files - relative path within $WORKDIR
 # BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
