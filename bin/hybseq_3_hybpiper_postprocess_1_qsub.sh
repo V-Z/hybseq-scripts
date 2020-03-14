@@ -36,7 +36,8 @@ DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
 # DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs"
 
 # samples_list.txt is created by hybseq_1_prep.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
-# If merging multiple libraries, either merge the samples_list.txt from each library, or run something like 'find . -maxdepth 1 -type d | sed 's/^\.\///' | sort | tail -n+2 > samples_list.txt'
+# If merging multiple libraries, either merge the samples_list.txt from each library, or run something like:
+# find . -maxdepth 1 -type d | sed 's/^\.\///' | sort | tail -n+2 > samples_list.txt
 export SAMPLES='samples_list.txt'
 
 # Required modules

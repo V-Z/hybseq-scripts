@@ -12,15 +12,15 @@
 
 # Set data directories
 # HybSeq scripts and data
-export WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq"
+WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq"
 
 # Data to process
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/2_seqs"
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/2_seqs"
-# export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/2_seqs"
-export DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
-# export DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/2_seqs"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/2_seqs"
+# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/2_seqs"
+DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
+# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs"
 
 # Submitting individual tasks
 

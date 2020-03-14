@@ -29,6 +29,7 @@ DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/0_data"
 # DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/0_data"
 # DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/0_data"
 # DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/0_data"
+# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups/0_data"
 # DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/wgs/0_data"
 
 # Required modules
