@@ -68,7 +68,7 @@ echo
 
 # Runing the task (HibPiper)
 echo "Running HybPiper..."
-./hybseq_2_hybpiper_3_run.sh "${SAMPLE}" "${HYBPIPDIR}" "${BAITFILE}" "${NCPU}" | tee hybseq_hybpiper."${SAMPLE}".log
+./hybseq_2_hybpiper_3_run.sh -s "${SAMPLE}" -p "${HYBPIPDIR}" -b "${BAITFILE}" -c "${NCPU}" | tee hybseq_hybpiper."${SAMPLE}".log
 echo
 
 # Copy results back to storage
