@@ -12,7 +12,7 @@
 
 # Parse initial arguments
 while getopts "hvp:b:s:" INITARGS; do
-	case "$INITARGS" in
+	case "${INITARGS}" in
 		h) # Help and exit
 			echo "Usage options:"
 			echo -e "\t-h\tPrint this help and exit."
@@ -31,34 +31,34 @@ while getopts "hvp:b:s:" INITARGS; do
 			exit
 			;;
 		p) # Directory with HybPiper
-			if [ -d "$OPTARG" ]; then
-			HYBPIPER="$(realpath "$OPTARG")"
-			echo "Path to HybPiper directory: $HYBPIPER"
+			if [ -d "${OPTARG}" ]; then
+			HYBPIPER="$(realpath "${OPTARG}")"
+			echo "Path to HybPiper directory: ${HYBPIPER}"
 			echo
 			else
-				echo "Error! You did not provide path to HybPiper directory (-p) \"$OPTARG\"!"
+				echo "Error! You did not provide path to HybPiper directory (-p) \"${OPTARG}\"!"
 				echo
 				exit 1
 				fi
 			;;
 		b) # Reference bait FASTA file
-			if [ -r "$OPTARG" ]; then
-				BAITFILE="$(realpath "$OPTARG")"
-				echo "Reference bait FASTA file: $BAITFILE"
+			if [ -r "${OPTARG}" ]; then
+				BAITFILE="$(realpath "${OPTARG}")"
+				echo "Reference bait FASTA file: ${BAITFILE}"
 				echo
 				else
-					echo "Error! You did not provide path to reference bait FASTA file (-b) \"$OPTARG\"!"
+					echo "Error! You did not provide path to reference bait FASTA file (-b) \"${OPTARG}\"!"
 					echo
 					exit 1
 					fi
 			;;
 		s) # List of samples to process
-			if [ -r "$OPTARG" ]; then
-			SAMPLES="$OPTARG"
-			echo "List of samples to process: $SAMPLES"
+			if [ -r "${OPTARG}" ]; then
+			SAMPLES="${OPTARG}"
+			echo "List of samples to process: ${SAMPLES}"
 			echo
 			else
-				echo "Error! You did not provide list of samples to process (-s) \"$OPTARG\"!"
+				echo "Error! You did not provide list of samples to process (-s) \"${OPTARG}\"!"
 				echo
 				exit 1
 				fi
@@ -97,30 +97,30 @@ toolcheck R
 toolcheck samtools
 
 # Checking if all required variables are provided
-if [ -z "$HYBPIPER" ]; then
+if [ -z "${HYBPIPER}" ]; then
 	echo "Error! Directory with HybPiper not provided!"
 	operationfailed
 	fi
-if [ -z "$BAITFILE" ]; then
+if [ -z "${BAITFILE}" ]; then
 	echo "Error! Reference bait FASTA file not provided!"
 	operationfailed
 	fi
-if [ -z "$SAMPLES" ]; then
+if [ -z "${SAMPLES}" ]; then
 	echo "Error! List of samples to process not provided!"
 	operationfailed
 	fi
 
 # Post-processing, summary, statistics
 echo "Summary"
-python2 "$HYBPIPER"/get_seq_lengths.py "$BAITFILE" "$SAMPLES" dna > seq_lengths.txt || operationfailed
+python2 "${HYBPIPER}"/get_seq_lengths.py "${BAITFILE}" "${SAMPLES}" dna > seq_lengths.txt || operationfailed
 echo
 echo "Statistics"
-python2 "$HYBPIPER"/hybpiper_stats.py seq_lengths.txt "$SAMPLES" > stats.txt || operationfailed
+python2 "${HYBPIPER}"/hybpiper_stats.py seq_lengths.txt "${SAMPLES}" > stats.txt || operationfailed
 echo
 
 # Plotting gene recovery heatmaps
 echo "Plotting gene recovery heatmaps"
-cp "$HYBPIPER"/*.R . || operationfailed
+cp "${HYBPIPER}"/*.R . || operationfailed
 R CMD BATCH --no-save --no-restore gene_recovery_heatmap.R gene_recovery_heatmap_gplot.rlog || operationfailed
 R CMD BATCH --no-save --no-restore gene_recovery_heatmap_ggplot.R gene_recovery_heatmap_ggplot2.rlog || operationfailed
 echo
@@ -130,15 +130,15 @@ echo "Retrieving sequences"
 echo
 echo "Exons"
 echo
-python2 "$HYBPIPER"/retrieve_sequences.py "$BAITFILE" . dna || operationfailed
+python2 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . dna || operationfailed
 echo
 echo "Introns"
 echo
-python2 "$HYBPIPER"/retrieve_sequences.py "$BAITFILE" . intron || operationfailed
+python2 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . intron || operationfailed
 echo
 echo "Supercontigs"
 echo
-python2 "$HYBPIPER"/retrieve_sequences.py "$BAITFILE" . supercontig || operationfailed
+python2 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . supercontig || operationfailed
 echo
 
 # Removing ".dedup*" from accession names
@@ -148,7 +148,7 @@ echo
 
 # Removing input data
 echo "Removing input directories and unneeded files"
-while read -r SAMPLE; do rm -rf "$SAMPLE"*; done < "$SAMPLES"
+while read -r SAMPLE; do rm -rf "${SAMPLE}"*; done < "${SAMPLES}"
 rm -rf HybPiper HybPiper.* hybseq_hybpiper.*.dedup.log hybseq_3_hybpiper_postprocess_2_run.sh ref rpackages Rplots.pdf ./*.R samples_list.txt
 
 exit

@@ -40,16 +40,16 @@ echo "List of exons"
 find . -name "*.treefile" | sort | grep -v "introns\|supercontig" > trees_ml_list_exons.txt || operationfailed
 echo "Extracting trees"
 echo "Extracting introns"
-while read T; do
-	cat "$T" >> trees_ml_introns.treefile.tmp || operationfailed
+while read -r T; do
+	cat "${T}" >> trees_ml_introns.treefile.tmp || operationfailed
 	done < trees_ml_list_introns.txt
 echo "Extracting supercontigs"
-while read T; do
-	cat "$T" >> trees_ml_supercontigs.treefile.tmp || operationfailed
+while read -r T; do
+	cat "${T}" >> trees_ml_supercontigs.treefile.tmp || operationfailed
 	done < trees_ml_list_supercontig.txt
 echo "Extracting exons"
-while read T; do
-	cat "$T" >> trees_ml_exons.treefile.tmp || operationfailed
+while read -r T; do
+	cat "${T}" >> trees_ml_exons.treefile.tmp || operationfailed
 	done < trees_ml_list_exons.txt
 echo "Cleaning tree names"
 sed -i 's/^\.\///;s/\.aln\.fasta//' trees_ml_*.txt || operationfailed
@@ -72,16 +72,16 @@ echo "List of exons"
 find . -name "*.contree" | sort | grep -v "introns\|supercontig" > trees_cons_list_exons.txt || operationfailed
 echo "Extracting trees"
 echo "Extracting introns"
-while read T; do
-	cat "$T" >> trees_cons_introns.contree.tmp || operationfailed
+while read -r T; do
+	cat "${T}" >> trees_cons_introns.contree.tmp || operationfailed
 	done < trees_cons_list_introns.txt
 echo "Extracting supercontigs"
-while read T; do
-	cat "$T" >> trees_cons_supercontigs.contree.tmp || operationfailed
+while read -r T; do
+	cat "${T}" >> trees_cons_supercontigs.contree.tmp || operationfailed
 	done < trees_cons_list_supercontig.txt
 echo "Extracting exons"
-while read T; do
-	cat "$T" >> trees_cons_exons.contree.tmp || operationfailed
+while read -r T; do
+	cat "${T}" >> trees_cons_exons.contree.tmp || operationfailed
 	done < trees_cons_list_exons.txt
 echo "Cleaning tree names"
 sed -i 's/^\.\///;s/\.aln\.fasta//' trees_cons_*.txt || operationfailed

@@ -11,7 +11,7 @@
 # Setting initial variables
 
 # Set data directories
-WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq"
+WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
 # DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/3_aligned/"
@@ -24,8 +24,8 @@ DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_r
 # Submitting individual tasks
 
 # Go to working directory
-echo "Switching to $DATADIR"
-cd "$DATADIR"/ || exit 1
+echo "Switching to ${DATADIR}"
+cd "${DATADIR}"/ || exit 1
 echo
 
 # Make output directory
@@ -37,9 +37,9 @@ echo
 echo "Processing all samples at $(date)..."
 echo
 for ALN in $(find . -name "*.aln.fasta" | sed 's/^\.\///' | sort); do
-	ALNB="$(basename "$ALN")"
-	echo "Processing $ALNB"
-	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -m abe -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="$WORKDIR",DATADIR="$DATADIR",ALNF="$ALN" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1
+	ALNB="$(basename "${ALN}")"
+	echo "Processing ${ALNB}"
+	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -m abe -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1
 	echo
 	done
 

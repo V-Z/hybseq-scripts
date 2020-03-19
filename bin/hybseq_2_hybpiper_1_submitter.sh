@@ -14,8 +14,8 @@
 # Setting initial variables
 
 # Set data directories
-HYBPIPDIR="/auto/pruhonice1-ibot/home/$LOGNAME/bin/HybPiper" # HybPiper installation path
-WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq" # Data and scripts for hybseq
+HYBPIPDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/bin/HybPiper" # HybPiper installation path
+WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq" # Data and scripts for hybseq
 
 # Data to process
 # DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/2_dedup"
@@ -43,18 +43,18 @@ NCPU='8'
 # Submitting individual tasks
 
 # Go to working directory
-echo "Switching to $DATADIR"
-cd "$DATADIR"/ || exit 1
+echo "Switching to ${DATADIR}"
+cd "${DATADIR}"/ || exit 1
 echo
 
 # Processing all samples
 echo "Processing all samples at $(date)..."
 echo
 while read -r SAMPLE; do
-	echo "Processing $SAMPLE"
-	qsub -l walltime=48:0:0 -l select=1:ncpus="$NCPU":mem=8gb:scratch_local=10gb -q ibot -m abe -N HybPiper."$SAMPLE" -v HYBPIPDIR="$HYBPIPDIR",WORKDIR="$WORKDIR",DATADIR="$DATADIR",BAITFILE="$BAITFILE",NCPU="$NCPU",SAMPLE="$SAMPLE" ~/hybseq/bin/hybseq_2_hybpiper_2_qsub.sh || exit 1
+	echo "Processing ${SAMPLE}"
+	qsub -l walltime=48:0:0 -l select=1:ncpus="${NCPU}":mem=8gb:scratch_local=10gb -q ibot -m abe -N HybPiper."${SAMPLE}" -v HYBPIPDIR="${HYBPIPDIR}",WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",BAITFILE="${BAITFILE}",NCPU="${NCPU}",SAMPLE="${SAMPLE}" ~/hybseq/bin/hybseq_2_hybpiper_2_qsub.sh || exit 1
 	echo
-	done < "$SAMPLES"
+	done < "${SAMPLES}"
 
 echo "All jobs submitted..."
 echo

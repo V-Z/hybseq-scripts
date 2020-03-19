@@ -12,7 +12,7 @@
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq"
+WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
 # DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
@@ -25,8 +25,8 @@ DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
 # Submitting individual tasks
 
 # Go to working directory
-echo "Switching to $DATADIR"
-cd "$DATADIR"/ || exit 1
+echo "Switching to ${DATADIR}"
+cd "${DATADIR}"/ || exit 1
 echo
 
 # Removing zero size files
@@ -43,9 +43,9 @@ echo
 echo "Processing all samples at $(date)..."
 echo
 for ALN in $(find . -maxdepth 1 -name "*.FNA" -o -name "*.fasta" | sort); do
-	ALNB="$(basename "$ALN")"
-	echo "Processing $ALNB"
-	qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=6gb:scratch_local=1gb -q ibot -m abe -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="$WORKDIR",DATADIR="$DATADIR",ALNF="$ALNB" ~/hybseq/bin/hybseq_4_alignment_2_qsub.sh || exit 1
+	ALNB="$(basename "${ALN}")"
+	echo "Processing ${ALNB}"
+	qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=6gb:scratch_local=1gb -q ibot -m abe -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALNB}" ~/hybseq/bin/hybseq_4_alignment_2_qsub.sh || exit 1
 	echo
 	done
 

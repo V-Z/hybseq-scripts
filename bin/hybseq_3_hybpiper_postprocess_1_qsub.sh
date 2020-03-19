@@ -17,9 +17,9 @@ trap 'cp -ar $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
 
 # Set data directories
 # HybPiper
-HYBPIPDIR="/auto/pruhonice1-ibot/home/$LOGNAME/bin/HybPiper"
+HYBPIPDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/bin/HybPiper"
 # HybSeq scripts and data
-WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq"
+WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Reference bait FASTA files - relative path within WORKDIR
 # BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
@@ -48,28 +48,28 @@ module add R-3.6.2-gcc || exit 1 # R (ggplot2, gplots, heatmap.plus, reshape2)
 echo
 
 # Change working directory
-echo "Going to working directory $SCRATCHDIR"
-cd "$SCRATCHDIR"/ || exit 1
+echo "Going to working directory ${SCRATCHDIR}"
+cd "${SCRATCHDIR}"/ || exit 1
 echo
 
 # Copy data
 echo "Copying..."
-echo "HybPiper - $HYBPIPDIR"
-cp -a "$HYBPIPDIR" "$SCRATCHDIR"/ || exit 1
-echo "HybSeq data - $WORKDIR"
-cp -a "$WORKDIR"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref,rpackages} "$SCRATCHDIR"/ || exit 1
-echo "Data to process - $DATADIR"
-cp -a "$DATADIR"/* "$SCRATCHDIR"/ || exit 1
+echo "HybPiper - ${HYBPIPDIR}"
+cp -a "${HYBPIPDIR}" "${SCRATCHDIR}"/ || exit 1
+echo "HybSeq data - ${WORKDIR}"
+cp -a "${WORKDIR}"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref,rpackages} "${SCRATCHDIR}"/ || exit 1
+echo "Data to process - ${DATADIR}"
+cp -a "${DATADIR}"/* "${SCRATCHDIR}"/ || exit 1
 echo
 
 # Runing the task (HibPiper postprocessing)
 echo "Running HybPiper postprocessing..."
-./hybseq_3_hybpiper_postprocess_2_run.sh -p "$HYBPIPDIR" -b "$BAITFILE" -s "$SAMPLES" | tee hybseq_hybpiper_postprocess.log
+./hybseq_3_hybpiper_postprocess_2_run.sh -p "${HYBPIPDIR}" -b "${BAITFILE}" -s "${SAMPLES}" | tee hybseq_hybpiper_postprocess.log
 echo
 
 # Copy results back to storage
-echo "Copying results back to $DATADIR"
-cp -a "$SCRATCHDIR" "$DATADIR"/ || export CLEAN_SCRATCH='false'
+echo "Copying results back to ${DATADIR}"
+cp -a "${SCRATCHDIR}" "${DATADIR}"/ || export CLEAN_SCRATCH='false'
 echo
 
 exit

@@ -18,7 +18,7 @@ BAITF="$(realpath "$3")" # Full path to HybSeq reference
 
 # Testing dependencies
 echo "Checking if all required software is available"
-python2 "$HYBPIP"/reads_first.py --check-depend || exit 1
+python2 "${HYBPIP}"/reads_first.py --check-depend || exit 1
 echo
 
 # Check if all required binaries are available
@@ -56,23 +56,23 @@ echo "Processing $1 at $(date)"
 echo
 echo "Main processing"
 echo
-python2 "$HYBPIP"/reads_first.py --bwa -r "$1".R{1,2}.fq -b "$BAITF" --cpu "$4" --prefix "$1" || { export CLEAN_SCRATCH='false'; exit 1; }
+python2 "${HYBPIP}"/reads_first.py --bwa -r "$1".R{1,2}.fq -b "${BAITF}" --cpu "$4" --prefix "$1" || { export CLEAN_SCRATCH='false'; exit 1; }
 echo
 echo "Paralogs"
 echo
-python2 "$HYBPIP"/paralog_investigator.py "$1" || { export CLEAN_SCRATCH='false'; exit 1; }
+python2 "${HYBPIP}"/paralog_investigator.py "$1" || { export CLEAN_SCRATCH='false'; exit 1; }
 echo
 echo "Introns"
 echo
-python2 "$HYBPIP"/intronerate.py --prefix "$1" --addN || { export CLEAN_SCRATCH='false'; exit 1; }
+python2 "${HYBPIP}"/intronerate.py --prefix "$1" --addN || { export CLEAN_SCRATCH='false'; exit 1; }
 echo
 echo "Depth"
 echo
-python2 "$HYBPIP"/depth_calculator.py --targets "$BAITF" -r "$1".R{1,2}.fq --prefix "$1" || { export CLEAN_SCRATCH='false'; exit 1; }
+python2 "${HYBPIP}"/depth_calculator.py --targets "${BAITF}" -r "$1".R{1,2}.fq --prefix "$1" || { export CLEAN_SCRATCH='false'; exit 1; }
 echo
 echo "Cleanup"
 echo
-python2 "$HYBPIP"/cleanup.py "$1" || { export CLEAN_SCRATCH='false'; exit 1; }
+python2 "${HYBPIP}"/cleanup.py "$1" || { export CLEAN_SCRATCH='false'; exit 1; }
 echo
 
 exit

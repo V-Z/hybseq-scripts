@@ -16,16 +16,16 @@
 echo "Reconstructing species trees with ASTRAL"
 echo
 for GT in *.nwk; do
-	echo "Processing gene tree file $GT at $(date)"
+	echo "Processing gene tree file ${GT} at $(date)"
 	echo
 	echo "Removing tree names from gene tree list"
-	sed -i 's/^.\+ //' "$GT"
+	sed -i 's/^.\+ //' "${GT}"
 	echo
 	echo "Running ASTRAL"
-	java -jar ~/bin/Astral/astral.5.7.1.jar -i "$GT" -o sp_"$GT" -t 3 -g -r 10000 2>&1 | tee sp_"${GT%.*}".log
+	java -jar ~/bin/Astral/astral.5.7.1.jar -i "${GT}" -o sp_"${GT}" -t 3 -g -r 10000 2>&1 | tee sp_"${GT%.*}".log
 	echo
 	echo "Removing input file"
-	rm "$GT"
+	rm "${GT}"
 	echo
 	done
 

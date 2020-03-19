@@ -32,13 +32,13 @@ function alignstats {
 	echo
 	for L in *.log; do
 		echo "Processing ${L%.*}"
-		{ printf '%s\t' "$L" # Print sample name
-			grep "Number of sequences:" "$L" | grep -o "[0-9]\+" | xargs printf '%s\t%s'
-			grep "Number of sites:" "$L" | grep -o "[0-9]\+" | xargs printf '%s\t%s'
-			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "$L" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 1 -d ' ' | xargs printf '%s\t%s'
-			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "$L" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 2 -d ' ' | xargs printf '%s\t%s'
-			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "$L" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 3 -d ' ' | xargs printf '%s\t%s'
-			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "$L" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 4 -d ' ' | xargs printf '%s\t%s'
+		{ printf '%s\t' "${L}" # Print sample name
+			grep "Number of sequences:" "${L}" | grep -o "[0-9]\+" | xargs printf '%s\t%s'
+			grep "Number of sites:" "${L}" | grep -o "[0-9]\+" | xargs printf '%s\t%s'
+			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "${L}" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 1 -d ' ' | xargs printf '%s\t%s'
+			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "${L}" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 2 -d ' ' | xargs printf '%s\t%s'
+			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "${L}" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 3 -d ' ' | xargs printf '%s\t%s'
+			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "${L}" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 4 -d ' ' | xargs printf '%s\t%s'
 			printf '\n'
 			} >> "$1" || operationfailed
 		done
@@ -64,16 +64,16 @@ echo "List of exons"
 find . -name "*.nwk" | sort | grep -v "introns\|supercontig" > trees_list_exons.txt || operationfailed
 echo "Extracting trees"
 echo "Extracting introns"
-while read T; do
-	cat "$T" >> trees_introns.nwk.tmp
+while read -r T; do
+	cat "${T}" >> trees_introns.nwk.tmp
 	done < trees_list_introns.txt
 echo "Extracting supercontigs"
-while read T; do
-	cat "$T" >> trees_supercontigs.nwk.tmp
+while read -r T; do
+	cat "${T}" >> trees_supercontigs.nwk.tmp
 	done < trees_list_supercontig.txt
 echo "Extracting exons"
-while read T; do
-	cat "$T" >> trees_exons.nwk.tmp
+while read -r T; do
+	cat "${T}" >> trees_exons.nwk.tmp
 	done < trees_list_exons.txt
 echo "Removing \".nwk\" from tree names"
 sed -i 's/^\.\///;s/\.nwk//' trees_*.txt || operationfailed

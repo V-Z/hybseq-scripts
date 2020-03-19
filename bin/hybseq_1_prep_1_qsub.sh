@@ -18,7 +18,7 @@ trap 'cp -a $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq"
+WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
 # DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/0_data"
@@ -41,22 +41,22 @@ module add parallel-20160622 || exit 1
 echo
 
 # Change working directory
-echo "Going to working directory $SCRATCHDIR"
-cd "$SCRATCHDIR"/ || exit 1
+echo "Going to working directory ${SCRATCHDIR}"
+cd "${SCRATCHDIR}"/ || exit 1
 echo
 
 # Copy data
 echo "Copying..."
-echo "HybSeq data - $WORKDIR"
-cp "$WORKDIR"/{adaptors.fa,bin/hybseq_1_prep_2_run.sh} "$SCRATCHDIR"/ || exit 1
-echo "Data to process - $DATADIR"
-cp -a "$DATADIR" "$SCRATCHDIR"/  || exit 1
+echo "HybSeq data - ${WORKDIR}"
+cp "${WORKDIR}"/{adaptors.fa,bin/hybseq_1_prep_2_run.sh} "${SCRATCHDIR}"/ || exit 1
+echo "Data to process - ${DATADIR}"
+cp -a "${DATADIR}" "${SCRATCHDIR}"/  || exit 1
 echo
 
 # Running the task
 echo "Preprocessing the FASTQ files..."
-./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o trimmed -d dedup -q qual_rep -a adaptors.fa -m 4 -t "$TRIMMOMATIC_BIN" | tee hybseq_prepare.log # HybSeq
-# ./hybseq_1_prep_2_run.sh -f 0_data -c 8 -o trimmed -d dedup -q qual_rep -a adaptors.fa -m 32 -t "$TRIMMOMATIC_BIN" | tee wgs_prepare.log # WGS
+./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 4 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log # HybSeq
+# ./hybseq_1_prep_2_run.sh -f 0_data -c 8 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 32 -t "${TRIMMOMATIC_BIN}" | tee wgs_prepare.log # WGS
 echo
 
 # Remove unneeded file
@@ -65,8 +65,8 @@ rm adaptors.fa hybseq_1_prep_2_run.sh
 echo
 
 # Copy results back to storage
-echo "Copying results back to $DATADIR"
-cp -a "$SCRATCHDIR" "$DATADIR"/ || export CLEAN_SCRATCH='false'
+echo "Copying results back to ${DATADIR}"
+cp -a "${SCRATCHDIR}" "${DATADIR}"/ || export CLEAN_SCRATCH='false'
 echo
 
 exit

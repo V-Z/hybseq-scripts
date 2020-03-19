@@ -16,7 +16,7 @@ trap 'cp -a $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq"
+WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
 # DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/4_gene_trees"
@@ -32,16 +32,16 @@ module add openjdk-10 || exit 1
 echo
 
 # Change working directory
-echo "Going to working directory $SCRATCHDIR"
-cd "$SCRATCHDIR"/ || exit 1
+echo "Going to working directory ${SCRATCHDIR}"
+cd "${SCRATCHDIR}"/ || exit 1
 echo
 
 # Copy data
 echo "Copying..."
-echo "HybSeq data - $WORKDIR"
-cp "$WORKDIR"/bin/hybseq_6_sp_tree_2_run.sh "$SCRATCHDIR"/ || exit 1
-echo "Data to process - $DATADIR"
-cp "$DATADIR"/trees_*.nwk "$SCRATCHDIR"/  || exit 1
+echo "HybSeq data - ${WORKDIR}"
+cp "${WORKDIR}"/bin/hybseq_6_sp_tree_2_run.sh "${SCRATCHDIR}"/ || exit 1
+echo "Data to process - ${DATADIR}"
+cp "${DATADIR}"/trees_*.nwk "${SCRATCHDIR}"/  || exit 1
 echo
 
 # Running the task
@@ -55,8 +55,8 @@ rm hybseq_6_sp_tree_2_run.sh
 echo
 
 # Copy results back to storage
-echo "Copying results back to $DATADIR"
-cp -a "$SCRATCHDIR" "$DATADIR"/ || export CLEAN_SCRATCH='false'
+echo "Copying results back to ${DATADIR}"
+cp -a "${SCRATCHDIR}" "${DATADIR}"/ || export CLEAN_SCRATCH='false'
 echo
 
 exit
