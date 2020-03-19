@@ -10,7 +10,7 @@
 
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
-trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
+trap 'cp -ar $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
 
 # Checking if all required variables are provided
 if [ -z "${ALNF}" ]; then
@@ -51,7 +51,7 @@ echo
 
 # Runing the task (trees from individual alignments)
 echo "Computing gene tree from ${ALNA}..."
-./hybseq_5_gene_trees_3_run.sh "${ALNA}" | tee hybseq_gene_tree."${ALNA%.*}".log
+./hybseq_5_gene_trees_3_run.sh -a "${ALNA}" | tee hybseq_gene_tree."${ALNA%.*}".log
 rm "${ALNA}" || { export CLEAN_SCRATCH='false'; exit 1; }
 echo
 
