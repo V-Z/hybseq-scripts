@@ -5,10 +5,72 @@
 
 # Process all sample directories in the working directory by the HybPiper pipeline - extracts contigs and calculates statistics.
 
+# See './hybseq_3_hybpiper_postprocess_2_run.sh -h' for help.
+
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-# TODO Parse initial arguments
+# Parse initial arguments
+while getopts "hvp:b:s:" INITARGS; do
+	case "$INITARGS" in
+		h) # Help and exit
+			echo "Usage options:"
+			echo -e "\t-h\tPrint this help and exit."
+			echo -e "\t-v\tPrint script version, author and license and exit."
+			echo -e "\t-p\tDirectory with HybPiper. E.g. xxx/bin/HybPiper"
+			echo -e "\t-b\tReference bait FASTA file. E.g. ref/xxx.fasta"
+			echo -e "\t-s\tList of samples to process. E.g. samples_list.txt"
+			echo
+			exit
+			;;
+		v) # Print script version and exit
+			echo "Version: 1.0"
+			echo "Author: Vojtěch Zeisek, https://trapa.cz/en"
+			echo "License: GNU GPLv3, https://www.gnu.org/licenses/gpl-3.0.html"
+			echo
+			exit
+			;;
+		p) # Directory with HybPiper
+			if [ -d "$OPTARG" ]; then
+			HYBPIPER="$(realpath "$OPTARG")"
+			echo "Path to HybPiper directory: $HYBPIPER"
+			echo
+			else
+				echo "Error! You did not provide path to HybPiper directory (-p) \"$OPTARG\"!"
+				echo
+				exit 1
+				fi
+			;;
+		b) # Reference bait FASTA file
+			if [ -r "$OPTARG" ]; then
+				BAITFILE="$(realpath "$OPTARG")"
+				echo "Reference bait FASTA file: $BAITFILE"
+				echo
+				else
+					echo "Error! You did not provide path to reference bait FASTA file (-b) \"$OPTARG\"!"
+					echo
+					exit 1
+					fi
+			;;
+		s) # List of samples to process
+			if [ -r "$OPTARG" ]; then
+			SAMPLES="$OPTARG"
+			echo "List of samples to process: $SAMPLES"
+			echo
+			else
+				echo "Error! You did not provide list of samples to process (-s) \"$OPTARG\"!"
+				echo
+				exit 1
+				fi
+			;;
+		*)
+			echo "Error! Unknown option!"
+			echo "See usage options: \"$0 -h\""
+			echo
+			exit 1
+			;;
+		esac
+	done
 
 # Exit on error
 function operationfailed {
@@ -35,7 +97,7 @@ toolcheck R
 toolcheck samtools
 
 # Checking if all required variables are provided
-if [ -z "$HYBPIPDIR" ]; then
+if [ -z "$HYBPIPER" ]; then
 	echo "Error! Directory with HybPiper not provided!"
 	operationfailed
 	fi
@@ -48,13 +110,9 @@ if [ -z "$SAMPLES" ]; then
 	operationfailed
 	fi
 
-# Get full paths
-HYBPIPER="$(realpath "$HYBPIPDIR")" || operationfailed # Full path to HybPiper directory
-BAITFILEF="$(realpath "$BAITFILE")" || operationfailed # Full path to HybSeq reference
-
 # Post-processing, summary, statistics
 echo "Summary"
-python2 "$HYBPIPER"/get_seq_lengths.py "$BAITFILEF" "$SAMPLES" dna > seq_lengths.txt || operationfailed
+python2 "$HYBPIPER"/get_seq_lengths.py "$BAITFILE" "$SAMPLES" dna > seq_lengths.txt || operationfailed
 echo
 echo "Statistics"
 python2 "$HYBPIPER"/hybpiper_stats.py seq_lengths.txt "$SAMPLES" > stats.txt || operationfailed
@@ -72,26 +130,26 @@ echo "Retrieving sequences"
 echo
 echo "Exons"
 echo
-python2 "$HYBPIPER"/retrieve_sequences.py "$BAITFILEF" . dna || operationfailed
+python2 "$HYBPIPER"/retrieve_sequences.py "$BAITFILE" . dna || operationfailed
 echo
 echo "Introns"
 echo
-python2 "$HYBPIPER"/retrieve_sequences.py "$BAITFILEF" . intron || operationfailed
+python2 "$HYBPIPER"/retrieve_sequences.py "$BAITFILE" . intron || operationfailed
 echo
 echo "Supercontigs"
 echo
-python2 "$HYBPIPER"/retrieve_sequences.py "$BAITFILEF" . supercontig || operationfailed
+python2 "$HYBPIPER"/retrieve_sequences.py "$BAITFILE" . supercontig || operationfailed
 echo
 
 # Removing ".dedup*" from accession names
 echo "Removing \".dedup*\" from accession names"
-sed -i 's/\.dedup.*$//g' *.{FNA,fasta}
+sed -i 's/\.dedup.*$//g' ./*.{FNA,fasta}
 echo
 
 # Removing input data
 echo "Removing input directories and unneeded files"
 while read -r SAMPLE; do rm -rf "$SAMPLE"*; done < "$SAMPLES"
-rm -rf HybPiper HybPiper.* hybseq_hybpiper.*.dedup.log hybseq_3_hybpiper_postprocess_2_run.sh ref rpackages Rplots.pdf *.R samples_list.txt
+rm -rf HybPiper HybPiper.* hybseq_hybpiper.*.dedup.log hybseq_3_hybpiper_postprocess_2_run.sh ref rpackages Rplots.pdf ./*.R samples_list.txt
 
 exit
 

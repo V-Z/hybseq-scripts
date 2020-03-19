@@ -28,7 +28,7 @@ awk 'BEGIN{RS=">"}NR>1{sub("\n","\t");gsub("\n",""); print RS$0}' "$INPUT" | sed
 grep -o "$PROBES" tmp01 | sort -u > tmp02
 
 # Create individual FASTA sequence for every probe/taxon
-while read L; do
+while read -r L; do
 	grep -A 1 "$L" tmp01 | grep -v "^>" | tr -d "\n" > "$L".fasta
 	done < tmp02
 

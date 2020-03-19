@@ -17,15 +17,15 @@ trap 'cp -ar $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
 
 # Set data directories
 # HybPiper
-export HYBPIPDIR="/auto/pruhonice1-ibot/home/$LOGNAME/bin/HybPiper"
+HYBPIPDIR="/auto/pruhonice1-ibot/home/$LOGNAME/bin/HybPiper"
 # HybSeq scripts and data
 WORKDIR="/auto/pruhonice1-ibot/home/$LOGNAME/hybseq"
 
 # Reference bait FASTA files - relative path within WORKDIR
-# export BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
-# export BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
-export BAITFILE='ref/oxalis/input_seq_without_cpdna_1086_loci_renamed_concat.fasta' # Reference for Oxalis
-# export BAITFILE='ref/oxalis/red_soa_probes_gen_comp_concat.fasta' # Reduced reference for Oxalis
+# BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
+# BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
+BAITFILE='ref/oxalis/input_seq_without_cpdna_1086_loci_renamed_concat.fasta' # Reference for Oxalis
+# BAITFILE='ref/oxalis/red_soa_probes_gen_comp_concat.fasta' # Reduced reference for Oxalis
 
 # Data to process
 # DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
@@ -38,7 +38,7 @@ DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
 # samples_list.txt is created by hybseq_1_prep.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
 # If merging multiple libraries, either merge the samples_list.txt from each library, or run something like:
 # find . -maxdepth 1 -type d | sed 's/^\.\///' | sort | tail -n+2 > samples_list.txt
-export SAMPLES='samples_list.txt'
+SAMPLES='samples_list.txt'
 
 # Required modules
 echo "Loading modules"
@@ -64,7 +64,7 @@ echo
 
 # Runing the task (HibPiper postprocessing)
 echo "Running HybPiper postprocessing..."
-./hybseq_3_hybpiper_postprocess_2_run.sh | tee hybseq_hybpiper_postprocess.log
+./hybseq_3_hybpiper_postprocess_2_run.sh -p "$HYBPIPDIR" -b "$BAITFILE" -s "$SAMPLES" | tee hybseq_hybpiper_postprocess.log
 echo
 
 # Copy results back to storage
