@@ -5,11 +5,11 @@ Required [R](https://www.r-project.org/) packages are `ape`, `ggplot2`, `gplots`
 Within `R` command line started in `hybseq` directory use e.g. command
 
 ```R
-install.packages(pkgs=c("ape", "ggplot2", "gplots", "heatmap.plus", "ips", "reshape"),
+install.packages(pkgs=c("ape", "ggplot2", "gplots", "heatmap.plus", "ips", "reshape2"),
 lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports")
 ```
 
 to install needed packages.
 
-The R packages are required to plot heatmaps from [HybPiper](https://github.com/mossmatters/HybPiper/wiki) outputs and to align (and trim, check, plot, etc.) contigs recovered by HybPiper (script `hybseq_4_alignment_3_run.r`).
+The R packages are required to plot heatmaps from [HybPiper](https://github.com/mossmatters/HybPiper/wiki) outputs and to align (and trim, check, plot, etc.) contigs recovered by HybPiper (see script `hybseq_4_alignment_3_run.r`).
 
