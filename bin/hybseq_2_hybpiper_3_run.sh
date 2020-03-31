@@ -108,8 +108,8 @@ echo
 
 # Check if all required binaries are available
 function toolcheck {
-	command -v "$1" >/dev/null 2>&1 || {
-		echo >&2 "Error! $1 is required but not installed. Aborting. Please, install it."
+	command -v "${1}" >/dev/null 2>&1 || {
+		echo >&2 "Error! ${1} is required but not installed. Aborting. Please, install it."
 		echo
 		exit 1
 		}
@@ -150,27 +150,27 @@ parallel -X bunzip2 -v ::: *.bz2
 echo
 
 # Processing the sample by HybPiper
-echo "Processing $1 at $(date)"
+echo "Processing ${SAMPLES} at $(date)"
 echo
 echo "Main processing"
 echo
-python2 "${HYBPIPER}"/reads_first.py --bwa -r "$1".R{1,2}.fq -b "${BAITFILE}" --cpu "$4" --prefix "$1" || operationfailed
+python2 "${HYBPIPER}"/reads_first.py --bwa -r "${SAMPLES}".R{1,2}.fq -b "${BAITFILE}" --cpu "${NCPU}" --prefix "${SAMPLES}" || operationfailed
 echo
 echo "Paralogs"
 echo
-python2 "${HYBPIPER}"/paralog_investigator.py "$1" || operationfailed
+python2 "${HYBPIPER}"/paralog_investigator.py "${SAMPLES}" || operationfailed
 echo
 echo "Introns"
 echo
-python2 "${HYBPIPER}"/intronerate.py --prefix "$1" --addN || operationfailed
+python2 "${HYBPIPER}"/intronerate.py --prefix "${SAMPLES}" --addN || operationfailed
 echo
 echo "Depth"
 echo
-python2 "${HYBPIPER}"/depth_calculator.py --targets "${BAITFILE}" -r "$1".R{1,2}.fq --prefix "$1" || operationfailed
+python2 "${HYBPIPER}"/depth_calculator.py --targets "${BAITFILE}" -r "${SAMPLES}".R{1,2}.fq --prefix "${SAMPLES}" || operationfailed
 echo
 echo "Cleanup"
 echo
-python2 "${HYBPIPER}"/cleanup.py "$1" || operationfailed
+python2 "${HYBPIPER}"/cleanup.py "${SAMPLES}" || operationfailed
 echo
 
 exit
