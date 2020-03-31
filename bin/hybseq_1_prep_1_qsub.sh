@@ -9,8 +9,8 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-# qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=16gb:scratch_local=100gb -q ibot -m abe ~/hybseq/bin/hybseq_run_1_prep.sh # HybSeq
-# qsub -l walltime=48:0:0 -l select=1:ncpus=8:mem=256gb:scratch_local=1000gb -q ibot -m abe ~/hybseq/bin/hybseq_run_1_prep.sh # WGS
+# qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=16gb:scratch_local=100gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # HybSeq
+# qsub -l walltime=48:0:0 -l select=1:ncpus=8:mem=256gb:scratch_local=1000gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # WGS
 
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
