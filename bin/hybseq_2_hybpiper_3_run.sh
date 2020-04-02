@@ -103,7 +103,7 @@ function operationfailed {
 
 # Testing dependencies
 echo "Checking if all required software is available"
-python2 "${HYBPIPER}"/reads_first.py --check-depend || operationfailed
+python3 "${HYBPIPER}"/reads_first.py --check-depend || operationfailed
 echo
 
 # Check if all required binaries are available
@@ -115,7 +115,7 @@ function toolcheck {
 		}
 	}
 
-toolcheck python2
+toolcheck python3
 toolcheck parallel
 toolcheck bunzip2
 toolcheck exonerate
@@ -154,23 +154,23 @@ echo "Processing ${SAMPLES} at $(date)"
 echo
 echo "Main processing"
 echo
-python2 "${HYBPIPER}"/reads_first.py --bwa -r "${SAMPLES}".R{1,2}.fq -b "${BAITFILE}" --cpu "${NCPU}" --prefix "${SAMPLES}" || operationfailed
+python3 "${HYBPIPER}"/reads_first.py --bwa -r "${SAMPLES}".R{1,2}.fq -b "${BAITFILE}" --cpu "${NCPU}" --prefix "${SAMPLES}" || operationfailed
 echo
 echo "Paralogs"
 echo
-python2 "${HYBPIPER}"/paralog_investigator.py "${SAMPLES}" || operationfailed
+python3 "${HYBPIPER}"/paralog_investigator.py "${SAMPLES}" || operationfailed
 echo
 echo "Introns"
 echo
-python2 "${HYBPIPER}"/intronerate.py --prefix "${SAMPLES}" --addN || operationfailed
+python3 "${HYBPIPER}"/intronerate.py --prefix "${SAMPLES}" --addN || operationfailed
 echo
 echo "Depth"
 echo
-python2 "${HYBPIPER}"/depth_calculator.py --targets "${BAITFILE}" -r "${SAMPLES}".R{1,2}.fq --prefix "${SAMPLES}" || operationfailed
+python3 "${HYBPIPER}"/depth_calculator.py --targets "${BAITFILE}" -r "${SAMPLES}".R{1,2}.fq --prefix "${SAMPLES}" || operationfailed
 echo
 echo "Cleanup"
 echo
-python2 "${HYBPIPER}"/cleanup.py "${SAMPLES}" || operationfailed
+python3 "${HYBPIPER}"/cleanup.py "${SAMPLES}" || operationfailed
 echo
 
 exit

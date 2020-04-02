@@ -34,10 +34,10 @@ DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/0_data"
 
 # Required modules
 echo "Loading modules"
-module add trimmomatic-0.36 || exit 1
+module add trimmomatic-0.39 || exit 1
 module add bbmap-38.42 || exit 1
 module add fastQC-0.11.5 || exit 1
-module add parallel-20160622 || exit 1
+module add parallel-20200322 || exit 1
 echo
 
 # Change working directory

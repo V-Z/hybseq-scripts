@@ -92,7 +92,7 @@ function toolcheck {
 		}
 	}
 
-toolcheck python2
+toolcheck python3
 toolcheck R
 toolcheck samtools
 
@@ -112,10 +112,10 @@ if [ -z "${SAMPLES}" ]; then
 
 # Post-processing, summary, statistics
 echo "Summary"
-python2 "${HYBPIPER}"/get_seq_lengths.py "${BAITFILE}" "${SAMPLES}" dna > seq_lengths.txt || operationfailed
+python3 "${HYBPIPER}"/get_seq_lengths.py "${BAITFILE}" "${SAMPLES}" dna > seq_lengths.txt || operationfailed
 echo
 echo "Statistics"
-python2 "${HYBPIPER}"/hybpiper_stats.py seq_lengths.txt "${SAMPLES}" > stats.txt || operationfailed
+python3 "${HYBPIPER}"/hybpiper_stats.py seq_lengths.txt "${SAMPLES}" > stats.txt || operationfailed
 echo
 
 # Plotting gene recovery heatmaps
@@ -130,15 +130,15 @@ echo "Retrieving sequences"
 echo
 echo "Exons"
 echo
-python2 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . dna || operationfailed
+python3 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . dna || operationfailed
 echo
 echo "Introns"
 echo
-python2 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . intron || operationfailed
+python3 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . intron || operationfailed
 echo
 echo "Supercontigs"
 echo
-python2 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . supercontig || operationfailed
+python3 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . supercontig || operationfailed
 echo
 
 # Removing ".dedup*" from accession names
