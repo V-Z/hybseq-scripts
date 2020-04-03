@@ -26,7 +26,7 @@ seqf <- read.FASTA(file=fnames[1], type="DNA")
 seqf
 
 ## Alignment with MAFFT
-aln <- mafft(x=seqf, method="auto", maxiterate=1000, options="--adjustdirection", thread=1, exec="/software/mafft/7.453/bin/mafft")
+aln <- mafft(x=seqf, method="auto", maxiterate=1000, options="--adjustdirectionaccurately", thread=1, exec="/software/mafft/7.453/bin/mafft")
 aln
 
 ## Cleaning the alignment
