@@ -346,7 +346,7 @@ for FASTQ1 in "${FQDIR}"/*.R1.f*q*; do
 
 # Creating list of samples for HybPiper
 echo "Creating list of samples"
-find "${DEDUPDIR}"/ -name "*.R1.*" -printf "%f\n" | sed 's/\.R1.fq$//' > "${DEDUPDIR}"/samples_list.txt || operationfailed
+find "${DEDUPDIR}"/ -name "*.R1.*" -printf "%f\n" | sed 's/\.R1.fq$//' | sort > "${DEDUPDIR}"/samples_list.txt || operationfailed
 echo
 
 # Final messages
