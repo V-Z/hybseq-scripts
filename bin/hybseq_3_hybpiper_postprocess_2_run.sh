@@ -146,10 +146,26 @@ echo "Removing \".dedup*\" from accession names"
 sed -i 's/\.dedup.*$//g' ./*.{FNA,fasta}
 echo
 
+# Calculating number of occurrences of each sample in all contigs
+echo "Calculating number of occurrences of each sample in all contigs..."
+echo "Results will be in file 'presence_of_samples_in_contigs.tsv'."
+echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.FNA" -o -name "*.fasta" | wc -l)" > presence_of_samples_in_contigs.tsv || operationfailed
+echo >> presence_of_samples_in_contigs.tsv || operationfailed
+echo -e "Sample\tNumber" >> presence_of_samples_in_contigs.tsv || operationfailed
+while read -r SAMPLE; do
+	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta ./*.FNA | wc -l)" >> presence_of_samples_in_contigs.tsv || operationfailed
+	done < <(sed 's/\.dedup$//' "${SAMPLES}" | sort)
+echo >> presence_of_samples_in_contigs.tsv || operationfailed
+echo "Note that for every probe sequence, three contigs are produced (for respective exon, intron and supercontig)."
+echo "Divide 'Total number of contigs' by three to get number of probes. Similarly divide number of occurrence of each sample by three."
+echo "You can calculate percentage of presence of each sample in all contigs (from total number of contigs)."
+echo
+
 # Removing input data
 echo "Removing input directories and unneeded files"
 while read -r SAMPLE; do rm -rf "${SAMPLE}"*; done < "${SAMPLES}"
-rm -rf HybPiper HybPiper.* hybseq_hybpiper.*.dedup.log hybseq_3_hybpiper_postprocess_2_run.sh ref rpackages Rplots.pdf ./*.R samples_list.txt
+rm -rf HybPiper HybPiper.* hybseq_hybpiper.*.dedup.log hybseq_3_hybpiper_postprocess_2_run.sh ref rpackages Rplots.pdf ./*.R "${SAMPLES}"
+echo
 
 exit
 
