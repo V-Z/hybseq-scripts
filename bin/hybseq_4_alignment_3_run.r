@@ -28,6 +28,8 @@ seqf
 ## Alignment with MAFFT
 aln <- mafft(x=seqf, method="auto", maxiterate=1000, options="--adjustdirectionaccurately", thread=1, exec="/software/mafft/7.453/bin/mafft")
 aln
+# Remove "_R_" marking reversed sequences (introduced by MAFFT's "--adjustdirectionaccurately")
+rownames(aln) <- gsub("^_R_", "", rownames(aln))
 
 ## Cleaning the alignment
 # Delete empy columns/rows
