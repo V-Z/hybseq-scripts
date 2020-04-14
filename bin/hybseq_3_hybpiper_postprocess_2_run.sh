@@ -169,3 +169,22 @@ echo
 
 exit
 
+cd exons/
+echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.aln.fasta" | wc -l)" > presence_of_samples_in_exons.tsv
+echo >> presence_of_samples_in_exons.tsv
+echo -e "Sample\tNumber" >> presence_of_samples_in_exons.tsv
+while read -r SAMPLE; do echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta | wc -l)" >> presence_of_samples_in_exons.tsv; done < <(sed 's/\.dedup$//' ../../2_seqs/samples_list.txt)
+echo >> presence_of_samples_in_exons.tsv
+cd ../introns/
+echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.aln.fasta" | wc -l)" > presence_of_samples_in_introns.tsv
+echo >> presence_of_samples_in_introns.tsv
+echo -e "Sample\tNumber" >> presence_of_samples_in_introns.tsv
+while read -r SAMPLE; do echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta | wc -l)" >> presence_of_samples_in_introns.tsv; done < <(sed 's/\.dedup$//' ../../2_seqs/samples_list.txt)
+cd ../supercontigs/
+echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.aln.fasta" | wc -l)" > presence_of_samples_in_supercontigs.tsv
+echo >> presence_of_samples_in_supercontigs.tsv
+echo -e "Sample\tNumber" >> presence_of_samples_in_supercontigs.tsv
+while read -r SAMPLE; do echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta | wc -l)" >> presence_of_samples_in_supercontigs.tsv; done < <(sed 's/\.dedup$//' ../../2_seqs/samples_list.txt)
+echo >> presence_of_samples_in_supercontigs.tsv
+cd ..
+mv exons/presence_of_samples_in_exons.tsv introns/presence_of_samples_in_introns.tsv supercontigs/presence_of_samples_in_supercontigs.tsv .
