@@ -19,7 +19,7 @@ PATTERN='Assembly_*.fasta'
 # Output file name
 OUTPUT='input_seq_without_cpdna_1086_loci_renamed_concat.fasta'
 # Taxa name to be inserted to the probe set
-TAXA='Oxalis_obtusa'
+TAXA='Oxalisobtusa'
 
 # Convert input FASTA not to be interleaved
 awk 'BEGIN{RS=">"}NR>1{sub("\n","\t");gsub("\n",""); print RS$0}' "$INPUT" | sed 's/\t/\n/g' > tmp01
