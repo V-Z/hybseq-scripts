@@ -24,7 +24,7 @@ WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 # Reference bait FASTA files - relative path within WORKDIR
 # BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
 # BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
-BAITFILE='ref/oxalis/input_seq_without_cpdna_1086_loci_renamed_concat.fasta' # Reference for Oxalis
+BAITFILE='ref/oxalis/input_seq_without_cpdna_renamed_concat.fasta' # Reference for Oxalis
 # BAITFILE='ref/oxalis/red_soa_probes_gen_comp_concat.fasta' # Reduced reference for Oxalis
 
 # Data to process
