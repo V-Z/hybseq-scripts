@@ -14,6 +14,9 @@ if [ "$#" -ne '1' ]; then
 	exit 1
 	fi
 
+# List of samples - relative path from directory to process
+SAMPLES='../../2_seqs/samples_list.txt'
+
 # Exit on error
 function operationfailed {
 	echo "Error! Operation failed!"
@@ -42,6 +45,18 @@ function alignstats {
 			printf '\n'
 			} >> "$1" || operationfailed
 		done
+	}
+
+# Statistics of presence of samples in alignments
+function samplestats {
+	# How many times is each sample presented in all alignments
+	echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.aln.fasta" | wc -l)" > "$1" || operationfailed
+	echo >> "$1" || operationfailed
+	echo -e "Sample\tNumber" >> "$1" || operationfailed
+	while read -r SAMPLE; do
+		echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta | wc -l)" >> "$1" || operationfailed
+		done < <(sed 's/\.dedup$//' "${SAMPLES}")
+	echo >> "$1" || operationfailed
 	}
 
 # Switching to working directory
@@ -108,7 +123,7 @@ echo "Supercontig"
 mv supercontigs/trees_supercontigs.nwk . || operationfailed
 echo
 
-# Statistics
+# Statistics of alignments
 echo "Extracting alignment statistics"
 echo "Statistics of exons"
 cd exons/ || operationfailed
@@ -130,6 +145,24 @@ echo
 echo "Removing unneeded strings from statistics"
 sed -i 's/\.log\>//' alignments_stats_*.tsv || operationfailed
 echo
+
+# Statistics of presence of samples
+echo "Statistics of presence of samples in all alignments"
+echo "Statistics of exons"
+cd exons/ || operationfailed
+samplestats presence_of_samples_in_exons.tsv || operationfailed
+echo
+echo "Statistics of introns"
+cd ../introns/ || operationfailed
+samplestats presence_of_samples_in_introns.tsv || operationfailed
+echo
+echo "Statistics of supercontigs"
+cd ../supercontigs/ || operationfailed
+samplestats presence_of_samples_in_supercontigs.tsv || operationfailed
+cd .. || operationfailed
+echo
+echo "Moving statistics files"
+mv exons/presence_of_samples_in_exons.tsv introns/presence_of_samples_in_introns.tsv supercontigs/presence_of_samples_in_supercontigs.tsv . || operationfailed
 
 exit
 

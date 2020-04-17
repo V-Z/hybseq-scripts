@@ -165,6 +165,10 @@ See `README.md` in the `rpackages` directory for information regarding installat
 
 Results will be copied back into `DATADIR`, e.g. `XXX/2_dedup`. After adding new sequenced library, this step and all following steps must be repeated.
 
+HybPiper statistics are in files `seq_lengths.txt` (table of length of each retrieved seqeunce in every sample) and `stats.txt` (sequence statistics, see [manual](https://github.com/mossmatters/HybPiper/wiki/Tutorial#summary-statistics)).
+
+Statistics of how many was each sample retrieved from the sequences are in file `presence_of_samples_in_contigs.tsv`. Note that for every probe sequence, three contigs are produced (for respective exon, intron and supercontig). Divide 'Total number of contigs' by three to get number of probes. Similarly divide number of occurrence of each sample by three. You can calculate percentage of presence of each sample in all contigs (from total number of contigs). If some sample is recovered in less than ca. 50% of contigs, consider its removal.
+
 ## 3. Alignments of all contigs
 
 Used scripts: `hybseq_4_alignment_1_submitter.sh`, `hybseq_4_alignment_2_qsub.sh`, `hybseq_4_alignment_3_run.r` and `hybseq_4_alignment_4_postprocess.sh`.
@@ -197,6 +201,8 @@ Finally, alignments should be sorted using `hybseq_4_alignment_4_postprocess.sh`
 mv hybseq_align_postprocess.log XXX/3_aligned/
 ```
 
+Note that the script should be runned when all alignments are in final destination, i.e. `XXX/3_aligned`.
+
 Script `hybseq_4_alignment_4_postprocess.sh` will create directories `exons`, `introns` and `supercontigs` and move there respective files. It will also create three lists of minimum evolution gene trees (`trees_exons.nwk`, `trees_introns.nwk` and `trees_supercontigs.nwk`) and files with statistics (`alignments_stats_exons.tsv`, `alignments_stats_introns.tsv` and `alignments_stats_supercontigs.tsv`). The `TSV` files show number of sequences in each alignment file, number of sites (length of the sequence) and number of sites with 1, 2, 3 or 4 observed bases (6 data columns). These statistics can help to discard too short or otherwise problematic alignments.
 
 The tree lists contain on the beginning of each line name of respective genetic region (according to reference bait file). This is advantageous for loading the lists into `R`, but many software like [ASTRAL](https://github.com/smirarab/ASTRAL) require each line to start directly with the NEWICK record. If this is the case (e.g. if user does not plan to load the list of gene trees into `R`), remove the names by something like:
@@ -204,6 +210,8 @@ The tree lists contain on the beginning of each line name of respective genetic 
 ```shell
 sed -i 's/^[[:graph:]]\+ //' *.nwk
 ```
+
+Final output are simple statistics of presence of samples in all alignments (how many times is each sample presented in trimmed alignments), created for exons (`presence_of_samples_in_exons.tsv`), introns (`presence_of_samples_in_introns.tsv`) as well as supercontigs (`presence_of_samples_in_supercontigs.tsv`).
 
 ## 4. Gene trees from all alignments
 
