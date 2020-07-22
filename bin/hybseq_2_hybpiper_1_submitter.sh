@@ -25,6 +25,7 @@ WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq" # Data and scripts for hy
 DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/2_dedup"
 # DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/2_dedup"
 # DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/2_dedup"
+# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_03/2_dedup"
 # DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/2_dedup"
 # DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups/2_dedup"
 
