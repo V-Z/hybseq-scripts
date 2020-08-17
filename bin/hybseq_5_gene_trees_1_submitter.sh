@@ -11,15 +11,15 @@
 # Setting initial variables
 
 # Set data directories
-WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq"
+WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/3_aligned/"
-DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/3_aligned"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/3_aligned"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/3_aligned"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/3_aligned"
-# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/3_aligned/"
+DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/3_aligned"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/3_aligned"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/3_aligned"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/3_aligned"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned"
 
 # Submitting individual tasks
 

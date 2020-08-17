@@ -17,9 +17,9 @@ trap 'cp -ar $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
 
 # Set data directories
 # HybPiper
-HYBPIPDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/bin/HybPiper"
+HYBPIPDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/bin/HybPiper"
 # HybSeq scripts and data
-WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq"
+WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Reference bait FASTA files - relative path within WORKDIR
 # BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
@@ -29,12 +29,12 @@ BAITFILE='ref/oxalis/input_seq_without_cpdna_renamed_concat.fasta' # Reference f
 # BAITFILE='ref/oxalis/red_soa_probes_gen_comp_concat.fasta' # Reduced reference for Oxalis
 
 # Data to process
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/2_seqs"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/2_seqs"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/2_seqs"
-DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
-# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/2_seqs"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/2_seqs"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/2_seqs"
+DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs"
 
 # samples_list.txt is created by hybseq_1_prep.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
 # If merging multiple libraries, either merge the samples_list.txt from each library, or run something like:

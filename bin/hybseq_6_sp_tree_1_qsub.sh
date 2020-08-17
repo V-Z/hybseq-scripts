@@ -18,15 +18,15 @@ trap 'cp -a $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq"
+WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/4_gene_trees"
-DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/4_gene_trees"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/4_gene_trees"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/4_gene_trees"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/4_gene_trees"
-# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/4_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/4_gene_trees"
+DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/4_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/4_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/4_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/4_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/4_gene_trees"
 
 # Required modules
 echo "Loading modules"

@@ -18,20 +18,20 @@ trap 'cp -a $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/auto/pruhonice1-ibot/home/${LOGNAME}/hybseq"
+WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/0_data"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/0_data"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/1_data/0_data"
-# DATADIR="/auto/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/1_data/0_data"
-DATADIR="/auto/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/0_data"
-# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/0_data"
-# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/0_data"
-# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_03/0_data"
-# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/0_data"
-# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups/0_data"
-# DATADIR="/auto/pruhonice1-ibot/shared/pteronia/hybseq/wgs/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/1_data/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/1_data/0_data"
+DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_03/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/wgs/0_data"
 
 # Required modules
 echo "Loading modules"
