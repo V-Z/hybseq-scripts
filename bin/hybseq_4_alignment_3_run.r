@@ -16,9 +16,10 @@ options(error=expression(NULL))
 # Load
 library(package=ape, lib.loc="rpackages")
 library(package=ips, lib.loc="rpackages")
+library(package=scales, lib.loc="rpackages")
 
 ## File names
-fnames <- commandArgs(TRUE) # [1] file.fasta/file.FNA, [2] file.aln.fasta, [3] file.aln.png, [4] file.aln.check.png, [5] file.nwk, [6] file.tree.png
+fnames <- commandArgs(TRUE) # [1] file.fasta/file.FNA, [2] file.aln.fasta, [3] file.aln.png, [4] file.aln.check.png, [5] file.nwk, [6] file.tree.png, [7] file.saturation.png
 fnames
 
 ## Load FASTA sequence
@@ -26,7 +27,7 @@ seqf <- read.FASTA(file=fnames[1], type="DNA")
 seqf
 
 ## Alignment with MAFFT
-aln <- mafft(x=seqf, method="auto", maxiterate=1000, options="--adjustdirectionaccurately", thread=1, exec="/software/mafft/7.453/bin/mafft")
+aln <- mafft(x=seqf, method="auto", maxiterate=1000, options="--adjustdirectionaccurately", thread=1, exec="/software/mafft/7.487/bin/mafft")
 aln
 # Remove "_R_" marking reversed sequences (introduced by MAFFT's "--adjustdirectionaccurately")
 rownames(aln) <- gsub("^_R_", "", rownames(aln))
@@ -37,12 +38,15 @@ aln.ng <- deleteEmptyCells(DNAbin=aln)
 # Delete columns and rows with too many gaps
 # Add/replace by ips::gblocks and/or ips::aliscore ?
 aln.ng <- deleteGaps(x=aln.ng, gap.max=round(nrow(aln)/2))
-aln.ng <- del.rowgapsonly(x=aln.ng, threshold=0.3, freq.only=FALSE)
-aln.ng <- del.colgapsonly(x=aln.ng, threshold=0.3, freq.only=FALSE)
+aln.ng <- del.rowgapsonly(x=aln.ng, threshold=0.2, freq.only=FALSE)
+aln.ng <- del.colgapsonly(x=aln.ng, threshold=0.2, freq.only=FALSE)
 aln.ng
 
 ## Exporting alignment
 write.FASTA(x=aln.ng, file=fnames[2])
+
+## Number of potentially-informative sites
+pis(x=aln.ng, what="fraction")
 
 ## Displaying alignment
 # Alignment
@@ -66,8 +70,22 @@ write.tree(phy=njtr, file=fnames[5])
 # Plot the tree
 png(filename=fnames[6], width=1200, height=1200, units="px", bg="white")
 	plot.phylo(x=njtr, type="unrooted", edge.width=2, cex=1.1, lab4ut="axial", tip.color="blue")
-	title("FastME minimum evolution tree and bootstrap values (1000 replicates)")
+	title("FastME minimum evolution tree and bootstrap values (1000 replicates, TN93 distance)")
 	add.scale.bar()
 	nodelabels(text=round(njtr[["node.labels"]]/10), frame="none", col="red")
+	dev.off()
+
+## Saturation plot
+# Raw DNA distance
+gdist.r <- dist.dna(x=aln.ng, model="raw")
+# Linear morel of distances
+dlm <- lm(formula=gdist.r~gdist)
+# Plot saturation
+png(filename=fnames[7], width=900, height=900, units="px", bg="white")
+	plot(gdist.r~gdist, xlab="TrN (TN93) model distance", ylab="Uncorrected distance", main="Saturation plot", col=alpha(colour="red", alpha=0.2), pch=20, cex=3)
+	abline(a=0, b=1, lty=4, lwd=2, col="blue")
+	abline(dlm, lty=5, lwd=3, col="green")
+	legend("topleft", legend=bquote(y==.(coef(object=dlm)[2])*x), cex=1.25, inset=0.02)
+	legend("bottomright", legend="Linear model of distances", cex=1.25, title="Dashed green line", inset=0.02)
 	dev.off()
 

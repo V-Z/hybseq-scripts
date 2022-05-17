@@ -32,7 +32,7 @@ function alignstats {
 	# Number of sites with 1, 2, 3 or 4 observed bases
 	echo "Initializing files with statistics"
 	printf "\t\t\tNumbers of sites with 1, 2, 3 or 4 observed bases\n" > "$1" || operationfailed
-	printf "Alignment\tNumber of sequences\tNumber of sites\t1\t2\t3\t4\n" >> "$1" || operationfailed
+	printf "Alignment\tNumber of sequences\tNumber of sites\t1\t2\t3\t4\tNumber of potentially-informative sites\n" >> "$1" || operationfailed
 	echo
 	for L in *.log; do
 		echo "Processing ${L%.*}"
@@ -43,6 +43,7 @@ function alignstats {
 			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "${L}" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 2 -d ' ' | xargs printf '%s\t%s'
 			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "${L}" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 3 -d ' ' | xargs printf '%s\t%s'
 			grep -A 2 "Number of sites with 1, 2, 3 or 4 observed bases:" "${L}" | tail -n 1 | sed 's/^[[:blank:]]\+//'| sed 's/[[:blank:]]\+/ /g' | cut -f 4 -d ' ' | xargs printf '%s\t%s'
+			grep -A 1 'pis(x=aln.ng, what="fraction")' "${L}" | grep '^\[1\]' | sed 's/^\[1\][[:blank:]]//' | xargs printf '%s\t%s'
 			printf '\n'
 			} >> "$1" || operationfailed
 		done
