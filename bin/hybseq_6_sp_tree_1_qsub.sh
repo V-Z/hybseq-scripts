@@ -27,7 +27,10 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/4_gene_trees"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/4_gene_trees"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/4_gene_trees"
-DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_mvftools_test/6_gene_trees"
+DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/all_samples"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/diploids"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta/diploids/trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_mvftools_test/6_gene_trees"
 
 # Required modules
 echo "Loading modules"

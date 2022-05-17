@@ -15,7 +15,8 @@ if [ "$#" -ne '1' ]; then
 	fi
 
 # List of samples - relative path from directory to process
-SAMPLES='../../2_seqs/samples_list.txt'
+SAMPLES='/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_contigs/samples_list.txt'
+# SAMPLES='/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/diploids_contigs/samples_list.txt'
 
 # Exit on error
 function operationfailed {

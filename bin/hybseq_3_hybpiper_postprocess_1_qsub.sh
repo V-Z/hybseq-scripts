@@ -33,8 +33,10 @@ BAITFILE='ref/oxalis/input_seq_without_cpdna_renamed_concat.fasta' # Reference f
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/2_seqs"
-DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs"
+DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_hybpiper"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/diploids_hybpiper"
 
 # samples_list.txt is created by hybseq_1_prep.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
 # If merging multiple libraries, either merge the samples_list.txt from each library, or run something like:

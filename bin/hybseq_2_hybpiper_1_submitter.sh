@@ -22,12 +22,16 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq" # Data and scripts for
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/1_data/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/1_data/2_dedup"
-DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_03/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_04/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_05/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups2/2_dedup"
+DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/repetitions_merged/2_dedup"
 
 # List of samples to process
 SAMPLES='samples_list.txt' # samples_list.txt is created by hybseq_1_prep_2_run.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
