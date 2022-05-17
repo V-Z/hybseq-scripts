@@ -47,7 +47,7 @@ SAMPLES='samples_list.txt'
 echo "Loading modules"
 module add python36-modules-gcc || exit 1 # biopython
 module add samtools-1.10 || exit 1 # samtools
-module add R-3.6.2-gcc || exit 1 # R (ggplot2, gplots, heatmap.plus, reshape2)
+module add R-4.0.0-gcc || exit 1 # R (ggplot2, gplots, heatmap.plus, reshape2)
 echo
 
 # Change working directory

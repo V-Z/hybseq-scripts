@@ -28,7 +28,8 @@ if [ -z "${DATADIR}" ]; then
 
 # Required modules
 echo "Loading modules"
-module add iqtree-1.6.12 || exit 1 # iqtree
+module add iqtree-2.1.3 || exit 1 # IQ-TREE 2
+# module add raxml-ng-8 || exit 1 # RAxML-NG
 echo
 
 # Change working directory
