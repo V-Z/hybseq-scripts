@@ -118,3 +118,27 @@ sed -i 's/\.contree\>//' trees_cons_*.nwk || operationfailed
 echo
 
 exit
+
+# # ### RAxML-NG
+# ## Exons
+# find . -name "*.support" > trees_list.tmp
+# find . -name "*.support" | sort > trees_list.tmp
+# while read -r T; do cat "${T}" >> trees_treefile.tmp; done < trees_list.tmp
+# sed -i 's/^\.\///;s/\.aln\.fasta\.raxml\.support//' trees_list.tmp
+# paste -d ' ' trees_list.tmp trees_treefile.tmp > ../exons_1_unfiltered/trees_ml_exons.nwk
+# rm ./*.tmp
+# ## Introns
+# find . -name "*.support" > trees_list.tmp
+# find . -name "*.support" | sort > trees_list.tmp
+# while read -r T; do cat "${T}" >> trees_treefile.tmp; done < trees_list.tmp
+# sed -i 's/^\.\///;s/\.aln\.fasta\.raxml\.support//' trees_list.tmp
+# paste -d ' ' trees_list.tmp trees_treefile.tmp > ../introns_1_unfiltered/trees_ml_introns.nwk
+# rm ./*.tmp
+# ## Supercontigs
+# find . -name "*.support" > trees_list.tmp
+# find . -name "*.support" | sort > trees_list.tmp
+# while read -r T; do cat "${T}" >> trees_treefile.tmp; done < trees_list.tmp
+# sed -i 's/^\.\///;s/\.aln\.fasta\.raxml\.support//' trees_list.tmp
+# paste -d ' ' trees_list.tmp trees_treefile.tmp > ../supercontigs_1_unfiltered/trees_ml_supercontigs.nwk
+# rm ./*.tmp
+
