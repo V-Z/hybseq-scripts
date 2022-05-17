@@ -47,7 +47,7 @@ echo "Copying..."
 echo "HybSeq data - ${WORKDIR}"
 cp "${WORKDIR}"/bin/hybseq_6_sp_tree_2_run.sh "${SCRATCHDIR}"/ || exit 1
 echo "Data to process - ${DATADIR}"
-cp "${DATADIR}"/trees_*.nwk "${SCRATCHDIR}"/  || exit 1
+cp "${DATADIR}"/trees*.nwk "${SCRATCHDIR}"/  || exit 1
 echo
 
 # Running the task
