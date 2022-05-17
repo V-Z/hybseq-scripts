@@ -6,7 +6,7 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-# qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -m abe -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh
+# qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -q ibot -m abe -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh
 
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
@@ -53,11 +53,11 @@ echo
 # Runing the task (trees from individual alignments)
 echo "Computing gene tree from ${ALNA}..."
 ./hybseq_5_gene_trees_3_run.sh -a "${ALNA}" | tee hybseq_gene_tree."${ALNA%.*}".log
-rm "${ALNA}" || { export CLEAN_SCRATCH='false'; exit 1; }
+rm "${ALNA}" hybseq_5_gene_trees_3_run.sh || { export CLEAN_SCRATCH='false'; exit 1; }
 echo
 
 # Copy results back to storage
-cp -a "${SCRATCHDIR}"/"${ALNA%.*}"* "${SCRATCHDIR}"/hybseq_gene_tree."${ALNA%.*}".log "${DATADIR}"/trees/ || export CLEAN_SCRATCH='false'
+cp -a "${SCRATCHDIR}"/* "${DATADIR}"/trees/ || export CLEAN_SCRATCH='false'
 
 exit
 
