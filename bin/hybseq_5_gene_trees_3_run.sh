@@ -28,7 +28,7 @@ while getopts "hva:" INITARGS; do
 			echo
 			exit
 			;;
-		a) # Reference bait FASTA file
+		a) # Alignment FASTA input
 			if [ -r "${OPTARG}" ]; then
 				ALN="$(realpath "${OPTARG}")"
 				echo "Input alignment in FASTA format to use for gene tree construction: ${ALN}"
@@ -68,7 +68,8 @@ function toolcheck {
 		}
 	}
 
-toolcheck iqtree
+toolcheck iqtree2
+# toolcheck raxml-ng
 
 # Checking if all required variables are provided
 if [ -z "${ALN}" ]; then
@@ -78,7 +79,9 @@ if [ -z "${ALN}" ]; then
 
 # Construct gene trees with IQ-TREE from *.aln.fasta alignments
 echo "Constructing gene tree for ${ALN} with IQ-TREE at $(date)"
-iqtree -s "${ALN}" -st DNA -nt 1 -m MFP+I+R+P -lmap ALL -cmax 1000 -nstop 1000 -alrt 10000 -bb 10000 -bnni || { export CLEAN_SCRATCH='false'; exit 1; }
+iqtree2 -s "${ALN}" -st DNA -nt 1 --runs 5 -m MFP+MERGE+I+R+P -cmax 100 -nstop 1000 -alrt 10000 -bb 10000 -bnni || { export CLEAN_SCRATCH='false'; operationfailed; }
+# echo "Constructing gene tree for ${ALN} with RAxML-NG at $(date)"
+# raxml-ng --all --msa "${ALN}" --msa-format FASTA --data-type DNA --threads 1 --opt-model on --opt-branches on --model GTR+G+FO --bs-trees 1000 || { export CLEAN_SCRATCH='false'; operationfailed; }
 echo
 
 exit
