@@ -10,7 +10,7 @@
 
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
-trap 'cp -ar $SCRATCHDIR $DATADIR/; clean_scratch' TERM
+trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/; clean_scratch' TERM
 
 # Checking if all required variables are provided
 if [ -z "${ALNF}" ]; then

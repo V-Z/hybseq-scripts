@@ -15,12 +15,13 @@
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
+DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
-DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_contigs"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_contigs"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/diploids_contigs"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/alignments"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta/red_samples"
@@ -50,7 +51,8 @@ echo
 for ALN in $(find . -maxdepth 1 -name "*.FNA" -o -name "*.fasta" | sort); do
 	ALNB="$(basename "${ALN}")"
 	echo "Processing ${ALNB}"
-	qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALNB}" ~/hybseq/bin/hybseq_4_alignment_2_qsub.sh || exit 1
+# 	qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALNB}" ~/hybseq/bin/hybseq_4_alignment_2_qsub.sh || exit 1
+	qsub -l walltime=1:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALNB}" ~/hybseq/bin/hybseq_4_alignment_2_qsub.sh || exit 1 # NOTE HybSeq course with zingiberaceae test data
 	echo
 	done
 

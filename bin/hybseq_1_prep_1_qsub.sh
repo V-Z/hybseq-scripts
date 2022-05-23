@@ -9,18 +9,20 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
+# qsub -l walltime=4:0:0 -l select=1:ncpus=4:mem=48gb:scratch_local=100gb -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # NOTE HybSeq course with zingiberaceae test data
 # qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=48gb:scratch_local=250gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # HybSeq
 # qsub -l walltime=48:0:0 -l select=1:ncpus=8:mem=256gb:scratch_local=1000gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # WGS
 
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
-trap 'cp -a $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
+trap 'cp -a ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
 
 # Set data directories
 # HybSeq scripts and data
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
+DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/1_data/lib_01/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/brassicaceae/arabidopsis_plastome_hybrid_zone/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/0_data"
@@ -45,7 +47,7 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_07/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_08/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_09/0_data"
-DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_10/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_10/0_data"
 
 # Required modules
 echo "Loading modules"
@@ -70,7 +72,7 @@ echo
 
 # Running the task
 echo "Preprocessing the FASTQ files..."
-./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t "${TRIMMOMATIC_BIN}" | tee trimming.log # HybSeq
+./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log # HybSeq
 # ./hybseq_1_prep_2_run.sh -f 0_data -c 8 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 32 -t "${TRIMMOMATIC_BIN}" | tee wgs_prepare.log # WGS
 echo
 

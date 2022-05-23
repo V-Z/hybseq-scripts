@@ -9,11 +9,12 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
+# qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=100gb -m abe ~/hybseq/bin/hybseq_3_hybpiper_postprocess_1_qsub.sh # NOTE HybSeq course with zingiberaceae test data
 # qsub -l walltime=24:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=500gb -q ibot -m abe ~/hybseq/bin/hybseq_3_hybpiper_postprocess_1_qsub.sh
 
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
-trap 'cp -ar $SCRATCHDIR $DATADIR/ && clean_scratch' TERM
+trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
 
 # Set data directories
 # HybPiper
@@ -25,17 +26,19 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 # BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
 # BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
 # BAITFILE='ref/oxalis/input_seq_without_cpdna_1086_loci_renamed_concat.fasta' # Reference for Oxalis incarnata
-BAITFILE='ref/oxalis/input_seq_without_cpdna_renamed_concat.fasta' # Reference for Oxalis
+# BAITFILE='ref/oxalis/input_seq_without_cpdna_renamed_concat.fasta' # Reference for Oxalis
 # BAITFILE='ref/oxalis/red_soa_probes_gen_comp_concat.fasta' # Reduced reference for Oxalis
+BAITFILE='ref/zingiberaceae/curcuma_hybpiper_renamed_concat.fasta'
 
 # Data to process
+DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs"
-DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_hybpiper"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_hybpiper"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/diploids_hybpiper"
 
 # samples_list.txt is created by hybseq_1_prep.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
