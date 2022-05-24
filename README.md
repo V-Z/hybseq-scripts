@@ -129,8 +129,8 @@ Edit variables in `hybseq_2_hybpiper_1_submitter.sh`:
 * `HYBPIPDIR` --- Point to directory containing [HybPiper](https://github.com/mossmatters/HybPiper/).
 * `WORKDIR` --- Point to `hybseq` directory containing this script set.
 * `DATADIR` --- Point to directory containing deduplicated FASTQ files named like `sampleXY.dedup.R1.fq` and `sampleXY.dedup.R2.fq` (produced by `hybseq_1_prep_2_run.sh`) for forward/reverse reads of each sample. The directory is e.g. `XXX/1_data/lib_01/2_dedup`.
-* `SAMPLES` --- File name of list of samples according to [HybPiper requirements](https://github.com/mossmatters/HybPiper/wiki#running-the-pipeline) to be processed (prepared by `hybseq_1_prep_2_run.sh` as `samples_list.txt`).
-* `BAITFILE` --- Reference bait FASTA file (see <https://github.com/mossmatters/HybPiper/wiki#target-file> for details) --- must be relative path within `WORKDIR`, recommended placement is `ref` directory (see `README.md` there).
+* `SAMPLES` --- File name of list of samples according to [HybPiper requirements](https://github.com/mossmatters/HybPiper/wiki#20-running-the-pipeline) to be processed (prepared by `hybseq_1_prep_2_run.sh` as `samples_list.txt`).
+* `BAITFILE` --- Reference bait FASTA file (see <https://github.com/mossmatters/HybPiper/wiki#12-target-file> for details) --- must be relative path within `WORKDIR`, recommended placement is `ref` directory (see `README.md` there).
 * `NCPU` --- Number of CPU threads used. Default is 8.
 
 Depending on the cluster (if using something else than [MetaCentrum](https://www.metacentrum.cz/)) script `hybseq_2_hybpiper_2_qsub.sh` will have to be edited (e.g. loading needed software modules by `module add`). As `hybseq_2_hybpiper_3_run.sh` contains settings for processing each input file by [HybPiper](https://github.com/mossmatters/HybPiper/wiki) itself, it can be edited to change HybPiper settings.
