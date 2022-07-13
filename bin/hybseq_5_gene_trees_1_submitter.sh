@@ -14,7 +14,7 @@
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/3_aligned"
+# DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/3_aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/3_aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/3_aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/3_aligned"
@@ -26,7 +26,9 @@ DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/3_al
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta/diploids"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta/red_samples/aligned"
+DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments_july_2022/final_alns_for_sptree"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_mvftools_test/5_aligned"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Zingiberaceae_HybSeq_flowering_genes/HybPiper/DNA_alignments/aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Zingiberaceae_HybSeq_flowering_genes/run_1/alignments/aligned"
 # Submitting individual tasks
 
@@ -46,8 +48,8 @@ echo
 for ALN in $(find . -name "*.aln.fasta" | sed 's/^\.\///' | sort); do
 	ALNB="$(basename "${ALN}")"
 	echo "Processing ${ALNB}"
-# 	qsub -l walltime=24:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -q ibot -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1
-	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1 # NOTE HybSeq course with zingiberaceae test data
+	qsub -l walltime=48:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -q ibot -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1
+# 	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1 # NOTE HybSeq course with zingiberaceae test data
 	echo
 	done
 

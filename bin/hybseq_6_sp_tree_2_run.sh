@@ -24,13 +24,13 @@ for GT in *.nwk; do
 	sed -i 's/^.\+ //' "${GT}"
 	echo
 	echo "Running ASTRAL"
-	java -jar /storage/pruhonice1-ibot/home/${LOGNAME}/bin/Astral/astral.5.7.8.jar -i "${GT}" -o sp_"${GT}" -t 3 -g -r 10000 2>&1 | tee sp_"${GT%.nwk}".log
+	java -jar /storage/pruhonice1-ibot/home/${LOGNAME}/bin/Astral/astral.5.7.8.jar -i "${GT}" -o sp_"${GT}" -t 3 -g -r 10000 --outgroup Achillea_nobilis_SAMN11585351 2>&1 | tee sp_"${GT%.nwk}".log
+# 	/storage/pruhonice1-ibot/home/${LOGNAME}/bin/astral-pro -o sp_"${GT}" -r 10 -s 10 -t 4 -u 1 "${GT}"
 	echo
 	echo "Removing input file"
 	rm "${GT}"
 	echo
 	done
-
 
 echo
 
