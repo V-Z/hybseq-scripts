@@ -293,13 +293,13 @@ for FASTQF in "${FQDIR}"/*.f*q*; do
 	# Pre-processing of the reads
 	echo "Trimming"
 	# Trimming and adaptor removal with Trimmomatic
-	${JAVA} -Xmx"$((MEM*NCPU))"g -jar "${TRIMMOMATIC}" PE -threads "$((NCPU-1))" -phred33 "${FASTQ}" "${TRIMDIR}"/"${TRM}" ILLUMINACLIP:"${ADAPTOR}":2:30:10 SLIDINGWINDOW:5:20 LEADING:20 TRAILING:20 MINLEN:50 || operationfailed
+	${JAVA} -Xmx"$((MEM*NCPU))"g -jar "${TRIMMOMATIC}" SE -threads "$((NCPU-1))" -phred33 "${FASTQF}" "${TRIMDIR}"/"${TRM}" ILLUMINACLIP:"${ADAPTOR}":2:30:10 SLIDINGWINDOW:5:20 LEADING:20 TRAILING:20 MINLEN:50 || operationfailed
 	echo
 
 	# Trimming statistics
 	echo "Trimming statistics"
 	{ printf '%s\t' "${FASTQ}" # Print sample name
-		echo "$(($(wc -l "${FASTQ}" | cut -f 1 -d ' ')/4))" | xargs printf '%s\t%s' # No of input reads (N of lines /4)
+		echo "$(($(wc -l "${FASTQF}" | cut -f 1 -d ' ')/4))" | xargs printf '%s\t%s' # No of input reads (N of lines /4)
 		echo "$(($(wc -l "${TRIMDIR}"/"${TRM}" | cut -f 1 -d ' ')/4))" | xargs printf '%s\t%s' # No of trimmed reads (N of lines /4)
 		printf '\n'
 		} >> "${TRIMDIR}"/report_trimming.tsv || operationfailed
@@ -313,7 +313,7 @@ for FASTQF in "${FQDIR}"/*.f*q*; do
 	# Filtering statistics
 	echo "Filtering statistics"
 	{ printf '%s\t' "${FASTQ}" # Print sample name
-		echo "$(($(wc -l "${FASTQ}" | cut -f 1 -d ' ')/4))" | xargs printf '%s\t%s' # No of input reads (N of lines /4)
+		echo "$(($(wc -l "${FASTQF}" | cut -f 1 -d ' ')/4))" | xargs printf '%s\t%s' # No of input reads (N of lines /4)
 		echo "$(($(wc -l "${TRIMDIR}"/"${TRM}" | cut -f 1 -d ' ')/4))" | xargs printf '%s\t%s' # No of trimmed reads (N of lines /4)
 		echo "$(($(wc -l "${DEDUPDIR}"/"${NODUP}" | cut -f 1 -d ' ')/4))" | xargs printf '%s\t%s' # No of deduplicated reads (N of lines /4)
 		printf '\n'
@@ -322,7 +322,7 @@ for FASTQF in "${FQDIR}"/*.f*q*; do
 
 	# Quality reports
 	echo "Quality reports"
-	fastqc -o "${QUALDIR}" -t "${NCPU}" "${FASTQ}" "${TRIMDIR}"/"${TRM}" "${DEDUPDIR}"/"${NODUP}" || operationfailed
+	fastqc -o "${QUALDIR}" -t "${NCPU}" "${FASTQF}" "${TRIMDIR}"/"${TRM}" "${DEDUPDIR}"/"${NODUP}" || operationfailed
 	echo
 	done
 
