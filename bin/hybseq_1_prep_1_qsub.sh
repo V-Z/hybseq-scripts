@@ -22,8 +22,11 @@ trap 'cp -a ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/1_data/lib_01/0_data"
+# DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/1_data/lib_01/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/brassicaceae/arabidopsis_plastome_hybrid_zone/0_data"
+DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/h_alpinum_ont/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_01_sra/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_02_tf/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/1_data/0_data"
@@ -32,8 +35,12 @@ DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/1_da
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_03/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_04/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_05/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_06/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups3/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/repetitions_merged/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/wgs/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/skimming/0_data"
@@ -74,6 +81,7 @@ echo
 echo "Preprocessing the FASTQ files..."
 ./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log # HybSeq
 # ./hybseq_1_prep_2_run.sh -f 0_data -c 8 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 32 -t "${TRIMMOMATIC_BIN}" | tee wgs_prepare.log # WGS
+# ./hybseq_1_prep_2_run_se.sh -f 0_data -c 8 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 32 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log
 echo
 
 # Remove unneeded file
