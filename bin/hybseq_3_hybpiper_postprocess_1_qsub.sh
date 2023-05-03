@@ -58,18 +58,22 @@ module add R-4.0.0-gcc || exit 1 # R (ggplot2, gplots, heatmap.plus, reshape2)
 echo
 
 # Change working directory
-echo "Going to working directory ${SCRATCHDIR}"
-cd "${SCRATCHDIR}"/ || exit 1
+# echo "Going to working directory ${SCRATCHDIR}"
+echo "Going to working directory ${DATADIR}"
+# cd "${SCRATCHDIR}"/ || exit 1
+cd "${DATADIR}"/ || exit 1
 echo
 
 # Copy data
 echo "Copying..."
 echo "HybPiper - ${HYBPIPDIR}"
-cp -a "${HYBPIPDIR}" "${SCRATCHDIR}"/ || exit 1
+# cp -a "${HYBPIPDIR}" "${SCRATCHDIR}"/ || exit 1
+cp -a "${HYBPIPDIR}" . || exit 1
 echo "HybSeq data - ${WORKDIR}"
-cp -a "${WORKDIR}"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref,rpackages} "${SCRATCHDIR}"/ || exit 1
-echo "Data to process - ${DATADIR}"
-cp -a "${DATADIR}"/* "${SCRATCHDIR}"/ || exit 1
+# cp -a "${WORKDIR}"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref,rpackages} "${SCRATCHDIR}"/ || exit 1
+cp -a "${WORKDIR}"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref,rpackages} . || exit 1
+# echo "Data to process - ${DATADIR}"
+# cp -a "${DATADIR}"/* "${SCRATCHDIR}"/ || exit 1
 echo
 
 # Runing the task (HibPiper postprocessing)
@@ -77,10 +81,10 @@ echo "Running HybPiper postprocessing..."
 ./hybseq_3_hybpiper_postprocess_2_run.sh -p "${HYBPIPDIR}" -b "${BAITFILE}" -s "${SAMPLES}" | tee hybseq_hybpiper_postprocess.log
 echo
 
-# Copy results back to storage
-echo "Copying results back to ${DATADIR}"
-cp -a "${SCRATCHDIR}" "${DATADIR}"/ || export CLEAN_SCRATCH='false'
-echo
+# # Copy results back to storage
+# echo "Copying results back to ${DATADIR}"
+# cp -a "${SCRATCHDIR}" "${DATADIR}"/ || export CLEAN_SCRATCH='false'
+# echo
 
 exit
 

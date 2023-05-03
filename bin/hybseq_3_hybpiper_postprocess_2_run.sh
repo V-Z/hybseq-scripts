@@ -163,7 +163,7 @@ echo
 
 # Removing input data
 echo "Removing input directories and unneeded files"
-while read -r SAMPLE; do rm -rf "${SAMPLE}"*; done < "${SAMPLES}"
+# while read -r SAMPLE; do rm -rf "${SAMPLE}"*; done < "${SAMPLES}"
 rm -rf HybPiper HybPiper.* hybseq_hybpiper.*.dedup.log hybseq_3_hybpiper_postprocess_2_run.sh ref rpackages Rplots.pdf ./*.R "${SAMPLES}"
 echo
 
