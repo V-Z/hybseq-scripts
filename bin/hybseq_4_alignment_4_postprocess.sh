@@ -15,9 +15,13 @@ if [ "$#" -ne '1' ]; then
 	fi
 
 # List of samples - relative path from directory to process
-SAMPLES="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/2_seqs/samples_list.txt"
+# SAMPLES="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/2_seqs/samples_list.txt"
+# SAMPLES="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/cos/samples_list.txt"
+# SAMPLES="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/kew/samples_list.txt"
 # SAMPLES='/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_contigs/samples_list.txt'
 # SAMPLES='/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/diploids_contigs/samples_list.txt'
+SAMPLES='/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/ingroup_contigs/samples_list.txt'
+# SAMPLES='/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/placement_contigs/samples_list.txt'
 
 # Exit on error
 function operationfailed {

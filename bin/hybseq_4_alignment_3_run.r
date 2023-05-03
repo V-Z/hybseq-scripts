@@ -38,8 +38,8 @@ aln.ng <- deleteEmptyCells(DNAbin=aln)
 # Delete columns and rows with too many gaps
 # Add/replace by ips::gblocks and/or ips::aliscore ?
 aln.ng <- deleteGaps(x=aln.ng, gap.max=round(nrow(aln)/2))
-aln.ng <- del.rowgapsonly(x=aln.ng, threshold=0.2, freq.only=FALSE)
-aln.ng <- del.colgapsonly(x=aln.ng, threshold=0.2, freq.only=FALSE)
+aln.ng <- del.rowgapsonly(x=aln.ng, threshold=0.25, freq.only=FALSE)
+aln.ng <- del.colgapsonly(x=aln.ng, threshold=0.25, freq.only=FALSE)
 aln.ng
 
 ## Exporting alignment
