@@ -42,9 +42,9 @@ if [ -z "${NCPU}" ]; then
 
 # Required modules
 echo "Loading modules"
-module add python36-modules-gcc || exit 1 # biopython
+module add py-biopython/1.78-gcc-10.2.1-rnx2m64 || exit 1 # biopython
 module add exonerate-2.2.0 || exit 1 # exonerate
-module add blast+-2.10.0 || exit 1 # blastx, makeblastdb
+module add blast-plus/2.12.0-gcc-10.2.1-2phsggo || exit 1 # blastx, makeblastdb
 module add spades-3.14.0 || exit 1 # spades.py
 module add parallel-20200322 || exit 1 # parallel
 module add bwa-0.7.17 || exit 1 # bwa
