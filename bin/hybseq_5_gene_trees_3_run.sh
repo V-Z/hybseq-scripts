@@ -29,7 +29,7 @@ while getopts "hva:" INITARGS; do
 			exit
 			;;
 		a) # Alignment FASTA input
-			if [ -r "${OPTARG}" ]; then
+			if [[ -r "${OPTARG}" ]]; then
 				ALN="$(realpath "${OPTARG}")"
 				echo "Input alignment in FASTA format to use for gene tree construction: ${ALN}"
 				echo
@@ -72,7 +72,7 @@ toolcheck iqtree2
 # toolcheck raxml-ng
 
 # Checking if all required variables are provided
-if [ -z "${ALN}" ]; then
+if [[ -z "${ALN}" ]]; then
 	echo "Error! Input alignment in FASTA format to use for gene tree construction not provided!"
 	operationfailed
 	fi

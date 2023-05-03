@@ -66,9 +66,9 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 			exit
 			;;
 		f) # Input directory with compressed FASTQ files to be processed
-			if [ -d "${OPTARG}" ]; then
+			if [[ -d "${OPTARG}" ]]; then
 				COUNTFASTQ=$(find "${OPTARG}" -name "*.f*q*" | wc -l)
-				if [ "${COUNTFASTQ}" != 0 ]; then
+				if [[ "${COUNTFASTQ}" != 0 ]]; then
 					FQDIR="${OPTARG}"
 					echo "Input directory: ${FQDIR}"
 					echo
@@ -95,7 +95,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 					fi
 			;;
 		o) # Output directory for trimmed sequences
-			if [ -d "${OPTARG}" ]; then
+			if [[ -d "${OPTARG}" ]]; then
 				TRIMDIR="${OPTARG}"
 				echo "Output directory for trimmed sequences: ${TRIMDIR}"
 				echo
@@ -107,7 +107,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 					fi
 			;;
 		d) # Output directory for deduplicated sequences
-			if [ -d "${OPTARG}" ]; then
+			if [[ -d "${OPTARG}" ]]; then
 				DEDUPDIR="${OPTARG}"
 				echo "Output directory for deduplicated sequences: ${DEDUPDIR}"
 				echo
@@ -119,7 +119,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 					fi
 			;;
 		q) # Output directory for quality reports
-			if [ -d "${OPTARG}" ]; then
+			if [[ -d "${OPTARG}" ]]; then
 				QUALDIR="${OPTARG}"
 				echo "Output directory for quality reports: ${QUALDIR}"
 				echo
@@ -131,7 +131,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 					fi
 			;;
 		a) # FASTA file containing adaptor(s)
-			if [ -r "${OPTARG}" ]; then
+			if [[ -r "${OPTARG}" ]]; then
 				ADAPTOR=$(realpath "${OPTARG}")
 				echo "Adaptor(s) FASTA file: ${ADAPTOR}"
 				echo
@@ -142,7 +142,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 					fi
 			;;
 		j) # Path to custom Java binary
-			if [ -x "${OPTARG}" ]; then
+			if [[ -x "${OPTARG}" ]]; then
 			JAVA="${OPTARG}"
 			echo "Custom Java binary: ${JAVA}"
 			echo
@@ -164,7 +164,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 				fi
 			;;
 		t) # Path to Trimmomatic JAR file
-			if [ -r "${OPTARG}" ]; then
+			if [[ -r "${OPTARG}" ]]; then
 			TRIMMOMATIC="${OPTARG}"
 			echo "Trimmomatic JAR file: ${TRIMMOMATIC}"
 			echo
@@ -198,61 +198,61 @@ toolcheck fastqc
 toolcheck parallel
 
 # Checking if all required parameters are provided
-if [ -z "${FQDIR}" ]; then
+if [[ -z "${FQDIR}" ]]; then
 	echo "Error! Input directory with FASTQ files (-f) was not specified!"
 	echo "See usage options: \"$0 -h\""
 	echo
 	exit 1
 	fi
 
-if [ -z "${NCPU}" ]; then
+if [[ -z "${NCPU}" ]]; then
 	echo "Number of CPU threads (-c) for parallel operations was not set. Using default value of 4."
 	echo
 	NCPU='4'
 	fi
 
-if [ -z "${TRIMDIR}" ]; then
+if [[ -z "${TRIMDIR}" ]]; then
 	echo "Error! Output directory for trimmed sequences (-o) was not specified!"
 	echo "See usage options: \"$0 -h\""
 	echo
 	exit 1
 	fi
 
-if [ -z "${DEDUPDIR}" ]; then
+if [[ -z "${DEDUPDIR}" ]]; then
 	echo "Error! Output directory for deduplicated sequences (-d) was not specified!"
 	echo "See usage options: \"$0 -h\""
 	echo
 	exit 1
 	fi
 
-if [ -z "${QUALDIR}" ]; then
+if [[ -z "${QUALDIR}" ]]; then
 	echo "Error! Output directory for quality reports (-q) was not specified!"
 	echo "See usage options: \"$0 -h\""
 	echo
 	exit 1
 	fi
 
-if [ -z "${ADAPTOR}" ]; then
+if [[ -z "${ADAPTOR}" ]]; then
 	echo "Error! Adaptor file (-a) was not specified!"
 	echo "See usage options: \"$0 -h\""
 	echo
 	exit 1
 	fi
 
-if [ -z "${JAVA}" ]; then
+if [[ -z "${JAVA}" ]]; then
 	toolcheck java
 	echo "Path to custom Java executable (-j) was not specified. Using default $(command -v java)"
 	JAVA="$(command -v java)"
 	echo
 	fi
 
-if [ -z "${MEM}" ]; then
+if [[ -z "${MEM}" ]]; then
 	echo "Memory consumption per core (-m) was not set. Using default value of 2 GB per core."
 	MEM='2'
 	echo
 	fi
 
-if [ -z "${TRIMMOMATIC}" ]; then
+if [[ -z "${TRIMMOMATIC}" ]]; then
 	echo "Error! Path to Trimmomatic JAR file (-t) was not specified!"
 	echo "See usage options: \"$0 -h\""
 	echo

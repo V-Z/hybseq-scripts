@@ -37,7 +37,7 @@ while getopts "hvp:b:s:c:" INITARGS; do
 			exit
 			;;
 		p) # Directory with HybPiper
-			if [ -d "${OPTARG}" ]; then
+			if [[ -d "${OPTARG}" ]]; then
 			HYBPIPER="$(realpath "${OPTARG}")"
 			echo "Path to HybPiper directory: ${HYBPIPER}"
 			echo
@@ -48,7 +48,7 @@ while getopts "hvp:b:s:c:" INITARGS; do
 				fi
 			;;
 		b) # Reference bait FASTA file
-			if [ -r "${OPTARG}" ]; then
+			if [[ -r "${OPTARG}" ]]; then
 				BAITFILE="$(realpath "${OPTARG}")"
 				echo "Reference bait FASTA file: ${BAITFILE}"
 				echo
@@ -60,7 +60,7 @@ while getopts "hvp:b:s:c:" INITARGS; do
 			;;
 		s) # List of samples to process
 			for F in "${OPTARG}".*; do
-				if [ ! -r "${F}" ]; then
+				if [[ ! -r "${F}" ]]; then
 					echo "Error! You did not provide sample to process (-s) \"${OPTARG}\"!"
 					echo
 					exit 1
@@ -126,19 +126,19 @@ toolcheck bwa
 toolcheck samtools
 
 # Checking if all required parameters are provided
-if [ -z "${HYBPIPER}" ]; then
+if [[ -z "${HYBPIPER}" ]]; then
 	echo "Error! Directory with HybPiper not provided!"
 	operationfailed
 	fi
-if [ -z "${BAITFILE}" ]; then
+if [[ -z "${BAITFILE}" ]]; then
 	echo "Error! Reference bait FASTA file not provided!"
 	operationfailed
 	fi
-if [ -z "${SAMPLES}" ]; then
+if [[ -z "${SAMPLES}" ]]; then
 	echo "Error! List of samples to process not provided!"
 	operationfailed
 	fi
-if [ -z "${NCPU}" ]; then
+if [[ -z "${NCPU}" ]]; then
 	echo "Number of CPU threads (-c) for parallel operations was not set. Using default value of 8."
 	echo
 	NCPU='8'

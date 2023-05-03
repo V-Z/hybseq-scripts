@@ -22,36 +22,36 @@ OUTPUT='input_seq_without_cpdna_1086_loci_renamed_concat.fasta'
 TAXA='Oxalisobtusa'
 
 # Convert input FASTA not to be interleaved
-awk 'BEGIN{RS=">"}NR>1{sub("\n","\t");gsub("\n",""); print RS$0}' "$INPUT" | sed 's/\t/\n/g' > tmp01
+awk 'BEGIN{RS=">"}NR>1{sub("\n","\t");gsub("\n",""); print RS$0}' "${INPUT}" | sed 's/\t/\n/g' > tmp01
 
 # Extract list of probe names
-grep -o "$PROBES" tmp01 | sort -u > tmp02
+grep -o "${PROBES}" tmp01 | sort -u > tmp02
 
 # Create individual FASTA sequence for every probe/taxon
 while read -r L; do
-	grep -A 1 "$L" tmp01 | grep -v "^>" | tr -d "\n" > "$L".fasta
+	grep -A 1 "${L}" tmp01 | grep -v "^>" | tr -d "\n" > "${L}".fasta
 	done < tmp02
 
 # Add probe name to every probe FASTA file
-for F in $PATTERN; do
-	sed -i "1 i\>$F" "$F"
-	echo >> "$F"
+for F in ${PATTERN}; do
+	sed -i "1 i\>${F}" "${F}"
+	echo >> "${F}"
 	done
 
 # Group all concatenated probes into single file
-cat $PATTERN > "$OUTPUT"
+cat ${PATTERN} > "${OUTPUT}"
 
 # Remove ".fasta" from probe names
-sed -i 's/\.fasta//' "$OUTPUT"
+sed -i 's/\.fasta//' "${OUTPUT}"
 
 # List of names of individuals used for probes
-grep -o ">.\+-" "$INPUT" | sed 's/^>//' | sed 's/-$//' | sort -u > "$OUTPUT".txt
+grep -o ">.\+-" "${INPUT}" | sed 's/^>//' | sed 's/-$//' | sort -u > "${OUTPUT}".txt
 
 # Insert taxa name before every probe name
-sed -i "s/^>/>$TAXA-/" "$OUTPUT"
+sed -i "s/^>/>${TAXA}-/" "${OUTPUT}"
 
 # Remove unneeded files
-rm tmp0[12] $PATTERN
+rm tmp0[12] ${PATTERN}
 
 exit
 

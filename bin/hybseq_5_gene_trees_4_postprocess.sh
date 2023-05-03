@@ -9,7 +9,7 @@
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 # Checking if exactly one variables is provided
-if [ "$#" -ne '1' ]; then
+if [[ "$#" -ne '1' ]]; then
 	echo "Error! Exactly 1 parameter (directory with gene trees to process) is required! $# parameters received."
 	exit 1
 	fi

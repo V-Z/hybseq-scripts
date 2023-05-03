@@ -13,15 +13,15 @@ trap 'clean_scratch' TERM EXIT
 trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/; clean_scratch' TERM
 
 # Checking if all required variables are provided
-if [ -z "${ALNF}" ]; then
+if [[ -z "${ALNF}" ]]; then
 	echo "Error! Sample name not provided!"
 	exit 1
 	fi
-if [ -z "${WORKDIR}" ]; then
+if [[ -z "${WORKDIR}" ]]; then
 	echo "Error! Data and scripts for HybSeq not provided!"
 	exit 1
 	fi
-if [ -z "${DATADIR}" ]; then
+if [[ -z "${DATADIR}" ]]; then
 	echo "Error! Directory with data to process not provided!"
 	exit 1
 	fi

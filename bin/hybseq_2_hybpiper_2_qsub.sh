@@ -15,27 +15,27 @@ trap 'clean_scratch' TERM EXIT
 trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
 
 # Checking if all required variables are provided
-if [ -z "${SAMPLE}" ]; then
+if [[ -z "${SAMPLE}" ]]; then
 	echo "Error! Sample name not provided!"
 	exit 1
 	fi
-if [ -z "${HYBPIPDIR}" ]; then
+if [[ -z "${HYBPIPDIR}" ]]; then
 	echo "Error! Directory with HybPiper not provided!"
 	exit 1
 	fi
-if [ -z "${WORKDIR}" ]; then
+if [[ -z "${WORKDIR}" ]]; then
 	echo "Error! Data and scripts for HybSeq not provided!"
 	exit 1
 	fi
-if [ -z "${DATADIR}" ]; then
+if [[ -z "${DATADIR}" ]]; then
 	echo "Error! Directory with data to process not provided!"
 	exit 1
 	fi
-if [ -z "${BAITFILE}" ]; then
+if [[ -z "${BAITFILE}" ]]; then
 	echo "Error! Reference bait FASTA file not provided!"
 	exit 1
 	fi
-if [ -z "${NCPU}" ]; then
+if [[ -z "${NCPU}" ]]; then
 	echo "Error! Number of CPU threads not provided!"
 	exit 1
 	fi

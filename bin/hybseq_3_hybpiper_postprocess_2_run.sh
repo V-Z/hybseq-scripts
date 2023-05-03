@@ -31,7 +31,7 @@ while getopts "hvp:b:s:" INITARGS; do
 			exit
 			;;
 		p) # Directory with HybPiper
-			if [ -d "${OPTARG}" ]; then
+			if [[ -d "${OPTARG}" ]]; then
 			HYBPIPER="$(realpath "${OPTARG}")"
 			echo "Path to HybPiper directory: ${HYBPIPER}"
 			echo
@@ -42,7 +42,7 @@ while getopts "hvp:b:s:" INITARGS; do
 				fi
 			;;
 		b) # Reference bait FASTA file
-			if [ -r "${OPTARG}" ]; then
+			if [[ -r "${OPTARG}" ]]; then
 				BAITFILE="$(realpath "${OPTARG}")"
 				echo "Reference bait FASTA file: ${BAITFILE}"
 				echo
@@ -53,7 +53,7 @@ while getopts "hvp:b:s:" INITARGS; do
 					fi
 			;;
 		s) # List of samples to process
-			if [ -r "${OPTARG}" ]; then
+			if [[ -r "${OPTARG}" ]]; then
 			SAMPLES="${OPTARG}"
 			echo "List of samples to process: ${SAMPLES}"
 			echo
@@ -97,15 +97,15 @@ toolcheck R
 toolcheck samtools
 
 # Checking if all required variables are provided
-if [ -z "${HYBPIPER}" ]; then
+if [[ -z "${HYBPIPER}" ]]; then
 	echo "Error! Directory with HybPiper not provided!"
 	operationfailed
 	fi
-if [ -z "${BAITFILE}" ]; then
+if [[ -z "${BAITFILE}" ]]; then
 	echo "Error! Reference bait FASTA file not provided!"
 	operationfailed
 	fi
-if [ -z "${SAMPLES}" ]; then
+if [[ -z "${SAMPLES}" ]]; then
 	echo "Error! List of samples to process not provided!"
 	operationfailed
 	fi
@@ -153,7 +153,7 @@ echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.FNA" -o -name "
 echo >> presence_of_samples_in_contigs.tsv || operationfailed
 echo -e "Sample\tNumber" >> presence_of_samples_in_contigs.tsv || operationfailed
 while read -r SAMPLE; do
-	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta ./*.FNA | wc -l)" >> presence_of_samples_in_contigs.tsv || operationfailed
+	echo -e "${SAMPLE}\t$(grep -c "^>${SAMPLE}$" ./*.fasta ./*.FNA)" >> presence_of_samples_in_contigs.tsv || operationfailed
 	done < <(sed 's/\.dedup$//' "${SAMPLES}" | sort)
 echo >> presence_of_samples_in_contigs.tsv || operationfailed
 echo "Note that for every probe sequence, three contigs are produced (for respective exon, intron and supercontig)."

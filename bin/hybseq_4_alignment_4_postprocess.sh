@@ -9,7 +9,7 @@
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 # Checking if exactly one variables is provided
-if [ "$#" -ne '1' ]; then
+if [[ "$#" -ne '1' ]]; then
 	echo "Error! Exactly 1 parameter (directory with aligned sequences to process) is required! $# parameters received."
 	exit 1
 	fi
@@ -61,7 +61,7 @@ function samplestats {
 	echo >> "$1" || operationfailed
 	echo -e "Sample\tNumber" >> "$1" || operationfailed
 	while read -r SAMPLE; do
-		echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta | wc -l)" >> "$1" || operationfailed
+		echo -e "${SAMPLE}\t$(grep -c "^>${SAMPLE}$" ./*.fasta)" >> "$1" || operationfailed
 		done < <(sed 's/\.dedup$//' "${SAMPLES}")
 	echo >> "$1" || operationfailed
 	}
