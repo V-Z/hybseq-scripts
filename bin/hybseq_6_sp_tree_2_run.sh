@@ -25,7 +25,7 @@ for GT in *.nwk; do
 	echo
 	echo "Running ASTRAL"
 	java -jar /storage/pruhonice1-ibot/home/"${LOGNAME}"/bin/Astral/astral.5.7.8.jar -i "${GT}" -o sp_"${GT}" -t 3 -g -r 10000 2>&1 | tee sp_"${GT%.nwk}".log
-# 	/storage/pruhonice1-ibot/home/"${LOGNAME}"/bin/astral-pro -o sp_"${GT}" -r 10 -s 10 -t 4 -u 1 "${GT}" 2>&1 | tee sp_"${GT%.nwk}".log
+# 	/storage/pruhonice1-ibot/home/"${LOGNAME}"/bin/astral-pro -o sp_"${GT}" -r 25 -s 25 -t 4 -u 1 "${GT}" 2>&1 | tee sp_"${GT%.nwk}".log
 	echo
 	echo "Removing input file"
 	rm "${GT}"

@@ -61,7 +61,7 @@ function samplestats {
 	echo >> "$1" || operationfailed
 	echo -e "Sample\tNumber" >> "$1" || operationfailed
 	while read -r SAMPLE; do
-		echo -e "${SAMPLE}\t$(grep -c "^>${SAMPLE}$" ./*.fasta)" >> "$1" || operationfailed
+		echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta | wc -l)" >> "$1" || operationfailed
 		done < <(sed 's/\.dedup$//' "${SAMPLES}")
 	echo >> "$1" || operationfailed
 	}

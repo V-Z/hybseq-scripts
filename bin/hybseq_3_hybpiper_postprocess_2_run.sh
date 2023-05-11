@@ -153,12 +153,22 @@ echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.FNA" -o -name "
 echo >> presence_of_samples_in_contigs.tsv || operationfailed
 echo -e "Sample\tNumber" >> presence_of_samples_in_contigs.tsv || operationfailed
 while read -r SAMPLE; do
-	echo -e "${SAMPLE}\t$(grep -c "^>${SAMPLE}$" ./*.fasta ./*.FNA)" >> presence_of_samples_in_contigs.tsv || operationfailed
+	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta ./*.FNA | wc -l)" >> presence_of_samples_in_contigs.tsv || operationfailed
 	done < <(sed 's/\.dedup$//' "${SAMPLES}" | sort)
 echo >> presence_of_samples_in_contigs.tsv || operationfailed
 echo "Note that for every probe sequence, three contigs are produced (for respective exon, intron and supercontig)."
 echo "Divide 'Total number of contigs' by three to get number of probes. Similarly divide number of occurrence of each sample by three."
 echo "You can calculate percentage of presence of each sample in all contigs (from total number of contigs)."
+echo
+
+# Removing ".dedup*" from accession names
+echo "Removing \".dedup*\" from statistics"
+sed -i 's/\.dedup//g' presence_of_samples_in_contigs.tsv seq_lengths.txt stats.txt
+echo
+
+echo "Transposition of sequence lengths"
+perl -F'\t' -lane 'push @rows, [@F]; END { for $row (0..$#{$rows[0]}) { print join("\t", map {$_->[$row] // ""} @rows) } }' seq_lengths.txt > seq_lengths.tsv
+sed -i 's/^Species[[:blank:]]/Gene\/Species\t/' seq_lengths.tsv
 echo
 
 # Removing input data
