@@ -19,9 +19,11 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq" # Data and scripts for
 
 # Data to process
 # DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/1_data/lib_01/2_dedup"
-DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/h_alpinum_ont/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/h_alpinum_ont/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_01_sra/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_02_tf/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_03_hieracium_rnaseq/2_dedup"
+DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_04_pilosella_RNA/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/1_data/2_dedup"
