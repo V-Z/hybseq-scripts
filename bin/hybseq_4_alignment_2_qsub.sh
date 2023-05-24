@@ -28,8 +28,8 @@ if [[ -z "${DATADIR}" ]]; then
 
 # Required modules
 echo "Loading modules"
-module add mafft-7.487 || exit 1 # mafft
-module add R-4.0.0-gcc || exit 1 # R (ape, ips, scales; dependencies colorspace, XML)
+module add mafft/7.520-gcc-10.2.1-hvrjqrq || exit 1 # mafft
+module add r/4.1.3-gcc-10.2.1-6xt26dl || exit 1 # R (ape, ips, scales; dependencies colorspace, XML)
 echo
 
 # Change working directory

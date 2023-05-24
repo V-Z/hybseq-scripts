@@ -43,12 +43,12 @@ if [[ -z "${NCPU}" ]]; then
 # Required modules
 echo "Loading modules"
 module add py-biopython/1.78-gcc-10.2.1-rnx2m64 || exit 1 # biopython
-module add exonerate-2.2.0 || exit 1 # exonerate
+module add exonerate/2.4.0-gcc-10.2.1-htf4gnb || exit 1 # exonerate
 module add blast-plus/2.12.0-gcc-10.2.1-2phsggo || exit 1 # blastx, makeblastdb
-module add spades-3.14.0 || exit 1 # spades.py
-module add parallel-20200322 || exit 1 # parallel
-module add bwa-0.7.17 || exit 1 # bwa
-module add samtools-1.10 || exit 1 # samtools
+module add spades/3.15.4 || exit 1 # spades.py
+module add parallel/20200322 || exit 1 # parallel
+module add bwa/0.7.17 || exit 1 # bwa
+module add samtools/1.14-gcc-10.2.1-oyuzddu || exit 1 # samtools
 echo
 
 # Change working directory

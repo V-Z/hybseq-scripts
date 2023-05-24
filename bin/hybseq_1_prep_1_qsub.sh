@@ -60,10 +60,10 @@ DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib
 
 # Required modules
 echo "Loading modules"
-module add trimmomatic-0.39 || exit 1
-module add bbmap-38.42 || exit 1
-module add fastQC-0.11.5 || exit 1
-module add parallel-20200322 || exit 1
+module add trimmomatic/0.39-gcc-10.2.1-uuuagj7 || exit 1
+module add bbmap/38.42 || exit 1
+module add fastqc/0.11.9-gcc-10.2.1-duxu5be || exit 1
+module add parallel/20200322 || exit 1
 echo
 
 # Change working directory

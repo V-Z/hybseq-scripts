@@ -43,7 +43,7 @@ DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/ingroup_filt
 
 # Required modules
 echo "Loading modules"
-module add openjdk-10 || exit 1
+module add openjdk/17.0.0_35-gcc-8.3.0-rfe265h || exit 1
 echo
 
 # Change working directory
