@@ -22,13 +22,13 @@ trap 'cp -a ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-# DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/1_data/lib_01/0_data"
+DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_01/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/brassicaceae/arabidopsis_plastome_hybrid_zone/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/h_alpinum_ont/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_01_sra/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_02_tf/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_03_hieracium_rnaseq/0_data"
-DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_04_pilosella_RNA/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_04_pilosella_RNA/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/1_data/0_data"

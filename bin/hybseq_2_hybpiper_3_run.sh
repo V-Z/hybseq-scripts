@@ -16,13 +16,12 @@ NCPU='' # Number of CPU threads for parallel operations
 echo
 
 # Parse initial arguments
-while getopts "hvp:b:s:c:" INITARGS; do
+while getopts "hvb:s:c:" INITARGS; do
 	case "${INITARGS}" in
 		h) # Help and exit
 			echo "Usage options:"
 			echo -e "\t-h\tPrint this help and exit."
 			echo -e "\t-v\tPrint script version, author and license and exit."
-			echo -e "\t-p\tDirectory with HybPiper. E.g. xxx/bin/HybPiper"
 			echo -e "\t-b\tReference bait FASTA file. E.g. ref/xxx.fasta"
 			echo -e "\t-s\tBase name of sample to process. E.g. sample_x.dedup for pair of files sample_x.dedup.R1.fq.bz2 and sample_x.dedup.R2.fq.bz2."
 			echo -e "\t-c\tNumber of CPU threads to use for parallel operations. If not provided, default is 8."
@@ -35,17 +34,6 @@ while getopts "hvp:b:s:c:" INITARGS; do
 			echo "License: GNU GPLv3, https://www.gnu.org/licenses/gpl-3.0.html"
 			echo
 			exit
-			;;
-		p) # Directory with HybPiper
-			if [[ -d "${OPTARG}" ]]; then
-			HYBPIPER="$(realpath "${OPTARG}")"
-			echo "Path to HybPiper directory: ${HYBPIPER}"
-			echo
-			else
-				echo "Error! You did not provide path to HybPiper directory (-p) \"${OPTARG}\"!"
-				echo
-				exit 1
-				fi
 			;;
 		b) # Reference bait FASTA file
 			if [[ -r "${OPTARG}" ]]; then
@@ -103,33 +91,10 @@ function operationfailed {
 
 # Testing dependencies
 echo "Checking if all required software is available"
-python3 "${HYBPIPER}"/reads_first.py --check-depend || operationfailed
+hybpiper check_dependencies || operationfailed
 echo
 
-# Check if all required binaries are available
-function toolcheck {
-	command -v "${1}" >/dev/null 2>&1 || {
-		echo >&2 "Error! ${1} is required but not installed. Aborting. Please, install it."
-		echo
-		exit 1
-		}
-	}
-
-toolcheck python3
-toolcheck parallel
-toolcheck bunzip2
-toolcheck exonerate
-toolcheck blastx
-toolcheck makeblastdb
-toolcheck spades.py
-toolcheck bwa
-toolcheck samtools
-
 # Checking if all required parameters are provided
-if [[ -z "${HYBPIPER}" ]]; then
-	echo "Error! Directory with HybPiper not provided!"
-	operationfailed
-	fi
 if [[ -z "${BAITFILE}" ]]; then
 	echo "Error! Reference bait FASTA file not provided!"
 	operationfailed
@@ -154,23 +119,7 @@ echo "Processing ${SAMPLES} at $(date)"
 echo
 echo "Main processing"
 echo
-python3 "${HYBPIPER}"/reads_first.py --bwa -r "${SAMPLES}".R{1,2}.fq -b "${BAITFILE}" --cpu "${NCPU}" --prefix "${SAMPLES}" || operationfailed
-echo
-echo "Paralogs"
-echo
-python3 "${HYBPIPER}"/paralog_investigator.py "${SAMPLES}" || operationfailed
-echo
-echo "Introns"
-echo
-python3 "${HYBPIPER}"/intronerate.py --prefix "${SAMPLES}" --addN || operationfailed
-echo
-echo "Depth"
-echo
-python3 "${HYBPIPER}"/depth_calculator.py --targets "${BAITFILE}" -r "${SAMPLES}".R{1,2}.fq --prefix "${SAMPLES}" || operationfailed
-echo
-echo "Cleanup"
-echo
-python3 "${HYBPIPER}"/cleanup.py "${SAMPLES}" || operationfailed
+hybpiper assemble --readfiles "${SAMPLES}".R{1,2}.fq --targetfile_dna "${BAITFILE}" --bwa --cpu "${NCPU}" --prefix "${SAMPLES}" || operationfailed
 echo
 
 exit

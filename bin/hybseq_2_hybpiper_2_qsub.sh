@@ -19,10 +19,6 @@ if [[ -z "${SAMPLE}" ]]; then
 	echo "Error! Sample name not provided!"
 	exit 1
 	fi
-if [[ -z "${HYBPIPDIR}" ]]; then
-	echo "Error! Directory with HybPiper not provided!"
-	exit 1
-	fi
 if [[ -z "${WORKDIR}" ]]; then
 	echo "Error! Data and scripts for HybSeq not provided!"
 	exit 1
@@ -42,13 +38,8 @@ if [[ -z "${NCPU}" ]]; then
 
 # Required modules
 echo "Loading modules"
-module add py-biopython/1.78-gcc-10.2.1-rnx2m64 || exit 1 # biopython
-module add exonerate/2.4.0-gcc-10.2.1-htf4gnb || exit 1 # exonerate
-module add blast-plus/2.12.0-gcc-10.2.1-2phsggo || exit 1 # blastx, makeblastdb
-module add spades/3.15.4 || exit 1 # spades.py
-module add parallel/20200322 || exit 1 # parallel
-module add bwa/0.7.17 || exit 1 # bwa
-module add samtools/1.14-gcc-10.2.1-oyuzddu || exit 1 # samtools
+module add conda-modules/py37 || exit 1 # Conda modules
+conda activate hybpiper || exit 1 # Activate HybPiper via Conda
 echo
 
 # Change working directory
@@ -58,8 +49,6 @@ echo
 
 # Copy data
 echo "Copying..."
-echo "HybPiper - ${HYBPIPDIR}"
-cp -a "${HYBPIPDIR}" "${SCRATCHDIR}"/ || exit 1
 echo "HybSeq data - ${WORKDIR}"
 cp -a "${WORKDIR}"/{bin/hybseq_2_hybpiper_3_run.sh,ref} "${SCRATCHDIR}"/ || exit 1
 echo "Data to process - ${DATADIR}/${SAMPLE}"
@@ -68,7 +57,7 @@ echo
 
 # Runing the task (HibPiper)
 echo "Running HybPiper..."
-./hybseq_2_hybpiper_3_run.sh -s "${SAMPLE}" -p "${HYBPIPDIR}" -b "${BAITFILE}" -c "${NCPU}" | tee hybseq_hybpiper."${SAMPLE}".log
+./hybseq_2_hybpiper_3_run.sh -s "${SAMPLE}" -b "${BAITFILE}" -c "${NCPU}" | tee hybseq_hybpiper."${SAMPLE}".log
 echo
 
 # Copy results back to storage
