@@ -31,6 +31,7 @@ UNP1='' # Unpaired, forward
 UNP2='' # Unpaired, reverse
 NODUP1='' # Without duplicates, forward
 NODUP2='' # Without duplicates, reverse
+DEDUPPARAMS='dedupe optical spany adjacent' # Parameters for deduplication with BBmap clumpify.sh
 echo
 
 # Parse initial arguments
@@ -72,7 +73,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 			;;
 		f) # Input directory with compressed FASTQ files to be processed
 			if [[ -d "${OPTARG}" ]]; then
-				COUNTFASTQ=$(find "${OPTARG}" -name "*.R[12].f*q*" | wc -l)
+				COUNTFASTQ=$(find "${OPTARG}" -name "*[._]R[12][._]*f*q*" | wc -l)
 				if [[ "${COUNTFASTQ}" != 0 ]]; then
 					FQDIR="${OPTARG}"
 					echo "Input directory: ${FQDIR}"
@@ -102,38 +103,50 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 		o) # Output directory for trimmed sequences
 			if [[ -d "${OPTARG}" ]]; then
 				TRIMDIR="${OPTARG}"
-				echo "Output directory for trimmed sequences: ${TRIMDIR}"
+				echo "Output directory: ${TRIMDIR}"
 				echo
-				else
-					echo "Output directory for trimmed sequences ${TRIMDIR} doesn't exist - creating 'trimmed'."
-					TRIMDIR='trimmed'
-					mkdir "${TRIMDIR}" || { echo "Error! Can't create ${TRIMDIR}!"; echo; exit 1; }
+				elif [[ -n "${OPTARG}" ]]; then
+					TRIMDIR="${OPTARG}"
+					echo "Output directory for trimmed sequences ${TRIMDIR} doesn't exist (-o) - creating it."
+					mkdir -p "${TRIMDIR}" || { echo "Error! Can't create ${TRIMDIR}!"; echo; exit 1; }
+					else
+						TRIMDIR='1_trimmed'
+						echo "Output directory for trimmed sequences ${TRIMDIR} doesn't exist - creating '1_trimmed'."
+						mkdir "${TRIMDIR}" || { echo "Error! Can't create ${TRIMDIR}!"; echo; exit 1; }
 					echo
-					fi
+				fi
 			;;
 		d) # Output directory for deduplicated sequences
 			if [[ -d "${OPTARG}" ]]; then
 				DEDUPDIR="${OPTARG}"
-				echo "Output directory for deduplicated sequences: ${DEDUPDIR}"
+				echo "Output directory: ${DEDUPDIR}"
 				echo
-				else
-					echo "Output directory for deduplicated sequences ${DEDUPDIR} doesn't exist - creating 'dedup'."
-					DEDUPDIR='dedup'
-					mkdir "${DEDUPDIR}" || { echo "Error! Can't create ${DEDUPDIR}!"; echo; exit 1; }
+				elif [[ -n "${OPTARG}" ]]; then
+					DEDUPDIR="${OPTARG}"
+					echo "Output directory for deduplicated sequences ${DEDUPDIR} doesn't exist (-o) - creating it."
+					mkdir -p "${DEDUPDIR}" || { echo "Error! Can't create ${DEDUPDIR}!"; echo; exit 1; }
+					else
+						DEDUPDIR='2_dedup'
+						echo "Output directory for deduplicated sequences ${DEDUPDIR} doesn't exist - creating '2_dedup'."
+						mkdir "${DEDUPDIR}" || { echo "Error! Can't create ${DEDUPDIR}!"; echo; exit 1; }
 					echo
-					fi
+				fi
 			;;
 		q) # Output directory for quality reports
 			if [[ -d "${OPTARG}" ]]; then
 				QUALDIR="${OPTARG}"
-				echo "Output directory for quality reports: ${QUALDIR}"
+				echo "Output directory: ${QUALDIR}"
 				echo
-				else
-					echo "Output directory for quality reports ${QUALDIR} doesn't exist - creating 'qual_rep'."
-					QUALDIR='qual_rep'
-					mkdir "${QUALDIR}" || { echo "Error! Can't create ${QUALDIR}!"; echo; exit 1; }
+				elif [[ -n "${OPTARG}" ]]; then
+					QUALDIR="${OPTARG}"
+					echo "Output directory for quality reports ${QUALDIR} doesn't exist (-o) - creating it."
+					mkdir -p "${QUALDIR}" || { echo "Error! Can't create ${QUALDIR}!"; echo; exit 1; }
+					else
+						QUALDIR='3_qual_rep'
+						echo "Output directory for quality reports ${QUALDIR} doesn't exist - creating '3_qual_rep'."
+						mkdir "${QUALDIR}" || { echo "Error! Can't create ${QUALDIR}!"; echo; exit 1; }
 					echo
-					fi
+				fi
 			;;
 		a) # FASTA file containing adaptor(s)
 			if [[ -r "${OPTARG}" ]]; then
@@ -283,14 +296,25 @@ echo
 
 # Decompress FASTQ files
 echo "Decompressing FASTQ files at $(date)"
-parallel -j "${NCPU}" -X bunzip2 -v ::: "${FQDIR}"/*.bz2
+if [[ -n "$(find "${FQDIR}" -name '*.gz')" ]]; then
+	echo "Files are compressed by gzip"
+	parallel -j "${NCPU}" -X gunzip -v ::: "${FQDIR}"/*.gz
+	elif [[ -n "$(find "${FQDIR}" -name '*.bz2')" ]]; then
+		echo "Files are compressed by bzip2"
+		parallel -j "${NCPU}" -X bunzip2 -v ::: "${FQDIR}"/*.bz2
+	fi
 echo
 
 # Process all files
-for FASTQ1 in "${FQDIR}"/*.R1.f*q*; do
+for FASTQ1 in "${FQDIR}"/*[._]R1[._]*.f*q; do
 	# Names - variables
-	FASTQ2="${FASTQ1//\.R1\./.R2.}" # Input, reverse (forward is in ${FASTQ1})
-	FASTQ="${FASTQ1%.R1.f*q*}" # Base name
+	if [[ $FASTQ1 =~ \.R1\. ]]; then
+		FASTQ2="${FASTQ1//\.R1\./.R2.}" # Input, reverse (forward is in ${FASTQ1})
+		FASTQ="${FASTQ1//\.R1\.*/}" # Base name
+		elif [[ $FASTQ1 =~ _R1_ ]]; then
+			FASTQ2="${FASTQ1//_R1_/_R2_}" # Also replace _R1_ with _R2_
+			FASTQ="${FASTQ1//_R1_*/}" # Also remove _R1_ from base name
+		fi
 	TRM1="$(basename "${FASTQ}.trm.R1.fq")" # Trimmed, forward
 	TRM2="$(basename "${FASTQ}.trm.R2.fq")" # Trimmed, reverse
 	UNP1="$(basename "${FASTQ}.unp.R1.fq")" # Unpaired, forward
@@ -322,7 +346,7 @@ for FASTQ1 in "${FQDIR}"/*.R1.f*q*; do
 
 	# Filtering of identical reads with BBmap
 	echo "Filtering identical reads"
-	clumpify.sh in="${TRIMDIR}"/"${TRM1}" in2="${TRIMDIR}"/"${TRM2}" out="${DEDUPDIR}"/"${NODUP1}" out2="${DEDUPDIR}"/"${NODUP2}" dedupe optical spany adjacent -Xmx"$((MEM*NCPU))"g || operationfailed
+	clumpify.sh in="${TRIMDIR}"/"${TRM1}" in2="${TRIMDIR}"/"${TRM2}" out="${DEDUPDIR}"/"${NODUP1}" out2="${DEDUPDIR}"/"${NODUP2}" "${DEDUPPARAMS}" -Xmx"$((MEM*NCPU))"g || operationfailed
 	echo
 
 	# Filtering statistics
