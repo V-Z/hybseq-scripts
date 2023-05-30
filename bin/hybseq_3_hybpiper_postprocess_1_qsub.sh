@@ -17,23 +17,22 @@ trap 'clean_scratch' TERM EXIT
 trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
 
 # Set data directories
-# HybPiper
-HYBPIPDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/bin/HybPiper"
 # HybSeq scripts and data
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Reference bait FASTA files - relative path within WORKDIR
-BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
+# BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
 # BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
 # BAITFILE='ref/oxalis/input_seq_without_cpdna_1086_loci_renamed_concat.fasta' # Reference for Oxalis incarnata
 # BAITFILE='ref/oxalis/input_seq_without_cpdna_renamed_concat.fasta' # Reference for Oxalis
 # BAITFILE='ref/oxalis/red_soa_probes_gen_comp_concat.fasta' # Reduced reference for Oxalis
 # BAITFILE='ref/zingiberaceae/curcuma_hybpiper_renamed_concat.fasta'
+BAITFILE='ref/zingiberaceae/curcuma_HybSeqProbes_first958_concat.fasta'
 
 # Data to process
-# DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/2_seqs"
+DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_01/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/cos"
-DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/kew"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/kew"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/2_seqs"
@@ -50,13 +49,6 @@ DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/kew
 # find . -maxdepth 1 -type d | sed 's/^\.\///' | sort | tail -n+2 > samples_list.txt
 SAMPLES='samples_list.txt'
 
-# Required modules
-echo "Loading modules"
-module add python36-modules/gcc || exit 1 # biopython
-module add samtools/1.14-gcc-10.2.1-oyuzddu || exit 1 # samtools
-module add r/4.1.3-gcc-10.2.1-6xt26dl || exit 1 # R (ggplot2, gplots, heatmap.plus, reshape2)
-echo
-
 # Change working directory
 # echo "Going to working directory ${SCRATCHDIR}"
 echo "Going to working directory ${DATADIR}"
@@ -66,25 +58,14 @@ echo
 
 # Copy data
 echo "Copying..."
-echo "HybPiper - ${HYBPIPDIR}"
-# cp -a "${HYBPIPDIR}" "${SCRATCHDIR}"/ || exit 1
-cp -a "${HYBPIPDIR}" . || exit 1
 echo "HybSeq data - ${WORKDIR}"
-# cp -a "${WORKDIR}"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref,rpackages} "${SCRATCHDIR}"/ || exit 1
-cp -a "${WORKDIR}"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref,rpackages} . || exit 1
-# echo "Data to process - ${DATADIR}"
-# cp -a "${DATADIR}"/* "${SCRATCHDIR}"/ || exit 1
+cp -a "${WORKDIR}"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref} . || exit 1
 echo
 
 # Runing the task (HibPiper postprocessing)
 echo "Running HybPiper postprocessing..."
-./hybseq_3_hybpiper_postprocess_2_run.sh -p "${HYBPIPDIR}" -b "${BAITFILE}" -s "${SAMPLES}" | tee hybseq_hybpiper_postprocess.log
+./hybseq_3_hybpiper_postprocess_2_run.sh -b "${BAITFILE}" -s "${SAMPLES}" | tee hybseq_hybpiper_postprocess.log
 echo
-
-# # Copy results back to storage
-# echo "Copying results back to ${DATADIR}"
-# cp -a "${SCRATCHDIR}" "${DATADIR}"/ || export CLEAN_SCRATCH='false'
-# echo
 
 exit
 

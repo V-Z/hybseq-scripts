@@ -38,8 +38,7 @@ if [[ -z "${NCPU}" ]]; then
 
 # Required modules
 echo "Loading modules"
-module add conda-modules/py37 || exit 1 # Conda modules
-conda activate hybpiper || exit 1 # Activate HybPiper via Conda
+module add parallel/20200322 || exit 1
 echo
 
 # Change working directory

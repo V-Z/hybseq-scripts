@@ -89,11 +89,6 @@ function operationfailed {
 	exit 1
 	}
 
-# Testing dependencies
-echo "Checking if all required software is available"
-hybpiper check_dependencies || operationfailed
-echo
-
 # Checking if all required parameters are provided
 if [[ -z "${BAITFILE}" ]]; then
 	echo "Error! Reference bait FASTA file not provided!"
@@ -117,9 +112,11 @@ echo
 # Processing the sample by HybPiper
 echo "Processing ${SAMPLES} at $(date)"
 echo
-echo "Main processing"
-echo
-hybpiper assemble --readfiles "${SAMPLES}".R{1,2}.fq --targetfile_dna "${BAITFILE}" --bwa --cpu "${NCPU}" --prefix "${SAMPLES}" || operationfailed
+run_in_os  HybPiper/HybPiper-2.1.3.sif <<END
+module add mambaforge
+mamba activate /conda/envs/hybpiper-2.1.3
+hybpiper assemble --readfiles "${SAMPLES}".R{1,2}.fq --targetfile_dna "${BAITFILE}" --bwa --cpu "${NCPU}" --prefix "${SAMPLES}" --run_intronerate
+END
 echo
 
 exit

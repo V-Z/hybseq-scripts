@@ -30,17 +30,6 @@ while getopts "hvp:b:s:" INITARGS; do
 			echo
 			exit
 			;;
-		p) # Directory with HybPiper
-			if [[ -d "${OPTARG}" ]]; then
-			HYBPIPER="$(realpath "${OPTARG}")"
-			echo "Path to HybPiper directory: ${HYBPIPER}"
-			echo
-			else
-				echo "Error! You did not provide path to HybPiper directory (-p) \"${OPTARG}\"!"
-				echo
-				exit 1
-				fi
-			;;
 		b) # Reference bait FASTA file
 			if [[ -r "${OPTARG}" ]]; then
 				BAITFILE="$(realpath "${OPTARG}")"
@@ -83,24 +72,7 @@ function operationfailed {
 	exit 1
 	}
 
-# Check if all required binaries are available
-function toolcheck {
-	command -v "$1" >/dev/null 2>&1 || {
-		echo >&2 "Error! $1 is required but not installed. Aborting. Please, install it."
-		echo
-		operationfailed
-		}
-	}
-
-toolcheck python3
-toolcheck R
-toolcheck samtools
-
 # Checking if all required variables are provided
-if [[ -z "${HYBPIPER}" ]]; then
-	echo "Error! Directory with HybPiper not provided!"
-	operationfailed
-	fi
 if [[ -z "${BAITFILE}" ]]; then
 	echo "Error! Reference bait FASTA file not provided!"
 	operationfailed
@@ -110,40 +82,44 @@ if [[ -z "${SAMPLES}" ]]; then
 	operationfailed
 	fi
 
-# Post-processing, summary, statistics
-echo "Summary"
-python3 "${HYBPIPER}"/get_seq_lengths.py "${BAITFILE}" "${SAMPLES}" dna > seq_lengths.txt || operationfailed
+run_in_os  HybPiper/HybPiper-2.1.3.sif <<END
+module add mambaforge
+mamba activate /conda/envs/hybpiper-2.1.3
+echo "Summary statistics"
 echo
-echo "Statistics"
-python3 "${HYBPIPER}"/hybpiper_stats.py seq_lengths.txt "${SAMPLES}" > stats.txt || operationfailed
+hybpiper stats --targetfile_dna "${BAITFILE}" gene samples_list.txt
 echo
-
-# Plotting gene recovery heatmaps
-echo "Plotting gene recovery heatmaps"
-cp "${HYBPIPER}"/*.R . || operationfailed
-R CMD BATCH --no-save --no-restore gene_recovery_heatmap.R gene_recovery_heatmap_gplot.rlog || operationfailed
-R CMD BATCH --no-save --no-restore gene_recovery_heatmap_ggplot.R gene_recovery_heatmap_ggplot2.rlog || operationfailed
+echo "Plotting gene recovery heatmap"
 echo
-
+hybpiper recovery_heatmap seq_lengths.tsv
+echo
 # Fetch the sequences recovered from the same gene for many samples and generates an unaligned multi-FASTA file for each gene
 echo "Retrieving sequences"
 echo
 echo "Exons"
 echo
-python3 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . dna || operationfailed
+hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names samples_list.txt dna
 echo
 echo "Introns"
 echo
-python3 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . intron || operationfailed
+hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names samples_list.txt intron
 echo
 echo "Supercontigs"
 echo
-python3 "${HYBPIPER}"/retrieve_sequences.py "${BAITFILE}" . supercontig || operationfailed
+hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names samples_list.txt supercontig
 echo
+echo "Investigating paralogs"
+echo
+hybpiper paralog_retriever --targetfile_dna "${BAITFILE}" samples_list.txt
+echo
+END
 
 # Removing ".dedup*" from accession names
 echo "Removing \".dedup*\" from accession names"
 sed -i 's/\.dedup.*$//g' ./*.{FNA,fasta}
+echo
+echo "Removing \".dedup*\" from statistics"
+sed -i 's/\.dedup//g' ./*.tsv
 echo
 
 # Calculating number of occurrences of each sample in all contigs
@@ -161,20 +137,14 @@ echo "Divide 'Total number of contigs' by three to get number of probes. Similar
 echo "You can calculate percentage of presence of each sample in all contigs (from total number of contigs)."
 echo
 
-# Removing ".dedup*" from accession names
-echo "Removing \".dedup*\" from statistics"
-sed -i 's/\.dedup//g' presence_of_samples_in_contigs.tsv seq_lengths.txt stats.txt
-echo
-
 echo "Transposition of sequence lengths"
-perl -F'\t' -lane 'push @rows, [@F]; END { for $row (0..$#{$rows[0]}) { print join("\t", map {$_->[$row] // ""} @rows) } }' seq_lengths.txt > seq_lengths.tsv
-sed -i 's/^Species[[:blank:]]/Gene\/Species\t/' seq_lengths.tsv
+perl -F'\t' -lane 'push @rows, [@F]; END { for $row (0..$#{$rows[0]}) { print join("\t", map {$_->[$row] // ""} @rows) } }' seq_lengths.tsv > seq_lengths_transp.tsv
+sed -i 's/^Species[[:blank:]]/Gene\/Species\t/' seq_lengths_transp.tsv
 echo
 
 # Removing input data
 echo "Removing input directories and unneeded files"
-# while read -r SAMPLE; do rm -rf "${SAMPLE}"*; done < "${SAMPLES}"
-rm -rf HybPiper HybPiper.* hybseq_hybpiper.*.dedup.log hybseq_3_hybpiper_postprocess_2_run.sh ref rpackages Rplots.pdf ./*.R "${SAMPLES}"
+rm -rf  hybseq_3_hybpiper_postprocess_2_run.sh ref
 echo
 
 exit
