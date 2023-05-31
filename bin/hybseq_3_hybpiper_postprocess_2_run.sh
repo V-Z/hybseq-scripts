@@ -137,9 +137,10 @@ echo "Divide 'Total number of contigs' by three to get number of probes. Similar
 echo "You can calculate percentage of presence of each sample in all contigs (from total number of contigs)."
 echo
 
-echo "Transposition of sequence lengths"
+echo "Transposition of sequence lengths and paralogs"
 perl -F'\t' -lane 'push @rows, [@F]; END { for $row (0..$#{$rows[0]}) { print join("\t", map {$_->[$row] // ""} @rows) } }' seq_lengths.tsv > seq_lengths_transp.tsv
-sed -i 's/^Species[[:blank:]]/Gene\/Species\t/' seq_lengths_transp.tsv
+perl -F'\t' -lane 'push @rows, [@F]; END { for $row (0..$#{$rows[0]}) { print join("\t", map {$_->[$row] // ""} @rows) } }' paralog_report.tsv > paralog_report_transp.tsv
+sed -i 's/^Species[[:blank:]]/Gene\/Species\t/' paralog_report_transp.tsv seq_lengths_transp.tsv
 echo
 
 # Removing input data
