@@ -8,29 +8,56 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-# Checking if exactly one variables is provided
-if [[ "$#" -ne '1' ]]; then
-	echo "Error! Exactly 1 parameter (directory with aligned sequences to process) is required! $# parameters received."
-	exit 1
-	fi
-
-# List of samples - relative path from directory to process
-# SAMPLES="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/2_seqs/samples_list.txt"
-# SAMPLES="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/cos/samples_list.txt"
-# SAMPLES="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/kew/samples_list.txt"
-# SAMPLES='/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_contigs/samples_list.txt'
-# SAMPLES='/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/diploids_contigs/samples_list.txt'
-SAMPLES='/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/ingroup_contigs/samples_list.txt'
-# SAMPLES='/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/placement_contigs/samples_list.txt'
-
-# Exit on error
-function operationfailed {
-	echo "Error! Operation failed!"
-	echo
-	echo "See previous message(s) to be able to trace the problem."
-	echo
-	exit 1
-	}
+# Parse initial arguments
+while getopts "hvp:s:" INITARGS; do
+	case "${INITARGS}" in
+		h) # Help and exit
+			echo "Usage options:"
+			echo -e "\t-h\tPrint this help and exit."
+			echo -e "\t-v\tPrint script version, author and license and exit."
+			echo -e "\t-\tPath to directory with alignments (typically XXX/3_aligned)"
+			echo -e "\t-s\tList of samples to process (typically XXX/2_seqs/samples_list.txt)."
+			echo
+			exit
+			;;
+		v) # Print script version and exit
+			echo "Version: 1.0"
+			echo "Author: Vojtěch Zeisek, https://trapa.cz/en"
+			echo "License: GNU GPLv3, https://www.gnu.org/licenses/gpl-3.0.html"
+			echo
+			exit
+			;;
+		p) # Path to directory with alignments
+			if [[ -d "${OPTARG}" ]]; then
+				ALNDIR="$(realpath "${OPTARG}")"
+				echo "Path to directory with alignments: ${ALNDIR}"
+				echo
+				else
+					echo "Error! You did not provide path to directory with alignments (-p) \"${OPTARG}\"!"
+					echo
+					exit 1
+					fi
+			;;
+		s) # List of samples to process
+			for F in "${OPTARG}".*; do
+				if [[ ! -r "${F}" ]]; then
+					echo "Error! You did not provide sample to process (-s) \"${OPTARG}\"!"
+					echo
+					exit 1
+					fi
+				done
+				SAMPLES="${OPTARG}"
+				echo "Sample to process: ${SAMPLES}"
+				echo
+			;;
+		*)
+			echo "Error! Unknown option!"
+			echo "See usage options: \"$0 -h\""
+			echo
+			exit 1
+			;;
+		esac
+	done
 
 # Alignment statistics
 function alignstats {
@@ -67,8 +94,8 @@ function samplestats {
 	}
 
 # Switching to working directory
-echo "Going to $1"
-cd "$1" || operationfailed
+echo "Going to ${ALNDIR}"
+cd "${ALNDIR}" || operationfailed
 echo
 
 # Alignments sorted according to file size

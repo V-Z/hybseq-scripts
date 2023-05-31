@@ -210,12 +210,12 @@ When done with edits, simply run the `hybseq_4_alignment_1_submitter.sh` script 
 ./hybseq_4_alignment_1_submitter.sh
 ```
 
-Result will be copied into newly created directory `aligned` in `DATADIR` directory, e.g. `XXX/2_seqs/aligned`. Reports of `PBS Pro` use to be in `DATADIR` and should be also moved to the `aligned` directory. Everything should be moved from `XXX/2_seqs/aligned` to `XXX/3_aligned`.
+Result will be copied into newly created directory `aligned` in `DATADIR` directory, e.g. `XXX/2_seqs/aligned`. Reports of `PBS Pro` use to be in `DATADIR` and should be also moved to the `aligned` directory (e.g. `mv HybSeq.alignment.* aligned/`). Everything should be moved from `XXX/2_seqs/aligned` to `XXX/3_aligned`.
 
-Finally, alignments should be sorted using `hybseq_4_alignment_4_postprocess.sh`. The script requires single argument --- directory to process, so run it like:
+Finally, alignments should be sorted using `hybseq_4_alignment_4_postprocess.sh`. The script requires two arguments --- directory to process and path to list of samples (i.e. `samples_list.txt` in `2_seqs`), so run it like:
 
 ```shell
-./hybseq_4_alignment_4_postprocess.sh XXX/3_aligned | tee hybseq_align_postprocess.log
+./hybseq_4_alignment_4_postprocess.sh -p XXX/3_aligned -s XXX/2_seqs/samples_list.txt | tee hybseq_align_postprocess.log
 mv hybseq_align_postprocess.log XXX/3_aligned/
 ```
 

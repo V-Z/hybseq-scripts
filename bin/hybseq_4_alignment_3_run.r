@@ -10,11 +10,18 @@
 ## Do not exit on error
 options(error=expression(NULL))
 
+## Variables, custom settings
+# Set filtration threshold for maximal percentage of missing data in rows (samples)
+filtrow <- 0.3
+# Set filtration threshold for maximal percentage of missing data in columns (alignment positions)
+filtcol <- 0.3
+
 ## Packages
 # Install
-# install.packages(pkgs=c("ape", "ips"), lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports")
+# install.packages(pkgs=c("ape", "ggplot2", "scales"), lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports") # Ensure to be in the directory with HybSeq scripts, e.g. '~/hybseq/'
 # Load
 library(package=ape, lib.loc="rpackages")
+library(package=farver, lib.loc="rpackages")
 library(package=ips, lib.loc="rpackages")
 library(package=scales, lib.loc="rpackages")
 
@@ -27,7 +34,7 @@ seqf <- read.FASTA(file=fnames[1], type="DNA")
 seqf
 
 ## Alignment with MAFFT
-aln <- mafft(x=seqf, method="auto", maxiterate=1000, options="--adjustdirectionaccurately", thread=1, exec="/software/mafft/7.487/bin/mafft")
+aln <- mafft(x=seqf, method="auto", maxiterate=1000, options="--adjustdirectionaccurately", thread=1, exec="mafft")
 aln
 # Remove "_R_" marking reversed sequences (introduced by MAFFT's "--adjustdirectionaccurately")
 rownames(aln) <- gsub("^_R_", "", rownames(aln))
@@ -36,10 +43,10 @@ rownames(aln) <- gsub("^_R_", "", rownames(aln))
 # Delete empy columns/rows
 aln.ng <- deleteEmptyCells(DNAbin=aln)
 # Delete columns and rows with too many gaps
-# Add/replace by ips::gblocks and/or ips::aliscore ?
+# NOTE: Add/replace by ips::gblocks and/or ips::aliscore ?
 aln.ng <- deleteGaps(x=aln.ng, gap.max=round(nrow(aln)/2))
-aln.ng <- del.rowgapsonly(x=aln.ng, threshold=0.25, freq.only=FALSE)
-aln.ng <- del.colgapsonly(x=aln.ng, threshold=0.25, freq.only=FALSE)
+aln.ng <- del.rowgapsonly(x=aln.ng, threshold=filtrow, freq.only=FALSE)
+aln.ng <- del.colgapsonly(x=aln.ng, threshold=filtcol, freq.only=FALSE)
 aln.ng
 
 ## Exporting alignment

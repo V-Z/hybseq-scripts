@@ -29,7 +29,7 @@ if [[ -z "${DATADIR}" ]]; then
 # Required modules
 echo "Loading modules"
 module add mafft/7.520-gcc-10.2.1-hvrjqrq || exit 1 # mafft
-module add r/4.1.3-gcc-10.2.1-6xt26dl || exit 1 # R (ape, ips, scales; dependencies colorspace, XML)
+module add r/4.1.3-gcc-10.2.1-6xt26dl || exit 1 # R (ape, ips, scales)
 echo
 
 # Change working directory
@@ -46,7 +46,7 @@ cp "${DATADIR}"/"${ALNF}" "${SCRATCHDIR}"/ || exit 1
 echo
 
 # Runing the task (alignments of individual loci)
-echo "Aligning contig ${ALNF}..."
+echo "Aligning contig ${ALNF}..." # [1] file.fasta/file.FNA, [2] file.aln.fasta, [3] file.aln.png, [4] file.aln.check.png, [5] file.nwk, [6] file.tree.png, [7] file.saturation.png
 R CMD BATCH --no-save --no-restore "--args ${ALNF} ${ALNF%.*}.aln.fasta ${ALNF%.*}.aln.png ${ALNF%.*}.aln.check.png ${ALNF%.*}.nwk ${ALNF%.*}.tree.png ${ALNF%.*}.saturation.png" hybseq_4_alignment_3_run.r "${ALNF%.*}".log || { export CLEAN_SCRATCH='false'; exit 1; }
 rm "${ALNF}" hybseq_4_alignment_3_run.r || { export CLEAN_SCRATCH='false'; exit 1; }
 echo

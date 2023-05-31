@@ -47,7 +47,7 @@ echo
 
 # Make output directory
 echo "Making output directory"
-mkdir aligned
+mkdir aligned || { echo "Error! Failed creation of directory 'aligned' for storing alignments, or the directory already exists. Aborting."; echo; exit 1; }
 echo
 
 # Processing all samples
@@ -56,7 +56,7 @@ echo
 for ALN in $(find . -maxdepth 1 -name "*.FNA" -o -name "*.fasta" | sort); do
 	ALNB="$(basename "${ALN}")"
 	echo "Processing ${ALNB}"
-	qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALNB}" ~/hybseq/bin/hybseq_4_alignment_2_qsub.sh || exit 1
+	qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALNB}" "${WORKDIR}"/bin/hybseq_4_alignment_2_qsub.sh || { echo "Error! Submission of \"${ALNB}\" failed. Aborting."; echo; exit 1; }
 	echo
 	done
 

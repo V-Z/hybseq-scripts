@@ -53,8 +53,8 @@ echo
 for ALN in $(find . -name "*.aln.fasta" | sed 's/^\.\///' | sort); do
 	ALNB="$(basename "${ALN}")"
 	echo "Processing ${ALNB}"
-	qsub -l walltime=48:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -q ibot -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1
-# 	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1 # NOTE HybSeq course with zingiberaceae test data
+	qsub -l walltime=48:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -q ibot -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" "${WORKDIR}"/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1
+# 	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" "${WORKDIR}"/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1 # NOTE HybSeq course with zingiberaceae test data
 	echo
 	done
 
