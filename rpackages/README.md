@@ -1,6 +1,6 @@
 # R packages
 
-Required [R](https://www.r-project.org/) packages are `ape`, `ips` and `scales` and their dependencies for R version used (e.g. R 4.2) **must** be installed here.
+Required [R](https://www.r-project.org/) packages are `ape`, `ips` and `scales` and all their dependencies for R version used (e.g. R 4.2) **must** be installed here.
 
 Within `R` command line started in `hybseq` directory use e.g. command
 

@@ -42,7 +42,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 			echo -e "\t-h\tPrint this help and exit."
 			echo -e "\t-r\tPrint references to used software and exit."
 			echo -e "\t-v\tPrint script version, author and license and exit."
-			echo -e "\t-f\tInput directory with FASTQ files saved as \"*.R[12].fq.*\"."
+			echo -e "\t-f\tInput directory with FASTQ files saved as \"*[._]R[12][._]*f*q*\"."
 			echo -e "\t-c\tNumber of CPU threads to use for parallel operations. If not provided, default is 4."
 			echo -e "\t-o\tOutput directory for trimmed sequences. It should be empty."
 			echo -e "\t-d\tOutput directory for deduplicated sequences. It should be empty."

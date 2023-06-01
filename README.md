@@ -29,14 +29,15 @@ For usage of presented scripts, data are recommended to be stored in following s
 
 * `1_data` --- Data directory containing directories for all individual sequencing libraries.
 	* `lib_01` --- Data from the first sequencing library. Same directory structure should be kept in all library directories.
-		* `0_data` --- Raw FASTQ files. **Must** be named like `sampleXY.R1.fq` and `sampleXY.R2.fq` for forward/reverse reads of each sample, i.e. with suffix `.R1.fq` and `.R2.fq`. Recommended is compression by `bzip2` (i.e. `sampleXY.R1.fq.bz2` and `sampleXY.R2.fq.bz2`).
+		* `0_data` --- Raw FASTQ files. **Must** be named like `*[._]R[12][._]*f*q*` for forward/reverse reads of each sample, i.e. containing `.R1.` and `.R2.` or `_R1_` and `_R2_`, and `.fq` or `.fastq`. Recommended is compression by `bzip2` (i.e. `sampleXY.R1.fq.bz2` and `sampleXY.R2.fq.bz2`). Compression with `gzip` is also possible.
 		* `1_trimmed` --- Outputs of `hybseq_1_prep_2_run.sh` --- trimmed raw FASTQ files (using [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic)), and trimming statistics (`report_trimming.tsv`).
 		* `2_dedup` --- Outputs of `hybseq_1_prep_2_run.sh` --- deduplicated FASTQ files (using `clumpify.sh` from [BBMap](https://sourceforge.net/projects/bbmap/)), and deduplication statistics (`report_filtering.tsv`) and list of samples needed for [HybPiper](https://github.com/mossmatters/HybPiper/wiki) (`samples_list.txt`).
 		* `3_qual_rep` --- Outputs of `hybseq_1_prep_2_run.sh` --- quality check reports of FASTQ files (using [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)).
 	* `lib_02` --- Data from the second sequencing library. More libraries can follow...
+    * Same structure as above...
 	* `lib_##` --- ...up to data from the *N*-th (last) sequencing library.
 * `2_seqs` --- All outputs of [HybPiper](https://github.com/mossmatters/HybPiper/wiki) --- scripts `hybseq_2_hybpiper_*` and `hybseq_3_hybpiper_postprocess_*`.
-* `3_aligned` --- Sequences aligned by [MAFFT](https://mafft.cbrc.jp/alignment/software/) and alignment reports (created by `R` script using packages `ape` and `ips`) sorted by `hybseq_4_alignment_4_postprocess.sh` into directories for exons, introns and supercontigs --- scripts `hybseq_4_alignment_*`.
+* `3_aligned` --- Sequences aligned by [MAFFT](https://mafft.cbrc.jp/alignment/software/) and alignment reports (created by `R` script using packages `ape`, `ips` and `scales`) sorted by `hybseq_4_alignment_4_postprocess.sh` into directories for exons, introns and supercontigs --- scripts `hybseq_4_alignment_*`.
 * `4_gene_trees` --- Gene trees reconstructed by [IQ-TREE](http://www.iqtree.org/) from all recovered contigs sorted by `hybseq_5_gene_trees_4_postprocess.sh` into directories for exons, introns and supercontigs --- scripts `hybseq_5_gene_trees_*`.
 * `5_sp_trees` --- Species trees reconstructed from sets of gene trees by [ASTRAL](https://github.com/smirarab/ASTRAL) --- scripts `hybseq_6_sp_tree_*`.
 
@@ -47,6 +48,7 @@ For usage of presented scripts, data are recommended to be stored in following s
 * Biopython <https://biopython.org/>
 * BLAST+ <https://blast.ncbi.nlm.nih.gov/>
 * BWA <https://github.com/lh3/bwa>
+* DIAMOND <https://github.com/bbuchfink/diamond/wiki>
 * Exonerate <https://www.ebi.ac.uk/about/vertebrate-genomics/software/exonerate>
 * FastQC <https://www.bioinformatics.babraham.ac.uk/projects/fastqc/>
 * GNU Parallel <https://www.gnu.org/software/parallel/>
@@ -54,12 +56,24 @@ For usage of presented scripts, data are recommended to be stored in following s
 * IQ-TREE <http://www.iqtree.org/>
 * Java <https://www.java.com/> or OpenJDK <https://openjdk.java.net/>
 * MAFFT <https://mafft.cbrc.jp/alignment/software/>
-* Python <https://www.python.org/>
-* R <https://www.r-project.org/>
+* Python <https://www.python.org/> 3.7 or later
 * Samtools <http://www.htslib.org/>
 * SPAdes <https://github.com/ablab/spades>
 * TreeShrink <https://github.com/uym2/TreeShrink>
 * Trimmomatic <http://www.usadellab.org/cms/?page=trimmomatic>
+
+## Python libraries used by HybPiper
+
+* seaborn <https://seaborn.pydata.org/>
+* matplotlib <https://matplotlib.org/>
+* pebble <https://github.com/noxdafox/pebble>
+* progressbar2 <https://github.com/WoLpH/python-progressbar>
+* scipy <https://scipy.org/>
+* pandas <https://pandas.pydata.org/>
+* biopython <https://biopython.org/> 1.80 or later
+* psutil <https://github.com/giampaolo/psutil>
+
+See also <https://github.com/mossmatters/HybPiper#dependencies>
 
 ## R packages used
 
@@ -77,14 +91,52 @@ For usage of presented scripts, data are recommended to be stored in following s
 * phangorn <https://cran.r-project.org/package=phangorn>
 * phytools <https://cran.r-project.org/package=phytools>
 * reshape2 <https://cran.r-project.org/package=reshape2>
+* scales <https://cran.r-project.org/package=scales>
 
 # Description and usage of the scripts
 
 Scripts `hybseq_1_prep_1_qsub.sh`, `hybseq_2_hybpiper_1_submitter.sh`, `hybseq_2_hybpiper_2_qsub.sh`, `hybseq_3_hybpiper_postprocess_1_qsub.sh`, `hybseq_4_alignment_1_submitter.sh`, `hybseq_4_alignment_2_qsub.sh`, `hybseq_5_gene_trees_1_submitter.sh`, `hybseq_5_gene_trees_2_qsub.sh` and `hybseq_6_sp_tree_1_qsub.sh` (scripts named `hybseq_*_qsub.sh` and `hybseq_*_submitter.sh`) contain settings for submission of each step (see further) on clusters using `PBS Pro`. **These scripts require edits.** At least paths must be changed there. According to cluster settings, commands `module add` and `qsub` (and probably some other things) will have to be edited. So they are rather inspiration for users of another clusters than [MetaCentrum](https://www.metacentrum.cz/).
 
-Scripts `hybseq_2_hybpiper_1_submitter.sh`, `hybseq_4_alignment_1_submitter.sh` and `hybseq_5_gene_trees_1_submitter.sh` process in given directory all files (HybPiper, alignments and reconstruction of gene trees, respectively) and prepare individual task (job) for each file to be submitted by `hybseq_2_hybpiper_2_qsub.sh`, `hybseq_4_alignment_2_qsub.sh` and `hybseq_5_gene_trees_2_qsub.sh`, respectively using `PBS Pro` (command `qsub`).
+Scripts `hybseq_2_hybpiper_1_submitter.sh`, `hybseq_4_alignment_1_submitter.sh` and `hybseq_5_gene_trees_1_submitter.sh` process in given directory all files (HybPiper, alignments and reconstruction of gene trees, respectively) and prepare individual task (job) for each file to be submitted by `hybseq_2_hybpiper_2_qsub.sh`, `hybseq_4_alignment_2_qsub.sh` and `hybseq_5_gene_trees_2_qsub.sh`, respectively using `PBS Pro` (command `qsub`). If the scripts are used **on different clusters than Czech [MetaCentrum](https://www.metacentrum.cz/), they must be edited** according to documentation of particular cluster (especially commands `module add` and `qsub`).
 
 All scripts are relatively simple and can be easily edited to change parameters of various steps, or some parts (like MAFFT or IQ-TREE) can be easily replaced by another tools.
+
+## 0. Installation
+
+# Install HybPiper and its dependencies
+
+See <https://github.com/mossmatters/HybPiper/wiki/Installation>
+
+On [MetaCentrum](https://www.metacentrum.cz/) it is installed as [container](https://docs.metacentrum.cz/software/containers/), so use it in scripts as
+
+```shell
+run_in_os  HybPiper/HybPiper-2.1.3.sif <<END
+module add mambaforge
+mamba activate /conda/envs/hybpiper-2.1.3
+hybpiper check_dependencies
+END
+```
+
+If working interactively, do not type `<<END` and `END`.
+
+# Install this script set and required R packages
+
+```shell
+# Clone repository with scripts into "~/hybseq" directory
+cd
+git clone https://github.com/V-Z/hybseq-scripts.git hybseq
+# Install all needed R packages
+cd hybseq/ # Go to hybseq directory
+module add r/4.1.3-gcc-10.2.1-6xt26dl  # Load R module
+R # Start R and install needed packages:
+```
+
+```R
+install.packages(pkgs=c("ape", "codetools", "cpp11", "farver", "ips", "RcppArmadillo",
+"scales"), lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports")
+```
+
+Required packages are `ape`, `ips` and `scales`. Packages `codetools`, `cpp11`, `farver` and `RcppArmadillo` are their dependencies which do not install automatically.
 
 ## 1. Pre-processing data --- trimming, deduplication, quality checks and statistics
 
@@ -97,12 +149,12 @@ It requires [BBMap](https://sourceforge.net/projects/bbmap/), [FastQC](https://w
 Edit in `hybseq_1_prep_1_qsub.sh` variables to point to correct locations:
 
 * `WORKDIR` --- Point to `hybseq` directory containing this script set.
-* `DATADIR` --- Point to directory containing raw FASTQ files named like `sampleXY.R1.fq` and `sampleXY.R2.fq` for forward/reverse reads of each sample, i.e. with suffix `.R1.fq` and `.R2.fq`. Recommended is compression by `bzip2` (i.e. `sampleXY.R1.fq.bz2` and `sampleXY.R2.fq.bz2`), e.g. `XXX/1_data/lib_01/0_data`.
+* `DATADIR` --- Point to directory containing raw FASTQ files **must** be named like `*[._]R[12][._]*f*q*` for forward/reverse reads of each sample, i.e. containing `.R1.` and `.R2.` or `_R1_` and `_R2_`, and `.fq` or `.fastq`. Recommended is compression by `bzip2` (i.e. `sampleXY.R1.fq.bz2` and `sampleXY.R2.fq.bz2`; compression with `gzip` is also possible), e.g. `XXX/1_data/lib_01/0_data`.
 
 and submit the job by something like:
 
 ```shell
-qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=16gb:scratch_local=100gb -q ibot -m abe \
+qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=16gb:scratch_local=100gb -m abe \
 ~/hybseq/bin/hybseq_1_prep_1_qsub.sh
 # And see progress by something like
 qstat -w -n -1 -u $LOGNAME -x
@@ -122,11 +174,10 @@ Each sample (i.e. pair of files `sampleXY.dedup.R1.fq.bz2` and `sampleXY.dedup.R
 
 Script `hybseq_2_hybpiper_1_submitter.sh` contains settings (paths etc.) needed for submission of the task on cluster using `PBS Pro`. It is using `qsub` to submit `hybseq_2_hybpiper_2_qsub.sh` to process all deduplicated FASTQ files (in directory like `XXX/1_data/lib_01/2_dedup`) with [HybPiper](https://github.com/mossmatters/HybPiper/wiki). For every sample listed in `samples_list.txt` (created by `hybseq_1_prep_2_run.sh`) script `hybseq_2_hybpiper_1_submitter.sh` submits individual job with `hybseq_2_hybpiper_2_qsub.sh`. Finally, `hybseq_2_hybpiper_3_run.sh` is using [HybPiper](https://github.com/mossmatters/HybPiper/wiki) to process the sample. This script can be edited to use different HybPiper settings.
 
-It requires [Biopython](https://biopython.org/), [BLAST+](https://blast.ncbi.nlm.nih.gov/), [BWA](https://github.com/lh3/bwa), [Exonerate](https://www.ebi.ac.uk/about/vertebrate-genomics/software/exonerate), [GNU Parallel](https://www.gnu.org/software/parallel/), [HybPiper](https://github.com/mossmatters/HybPiper/wiki), [Python](https://www.python.org/), [Samtools](http://www.htslib.org/) and [SPAdes](https://github.com/ablab/spades).
+It requires [HybPiper](https://github.com/mossmatters/HybPiper) with its dependencies.
 
 Edit variables in `hybseq_2_hybpiper_1_submitter.sh`:
 
-* `HYBPIPDIR` --- Point to directory containing [HybPiper](https://github.com/mossmatters/HybPiper/).
 * `WORKDIR` --- Point to `hybseq` directory containing this script set.
 * `DATADIR` --- Point to directory containing deduplicated FASTQ files named like `sampleXY.dedup.R1.fq` and `sampleXY.dedup.R2.fq` (produced by `hybseq_1_prep_2_run.sh`) for forward/reverse reads of each sample. The directory is e.g. `XXX/1_data/lib_01/2_dedup`.
 * `SAMPLES` --- File name of list of samples according to [HybPiper requirements](https://github.com/mossmatters/HybPiper/wiki#20-running-the-pipeline) to be processed (prepared by `hybseq_1_prep_2_run.sh` as `samples_list.txt`).
@@ -169,21 +220,18 @@ to create new `samples_list.txt` listing all samples.
 
 Script `hybseq_3_hybpiper_postprocess_1_qsub.sh` contains settings for submission of the task on cluster using `PBS Pro` and runs `hybseq_3_hybpiper_postprocess_2_run.sh` to retrieve sequences from HybPiper outputs and to obtain retrieval statistics.
 
-It requires [Biopython](https://biopython.org/), [HybPiper](https://github.com/mossmatters/HybPiper/wiki), [Python](https://www.python.org/), [R](https://www.r-project.org/) and [Samtools](http://www.htslib.org/).
+It requires [HybPiper](https://github.com/mossmatters/HybPiper) with its dependencies.
 
 Edit variables in `hybseq_3_hybpiper_postprocess_1_qsub.sh`:
 
-* `HYBPIPDIR` --- Point to directory containing [HybPiper](https://github.com/mossmatters/HybPiper/wiki).
 * `WORKDIR` --- Point to `hybseq` directory containing this script set.
-* `BAITFILE` --- Reference bait FASTA file (see <https://github.com/mossmatters/HybPiper/wiki#target-file> for details) --- must be relative path within `WORKDIR`
+* `BAITFILE` --- Reference bait FASTA file (see <https://github.com/mossmatters/HybPiper/wiki#12-target-file> for details) --- must be relative path within `WORKDIR`
 * `DATADIR` --- Point to directory containing all outputs of HybPiper from previous step and `samples_list.txt` listing them, e.g. `XXX/2_seqs`.
 * `SAMPLES` --- File name of list of samples according to [HybPiper requirements](https://github.com/mossmatters/HybPiper/wiki#running-the-pipeline) to be processed.
 
-See `README.md` in the `rpackages` directory for information regarding installation of `R` packages needed by `hybseq_3_hybpiper_postprocess_2_run.sh`.
+Calculations are done directly in `DATADIR`, e.g. `XXX/2_dedup` (HybPiper generates *a lot* of small files, copying them there and back can cause very high I/O for server). This step use to be quick. After adding new sequenced library, this step and all following steps must be repeated.
 
-Results will be copied back into `DATADIR`, e.g. `XXX/2_dedup`. After adding new sequenced library, this step and all following steps must be repeated.
-
-HybPiper statistics are in files `seq_lengths.txt` (table of length of each retrieved seqeunce in every sample) and `stats.txt` (sequence statistics, see [manual](https://github.com/mossmatters/HybPiper/wiki/Tutorial#summary-statistics)).
+HybPiper statistics are in files `seq_lengths.tsv` (table of length of each retrieved sequence in every sample; and transposed version `seq_lengths_transp.tsv`), `hybpiper_stats.tsv` (sequence statistics, see [manual](https://github.com/mossmatters/HybPiper/wiki/Tutorial#summary-statistics)), and paralog statistics in `paralog_report.tsv` (and transposed version `paralog_report_transp.tsv`).
 
 Statistics of how many was each sample retrieved from the sequences are in file `presence_of_samples_in_contigs.tsv`. Note that for every probe sequence, three contigs are produced (for respective exon, intron and supercontig). Divide 'Total number of contigs' by three to get number of probes. Similarly divide number of occurrence of each sample by three. You can calculate percentage of presence of each sample in all contigs (from total number of contigs). If some sample is recovered in less than ca. 50% of contigs, consider its removal.
 
@@ -254,7 +302,7 @@ When done with edits, simply run the `hybseq_5_gene_trees_1_submitter.sh` script
 ./hybseq_5_gene_trees_1_submitter.sh
 ```
 
-Result will be copied into newly created directory `trees` in `DATADIR` directory, e.g. `XXX/3_aligned/trees`. Reports of `PBS Pro` use to be in `DATADIR` and should be also moved to the `trees` directory. Everything should be moved from `XXX/3_aligned/trees` to `XXX/4_gene_trees`.
+Result will be copied into newly created directory `trees` in `DATADIR` directory, e.g. `XXX/3_aligned/trees`. Reports of `PBS Pro` use to be in `DATADIR` and should be also moved to the `trees` directory (`mv HybSeq.genetree.* trees/`). Everything should be moved from `XXX/3_aligned/trees` to `XXX/4_gene_trees`.
 
 Finally, gene trees should be sorted using `hybseq_5_gene_trees_4_postprocess.sh`. The script requires single argument --- directory to process, so run it like:
 
