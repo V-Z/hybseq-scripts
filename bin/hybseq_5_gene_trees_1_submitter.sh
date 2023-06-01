@@ -14,7 +14,7 @@
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-# DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/zingiberace_hybseq_course/3_aligned"
+DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/3_aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/3_aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/3_aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/3_aligned"
@@ -24,7 +24,7 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/diploids"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/ingroup"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/ingroup_filt025"
-DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/ingroup_filt035"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/ingroup_filt035"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/placement"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/alignments/aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta"
@@ -35,6 +35,7 @@ DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/ingroup_filt0
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_mvftools_test/5_aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Zingiberaceae_HybSeq_flowering_genes/HybPiper/DNA_alignments/aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Zingiberaceae_HybSeq_flowering_genes/run_1/alignments/aligned"
+
 # Submitting individual tasks
 
 # Go to working directory
@@ -53,8 +54,7 @@ echo
 for ALN in $(find . -name "*.aln.fasta" | sed 's/^\.\///' | sort); do
 	ALNB="$(basename "${ALN}")"
 	echo "Processing ${ALNB}"
-	qsub -l walltime=48:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -q ibot -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" "${WORKDIR}"/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1
-# 	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" "${WORKDIR}"/bin/hybseq_5_gene_trees_2_qsub.sh || exit 1 # NOTE HybSeq course with zingiberaceae test data
+	qsub -l walltime=48:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" "${WORKDIR}"/bin/hybseq_5_gene_trees_2_qsub.sh || { echo "Error! Submission of \"${ALNB}\" failed. Aborting."; echo; exit 1; }
 	echo
 	done
 
