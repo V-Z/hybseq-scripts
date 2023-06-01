@@ -5,8 +5,8 @@ Required [R](https://www.r-project.org/) packages are `ape`, `ips` and `scales` 
 Within `R` command line started in `hybseq` directory use e.g. command
 
 ```R
-install.packages(pkgs=c("ape", "cpp11", "farver", "ips", "RcppArmadillo", "scales"),
-lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports")
+install.packages(pkgs=c("ape", "codetools", "cpp11", "farver", "ips", "RcppArmadillo",
+"scales"), lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports")
 ```
 
 to install needed packages.

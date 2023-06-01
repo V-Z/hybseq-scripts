@@ -10,7 +10,7 @@
 ## Do not exit on error
 options(error=expression(NULL))
 
-## Variables, custom settings
+## NOTE: Variables, custom settings
 # Set filtration threshold for maximal percentage of missing data in rows (samples)
 filtrow <- 0.3
 # Set filtration threshold for maximal percentage of missing data in columns (alignment positions)
@@ -18,10 +18,12 @@ filtcol <- 0.3
 
 ## Packages
 # Install
-# install.packages(pkgs=c("ape", "ggplot2", "scales"), lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports") # Ensure to be in the directory with HybSeq scripts, e.g. '~/hybseq/'
+# NOTE: Required packages are ape, ips and scales. Packages codetools, cpp11, farver and RcppArmadillo are their dependencies which do not install automatically
+# install.packages(pkgs=c("ape", "codetools", "cpp11", "farver", "ips", "RcppArmadillo", "scales"), lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports") # Ensure to be in the directory with HybSeq scripts, e.g. '~/hybseq/'
 # Load
 library(package=ape, lib.loc="rpackages")
-library(package=farver, lib.loc="rpackages")
+library(package=codetools, lib.loc="rpackages") # Required by ips, does not load automatically
+library(package=farver, lib.loc="rpackages") # Required by scales, does not load automatically
 library(package=ips, lib.loc="rpackages")
 library(package=scales, lib.loc="rpackages")
 
@@ -42,10 +44,13 @@ rownames(aln) <- gsub("^_R_", "", rownames(aln))
 ## Cleaning the alignment
 # Delete empy columns/rows
 aln.ng <- deleteEmptyCells(DNAbin=aln)
+aln.ng
 # Delete columns and rows with too many gaps
-# NOTE: Add/replace by ips::gblocks and/or ips::aliscore ?
+# NOTE: Possibly add/replace by ips::gblocks and/or ips::aliscore
 aln.ng <- deleteGaps(x=aln.ng, gap.max=round(nrow(aln)/2))
+aln.ng
 aln.ng <- del.rowgapsonly(x=aln.ng, threshold=filtrow, freq.only=FALSE)
+aln.ng
 aln.ng <- del.colgapsonly(x=aln.ng, threshold=filtcol, freq.only=FALSE)
 aln.ng
 
@@ -69,9 +74,9 @@ png(filename=fnames[4], width=2000, height=1000, units="px", bg="white")
 # DNA distance
 gdist <- dist.dna(x=aln.ng, model="TN93")
 # NJ tree
-njtr <- fastme.bal(X=gdist, nni=TRUE, spr=TRUE, tbr=TRUE)
+njtr <- fastme.bal(X=gdist, nni=TRUE, spr=TRUE)
 # Bootstrap
-njtr[["node.labels"]] <- boot.phylo(phy=njtr, x=aln.ng, FUN=function(FMT) fastme.bal(X=dist.dna(x=FMT, model="TN93"), nni=TRUE, spr=TRUE, tbr=TRUE), B=1000, quiet=TRUE, mc.cores=1)
+njtr[["node.labels"]] <- boot.phylo(phy=njtr, x=aln.ng, FUN=function(FMT) fastme.bal(X=dist.dna(x=FMT, model="TN93"), nni=TRUE, spr=TRUE), B=1000, quiet=TRUE, mc.cores=1)
 # Export
 write.tree(phy=njtr, file=fnames[5])
 # Plot the tree

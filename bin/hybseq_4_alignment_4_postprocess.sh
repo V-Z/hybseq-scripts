@@ -15,7 +15,7 @@ while getopts "hvp:s:" INITARGS; do
 			echo "Usage options:"
 			echo -e "\t-h\tPrint this help and exit."
 			echo -e "\t-v\tPrint script version, author and license and exit."
-			echo -e "\t-\tPath to directory with alignments (typically XXX/3_aligned)"
+			echo -e "\t-p\tPath to directory with alignments (typically XXX/3_aligned)"
 			echo -e "\t-s\tList of samples to process (typically XXX/2_seqs/samples_list.txt)."
 			echo
 			exit
@@ -39,16 +39,15 @@ while getopts "hvp:s:" INITARGS; do
 					fi
 			;;
 		s) # List of samples to process
-			for F in "${OPTARG}".*; do
-				if [[ ! -r "${F}" ]]; then
-					echo "Error! You did not provide sample to process (-s) \"${OPTARG}\"!"
+			if [[ -r "${OPTARG}" ]]; then
+				SAMPLES="$(realpath "${OPTARG}")"
+				echo "List of samples to process: ${SAMPLES}"
+				echo
+				else
+					echo "Error! You did not provide list of samples to process (-s) \"${OPTARG}\"!"
 					echo
 					exit 1
 					fi
-				done
-				SAMPLES="${OPTARG}"
-				echo "Sample to process: ${SAMPLES}"
-				echo
 			;;
 		*)
 			echo "Error! Unknown option!"
