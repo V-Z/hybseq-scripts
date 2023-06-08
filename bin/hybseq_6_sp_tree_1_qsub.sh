@@ -10,12 +10,29 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
+################################################################################
+# NOTE Submit the job by the command below
+# On another clusters than Czech MetaCentrum edit the 'qsub' command below to fit your needs
+# See https://docs.metacentrum.cz/advanced/pbs-options/
+# Edit qsub parameters if you need more resources, use particular cluster, etc.
+################################################################################
+
 # qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=4gb:scratch_local=1gb -q ibot -m abe ~/hybseq/bin/hybseq_6_sp_tree_1_qsub.sh
 # qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=4gb:scratch_local=1gb -m abe ~/hybseq/bin/hybseq_6_sp_tree_1_qsub.sh # NOTE HybSeq course with zingiberaceae test data
+
+################################################################################
+# Cleanup of temporal (scratch) directory where the calculation was done
+# See https://docs.metacentrum.cz/advanced/job-tracking/#trap-command-usage
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'trap' commands below
+################################################################################
 
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
 trap 'cp -a ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
+
+################################################################################
+# NOTE Edit variables below to fit your data
+################################################################################
 
 # Set data directories
 # HybSeq scripts and data
@@ -41,10 +58,21 @@ DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/5_sp_trees"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_mvftools_test/6_gene_trees"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Zingiberaceae_HybSeq_flowering_genes/HybPiper/DNA_alignments/aligned/trees/4_sp_trees"
 
+################################################################################
+# Loading of application module
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'module' command below
+################################################################################
+
 # Required modules
 echo "Loading modules"
 module add openjdk/17.0.0_35-gcc-8.3.0-rfe265h || exit 1
 echo
+
+################################################################################
+# Switching to temporal (SCRATCH) directory and copying input data there
+# See https://docs.metacentrum.cz/basics/jobs/
+# NOTE On another clusters than Czech MetaCentrum ensure that SCRATCH is the variable for temporal directory - if not, edit following code accordingly
+################################################################################
 
 # Change working directory
 echo "Going to working directory ${SCRATCHDIR}"
@@ -59,10 +87,20 @@ echo "Data to process - ${DATADIR}"
 cp "${DATADIR}"/trees*.nwk "${SCRATCHDIR}"/  || exit 1
 echo
 
+################################################################################
+# The calculation
+################################################################################
+
 # Running the task
 echo "Preprocessing the gene trees files files..."
 ./hybseq_6_sp_tree_2_run.sh | tee hybseq_sp_tree.log
 echo
+
+################################################################################
+# Input files are removed from temporal working directory
+# Results are copied to the output directory
+# NOTE On another clusters than Czech MetaCentrum ensure that SCRATCH is the variable for temporal directory - if not, edit following code accordingly
+################################################################################
 
 # Remove unneeded file
 echo "Removing unneeded files"

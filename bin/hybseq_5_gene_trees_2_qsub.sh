@@ -8,9 +8,19 @@
 
 # qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -q ibot -m abe -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" ~/hybseq/bin/hybseq_5_gene_trees_2_qsub.sh
 
+################################################################################
+# Cleanup of temporal (scratch) directory where the calculation was done
+# See https://docs.metacentrum.cz/advanced/job-tracking/#trap-command-usage
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'trap' commands below
+################################################################################
+
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
 trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
+
+################################################################################
+# Checking if all required parameters are provided
+################################################################################
 
 # Checking if all required variables are provided
 if [[ -z "${ALNF}" ]]; then
@@ -26,11 +36,26 @@ if [[ -z "${DATADIR}" ]]; then
 	exit 1
 	fi
 
+################################################################################
+# End of processing of user input and checking if all required parameters are provided
+################################################################################
+
+################################################################################
+# Loading of application module
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'module' command below
+################################################################################
+
 # Required modules
 echo "Loading modules"
 module add iqtree/2.2.0 || exit 1 # IQ-TREE 2
 # module add raxml-ng/1.1.0 || exit 1 # RAxML-NG
 echo
+
+################################################################################
+# Switching to temporal (SCRATCH) directory and copying input data there
+# See https://docs.metacentrum.cz/basics/jobs/
+# NOTE On another clusters than Czech MetaCentrum ensure that SCRATCH is the variable for temporal directory - if not, edit following code accordingly
+################################################################################
 
 # Change working directory
 echo "Going to working directory ${SCRATCHDIR}"
@@ -50,9 +75,20 @@ echo "Obtaining basename of input file ${ALNF}"
 ALNA="$(basename "${ALNF}")" || exit 1
 echo
 
+################################################################################
+# The calculation
+################################################################################
+
 # Runing the task (trees from individual alignments)
 echo "Computing gene tree from ${ALNA}..."
 ./hybseq_5_gene_trees_3_run.sh -a "${ALNA}" | tee hybseq_gene_tree."${ALNA%.*}".log
+
+################################################################################
+# Input files are removed from temporal working directory
+# Results are copied to the output directory
+# NOTE On another clusters than Czech MetaCentrum ensure that SCRATCH is the variable for temporal directory - if not, edit following code accordingly
+################################################################################
+
 rm "${ALNA}" hybseq_5_gene_trees_3_run.sh || { export CLEAN_SCRATCH='false'; exit 1; }
 echo
 

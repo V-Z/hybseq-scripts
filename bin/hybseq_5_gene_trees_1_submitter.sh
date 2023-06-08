@@ -10,6 +10,10 @@
 
 # Setting initial variables
 
+################################################################################
+# NOTE Edit variables below to fit your data
+################################################################################
+
 # Set data directories
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
@@ -47,6 +51,16 @@ echo
 echo "Making output directory"
 mkdir trees
 echo
+
+################################################################################
+# NOTE On another clusters than Czech MetaCentrum edit the 'qsub' command below to fit your needs
+# See https://docs.metacentrum.cz/advanced/pbs-options/
+# Edit qsub parameters if you need more resources, use particular cluster, etc.
+################################################################################
+
+################################################################################
+# NOTE Edit variables below to fit your data
+################################################################################
 
 # Processing all samples
 echo "Processing all samples at $(date)..."

@@ -8,6 +8,10 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
+################################################################################
+# Checking if all required parameters are provided
+################################################################################
+
 # Checking if exactly one variables is provided
 if [[ "$#" -ne '1' ]]; then
 	echo "Error! Exactly 1 parameter (directory with gene trees to process) is required! $# parameters received."
@@ -22,6 +26,14 @@ function operationfailed {
 	echo
 	exit 1
 	}
+
+################################################################################
+# End of processing of user input and checking if all required parameters are provided
+################################################################################
+
+################################################################################
+# The calculation
+################################################################################
 
 # Switching to working directory
 echo "Going to $1"

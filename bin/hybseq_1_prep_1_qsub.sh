@@ -9,13 +9,34 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
+################################################################################
+# Sections of the code where edits are to be expected are marked by "NOTE" in comments (see below)
+################################################################################
+
+################################################################################
+# NOTE Submit the job by the command below
+# On another clusters than Czech MetaCentrum edit the 'qsub' command below to fit your needs
+# See https://docs.metacentrum.cz/advanced/pbs-options/
+# Edit qsub parameters if you need more resources, use particular cluster, etc.
+################################################################################
+
 # qsub -l walltime=4:0:0 -l select=1:ncpus=4:mem=48gb:scratch_local=100gb -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # NOTE HybSeq course with zingiberaceae test data
 # qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=48gb:scratch_local=250gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # HybSeq
 # qsub -l walltime=48:0:0 -l select=1:ncpus=8:mem=256gb:scratch_local=1000gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # WGS
 
+################################################################################
+# Cleanup of temporal (scratch) directory where the calculation was done
+# See https://docs.metacentrum.cz/advanced/job-tracking/#trap-command-usage
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'trap' commands below
+################################################################################
+
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
 trap 'cp -a ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
+
+################################################################################
+# NOTE Edit variables below to fit your data
+################################################################################
 
 # Set data directories
 # HybSeq scripts and data
@@ -58,6 +79,11 @@ DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_09/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_10/0_data"
 
+################################################################################
+# Loading of application modules
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'module' commands below
+################################################################################
+
 # Required modules
 echo "Loading modules"
 module add trimmomatic/0.39-gcc-10.2.1-uuuagj7 || exit 1
@@ -65,6 +91,12 @@ module add bbmap/38.42 || exit 1
 module add fastqc/0.11.9-gcc-10.2.1-duxu5be || exit 1
 module add parallel/20200322 || exit 1
 echo
+
+################################################################################
+# Switching to temporal (SCRATCH) directory and copying input data there
+# See https://docs.metacentrum.cz/basics/jobs/
+# NOTE On another clusters than Czech MetaCentrum ensure that SCRATCH is the variable for temporal directory - if not, edit following code accordingly
+################################################################################
 
 # Change working directory
 echo "Going to working directory ${SCRATCHDIR}"
@@ -79,12 +111,26 @@ echo "Data to process - ${DATADIR}"
 cp -a "${DATADIR}" "${SCRATCHDIR}"/  || exit 1
 echo
 
+################################################################################
+# The calculation
+################################################################################
+
+################################################################################
+# NOTE Edit parameters below to fit your data
+################################################################################
+
 # Running the task
 echo "Preprocessing the FASTQ files..."
 ./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log # HybSeq
 # ./hybseq_1_prep_2_run.sh -f 0_data -c 8 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 32 -t "${TRIMMOMATIC_BIN}" | tee wgs_prepare.log # WGS
 # ./hybseq_1_prep_2_run_se.sh -f 0_data -c 8 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 32 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log
 echo
+
+################################################################################
+# Input files are removed from temporal working directory
+# Results are copied to the output directory
+# NOTE On another clusters than Czech MetaCentrum ensure that SCRATCH is the variable for temporal directory - if not, edit following code accordingly
+################################################################################
 
 # Remove unneeded file
 echo "Removing unneeded files"

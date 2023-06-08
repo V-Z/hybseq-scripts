@@ -8,6 +8,12 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
+################################################################################
+# Processing user input
+# Do not edit this section unless you are very sure what you are doing - edits, if needed, are expected only in the last section
+# Sections of the code where edits are to be expected are marked by "NOTE" in comments (see below)
+################################################################################
+
 # Parse initial arguments
 while getopts "hvp:s:" INITARGS; do
 	case "${INITARGS}" in
@@ -57,6 +63,10 @@ while getopts "hvp:s:" INITARGS; do
 			;;
 		esac
 	done
+
+################################################################################
+# The calculation
+################################################################################
 
 # Alignment statistics
 function alignstats {

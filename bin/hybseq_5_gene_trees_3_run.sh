@@ -10,6 +10,12 @@
 
 # Processing variables
 
+################################################################################
+# Processing user input
+# Do not edit this section unless you are very sure what you are doing - edits, if needed, are expected only in the last section
+# Sections of the code where edits are to be expected are marked by "NOTE" in comments (see below)
+################################################################################
+
 # Parse initial arguments
 while getopts "hva:" INITARGS; do
 	case "${INITARGS}" in
@@ -68,6 +74,10 @@ function toolcheck {
 		}
 	}
 
+################################################################################
+# Checking if all required parameters are provided
+################################################################################
+
 toolcheck iqtree2
 # toolcheck raxml-ng
 
@@ -76,6 +86,14 @@ if [[ -z "${ALN}" ]]; then
 	echo "Error! Input alignment in FASTA format to use for gene tree construction not provided!"
 	operationfailed
 	fi
+
+################################################################################
+# End of processing of user input and checking if all required parameters are provided
+################################################################################
+
+################################################################################
+# NOTE Edit variables below to fit your data
+################################################################################
 
 # Construct gene trees with IQ-TREE from *.aln.fasta alignments
 echo "Constructing gene tree for ${ALN} with IQ-TREE at $(date)"

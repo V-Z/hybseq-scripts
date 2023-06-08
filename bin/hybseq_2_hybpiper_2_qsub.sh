@@ -10,9 +10,19 @@
 
 # qsub -l walltime=48:0:0 -l select=1:ncpus="${NCPU}":mem=16gb:scratch_local=15gb -q ibot -m abe -N HybPiper."${SAMPLE}" -v HYBPIPDIR="${HYBPIPDIR}",WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",BAITFILE="${BAITFILE}",NCPU="${NCPU}",SAMPLE="${SAMPLE}" ~/hybseq/bin/hybseq_2_hybpiper_2_qsub.sh
 
+################################################################################
+# Cleanup of temporal (scratch) directory where the calculation was done
+# See https://docs.metacentrum.cz/advanced/job-tracking/#trap-command-usage
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'trap' commands below
+################################################################################
+
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
 trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
+
+################################################################################
+# Checking if all required parameters are provided
+################################################################################
 
 # Checking if all required variables are provided
 if [[ -z "${SAMPLE}" ]]; then
@@ -36,10 +46,25 @@ if [[ -z "${NCPU}" ]]; then
 	exit 1
 	fi
 
+################################################################################
+# End of processing of user input and checking if all required parameters are provided
+################################################################################
+
+################################################################################
+# Loading of application module
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'module' command below
+################################################################################
+
 # Required modules
 echo "Loading modules"
 module add parallel/20200322 || exit 1
 echo
+
+################################################################################
+# Switching to temporal (SCRATCH) directory and copying input data there
+# See https://docs.metacentrum.cz/basics/jobs/
+# NOTE On another clusters than Czech MetaCentrum ensure that SCRATCH is the variable for temporal directory - if not, edit following code accordingly
+################################################################################
 
 # Change working directory
 echo "Going to working directory ${SCRATCHDIR}"
@@ -54,10 +79,19 @@ echo "Data to process - ${DATADIR}/${SAMPLE}"
 cp "${DATADIR}"/"${SAMPLE}".* "${SCRATCHDIR}"/ || exit 1
 echo
 
+################################################################################
+# The calculation
+################################################################################
+
 # Runing the task (HibPiper)
 echo "Running HybPiper..."
 ./hybseq_2_hybpiper_3_run.sh -s "${SAMPLE}" -b "${BAITFILE}" -c "${NCPU}" | tee hybseq_hybpiper."${SAMPLE}".log
 echo
+
+################################################################################
+# Results are copied to the output directory
+# NOTE On another clusters than Czech MetaCentrum ensure that SCRATCH is the variable for temporal directory - if not, edit following code accordingly
+################################################################################
 
 # Copy results back to storage
 echo "Copying results back to ${DATADIR}"

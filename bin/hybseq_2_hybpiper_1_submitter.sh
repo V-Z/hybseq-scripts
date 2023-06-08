@@ -13,6 +13,10 @@
 
 # Setting initial variables
 
+################################################################################
+# NOTE Edit variables below to fit your data
+################################################################################
+
 # Set data directories
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq" # Data and scripts for hybseq
 
@@ -57,10 +61,26 @@ NCPU='8'
 
 # Submitting individual tasks
 
+################################################################################
+# Switching to temporal (SCRATCH) directory and copying input data there
+# See https://docs.metacentrum.cz/basics/jobs/
+# NOTE On another clusters than Czech MetaCentrum ensure that SCRATCH is the variable for temporal directory - if not, edit following code accordingly
+################################################################################
+
 # Go to working directory
 echo "Switching to ${DATADIR}"
 cd "${DATADIR}"/ || exit 1
 echo
+
+################################################################################
+# NOTE On another clusters than Czech MetaCentrum edit the 'qsub' command below to fit your needs
+# See https://docs.metacentrum.cz/advanced/pbs-options/
+# Edit qsub parameters if you need more resources, use particular cluster, etc.
+################################################################################
+
+################################################################################
+# NOTE Edit variables below to fit your data
+################################################################################
 
 # Processing all samples
 echo "Processing all samples at $(date)..."

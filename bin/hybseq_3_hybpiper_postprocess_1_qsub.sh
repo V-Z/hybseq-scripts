@@ -9,12 +9,23 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
+################################################################################
+# NOTE Submit the job by the command below
+# On another clusters than Czech MetaCentrum edit the 'qsub' command below to fit your needs
+# See https://docs.metacentrum.cz/advanced/pbs-options/
+# Edit qsub parameters if you need more resources, use particular cluster, etc.
+################################################################################
+
 # qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=100gb -m abe ~/hybseq/bin/hybseq_3_hybpiper_postprocess_1_qsub.sh # NOTE HybSeq course with zingiberaceae test data
 # qsub -l walltime=24:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=500gb -q ibot -m abe ~/hybseq/bin/hybseq_3_hybpiper_postprocess_1_qsub.sh
 
 # Clean-up of SCRATCH
 trap 'clean_scratch' TERM EXIT
 trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
+
+################################################################################
+# NOTE Edit variables below to fit your data
+################################################################################
 
 # Set data directories
 # HybSeq scripts and data
@@ -50,9 +61,7 @@ DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/2_seqs"
 SAMPLES='samples_list.txt'
 
 # Change working directory
-# echo "Going to working directory ${SCRATCHDIR}"
 echo "Going to working directory ${DATADIR}"
-# cd "${SCRATCHDIR}"/ || exit 1
 cd "${DATADIR}"/ || exit 1
 echo
 
@@ -61,6 +70,10 @@ echo "Copying..."
 echo "HybSeq data - ${WORKDIR}"
 cp -a "${WORKDIR}"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref} . || exit 1
 echo
+
+################################################################################
+# The calculation
+################################################################################
 
 # Runing the task (HibPiper postprocessing)
 echo "Running HybPiper postprocessing..."

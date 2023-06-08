@@ -10,6 +10,12 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
+################################################################################
+# Processing user input
+# Do not edit this section unless you are very sure what you are doing - edits, if needed, are expected only in the last section
+# Sections of the code where edits are to be expected are marked by "NOTE" in comments (see below)
+################################################################################
+
 # Parse initial arguments
 while getopts "hvp:b:s:" INITARGS; do
 	case "${INITARGS}" in
@@ -72,6 +78,10 @@ function operationfailed {
 	exit 1
 	}
 
+################################################################################
+# Checking if all required parameters are provided
+################################################################################
+
 # Checking if all required variables are provided
 if [[ -z "${BAITFILE}" ]]; then
 	echo "Error! Reference bait FASTA file not provided!"
@@ -81,6 +91,14 @@ if [[ -z "${SAMPLES}" ]]; then
 	echo "Error! List of samples to process not provided!"
 	operationfailed
 	fi
+
+################################################################################
+# End of processing of user input and checking if all required parameters are provided
+################################################################################
+
+################################################################################
+# The calculation
+################################################################################
 
 run_in_os  HybPiper/HybPiper-2.1.3.sif <<END
 module add mambaforge

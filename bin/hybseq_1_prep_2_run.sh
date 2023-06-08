@@ -10,6 +10,12 @@
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 # This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
+################################################################################
+# Processing user input
+# Do not edit this section unless you are very sure what you are doing - edits, if needed, are expected only in the last section
+# Sections of the code where edits are to be expected are marked by "NOTE" in comments (see below)
+################################################################################
+
 # Initialize variables
 FQDIR='' # Input directory - it MUST contain directories named according to individuals and containing F and R FASTQ1 files for respective individual
 COUNTFASTQ='' # Test if input directory contains FASTQ1 files
@@ -210,6 +216,10 @@ function toolcheck {
 		}
 	}
 
+################################################################################
+# Checking if all required parameters are provided
+################################################################################
+
 toolcheck xargs
 toolcheck clumpify.sh
 toolcheck fastqc
@@ -277,6 +287,10 @@ if [[ -z "${TRIMMOMATIC}" ]]; then
 	exit 1
 	fi
 
+################################################################################
+# End of processing of user input and checking if all required parameters are provided
+################################################################################
+
 # Exit on error
 function operationfailed {
 	echo "Error! Operation failed!"
@@ -287,6 +301,10 @@ function operationfailed {
 	export CLEAN_SCRATCH='false'
 	exit 1
 	}
+
+################################################################################
+# The calculation
+################################################################################
 
 # Initialize file with statistics
 echo "Initializing files with statistics"
