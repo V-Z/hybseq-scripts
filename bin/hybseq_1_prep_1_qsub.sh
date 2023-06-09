@@ -20,9 +20,7 @@
 # Edit qsub parameters if you need more resources, use particular cluster, etc.
 ################################################################################
 
-# qsub -l walltime=4:0:0 -l select=1:ncpus=4:mem=48gb:scratch_local=100gb -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # NOTE HybSeq course with zingiberaceae test data
-# qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=48gb:scratch_local=250gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # HybSeq
-# qsub -l walltime=48:0:0 -l select=1:ncpus=8:mem=256gb:scratch_local=1000gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # WGS
+# qsub -l walltime=4:0:0 -l select=1:ncpus=4:mem=48gb:scratch_local=100gb -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh
 
 ################################################################################
 # NOTE Edit variables below to fit your data
@@ -117,13 +115,16 @@ echo
 
 ################################################################################
 # NOTE Edit parameters below to fit your data
+# NOTE Edit parameters according to resources required by 'qsub' command (see above)
+# NOTE Select pair-end or single-end variant of processing of input FASTQ files
 ################################################################################
 
 # Running the task
 echo "Preprocessing the FASTQ files..."
-./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log # HybSeq
-# ./hybseq_1_prep_2_run.sh -f 0_data -c 8 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 32 -t "${TRIMMOMATIC_BIN}" | tee wgs_prepare.log # WGS
-# ./hybseq_1_prep_2_run_se.sh -f 0_data -c 8 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 32 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log
+# Pair-end (forward and reverse) FASTQ files
+./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log
+# Single-end FASTQ files
+# ./hybseq_1_prep_2_run_se.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log
 echo
 
 ################################################################################

@@ -17,7 +17,7 @@
 ################################################################################
 
 # Initialize variables
-FQDIR='' # Input directory - it MUST contain directories named according to individuals and containing F and R FASTQ files for respective individual
+FQDIR='' # Input directory - it MUST contain FASTQ files for samples
 COUNTFASTQ='' # Test if input directory contains FASTQ files
 NUMTEST='^[0-9]+$' # Testing if provided value is an integer
 NCPU='' # Number of CPU threads for parallel operations
@@ -28,10 +28,10 @@ ADAPTOR='' # Path to FASTA file containing adaptor(s)
 JAVA='' # PATH to custom Java binary
 MEM='' # Memory limit for Trimmomatic and Clumpify
 TRIMMOMATIC='' # Path to Trimmomatic JAR file
-FASTQF='' # Input, forward
+FASTQF='' # Input
 FASTQ='' # Base name
-TRM='' # Trimmed, forward
-NODUP='' # Without duplicates, forward
+TRM='' # Trimmed
+NODUP='' # Without duplicates
 echo
 
 # Parse initial arguments
@@ -105,36 +105,48 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 				TRIMDIR="${OPTARG}"
 				echo "Output directory for trimmed sequences: ${TRIMDIR}"
 				echo
-				else
-					echo "Output directory for trimmed sequences ${TRIMDIR} doesn't exist - creating 'trimmed'."
-					TRIMDIR='trimmed'
-					mkdir "${TRIMDIR}" || { echo "Error! Can't create ${TRIMDIR}!"; echo; exit 1; }
+				elif [[ -n "${OPTARG}" ]]; then
+					TRIMDIR="${OPTARG}"
+					echo "Output directory for trimmed sequences ${TRIMDIR} doesn't exist (-o) - creating it."
+					mkdir -p "${TRIMDIR}" || { echo "Error! Can't create ${TRIMDIR}!"; echo; exit 1; }
+					else
+						TRIMDIR='1_trimmed'
+						echo "Output directory for trimmed sequences ${TRIMDIR} doesn't exist - creating '1_trimmed'."
+						mkdir "${TRIMDIR}" || { echo "Error! Can't create ${TRIMDIR}!"; echo; exit 1; }
 					echo
-					fi
+				fi
 			;;
 		d) # Output directory for deduplicated sequences
 			if [[ -d "${OPTARG}" ]]; then
 				DEDUPDIR="${OPTARG}"
 				echo "Output directory for deduplicated sequences: ${DEDUPDIR}"
 				echo
-				else
-					echo "Output directory for deduplicated sequences ${DEDUPDIR} doesn't exist - creating 'dedup'."
-					DEDUPDIR='dedup'
-					mkdir "${DEDUPDIR}" || { echo "Error! Can't create ${DEDUPDIR}!"; echo; exit 1; }
+				elif [[ -n "${OPTARG}" ]]; then
+					DEDUPDIR="${OPTARG}"
+					echo "Output directory for deduplicated sequences ${DEDUPDIR} doesn't exist (-o) - creating it."
+					mkdir -p "${DEDUPDIR}" || { echo "Error! Can't create ${DEDUPDIR}!"; echo; exit 1; }
+					else
+						DEDUPDIR='2_dedup'
+						echo "Output directory for deduplicated sequences ${DEDUPDIR} doesn't exist - creating '2_dedup'."
+						mkdir "${DEDUPDIR}" || { echo "Error! Can't create ${DEDUPDIR}!"; echo; exit 1; }
 					echo
-					fi
+				fi
 			;;
 		q) # Output directory for quality reports
 			if [[ -d "${OPTARG}" ]]; then
 				QUALDIR="${OPTARG}"
 				echo "Output directory for quality reports: ${QUALDIR}"
 				echo
-				else
-					echo "Output directory for quality reports ${QUALDIR} doesn't exist - creating 'qual_rep'."
-					QUALDIR='qual_rep'
-					mkdir "${QUALDIR}" || { echo "Error! Can't create ${QUALDIR}!"; echo; exit 1; }
+				elif [[ -n "${OPTARG}" ]]; then
+					QUALDIR="${OPTARG}"
+					echo "Output directory for quality reports ${QUALDIR} doesn't exist (-o) - creating it."
+					mkdir -p "${QUALDIR}" || { echo "Error! Can't create ${QUALDIR}!"; echo; exit 1; }
+					else
+						QUALDIR='3_qual_rep'
+						echo "Output directory for quality reports ${QUALDIR} doesn't exist - creating '3_qual_rep'."
+						mkdir "${QUALDIR}" || { echo "Error! Can't create ${QUALDIR}!"; echo; exit 1; }
 					echo
-					fi
+				fi
 			;;
 		a) # FASTA file containing adaptor(s)
 			if [[ -r "${OPTARG}" ]]; then
@@ -296,15 +308,21 @@ echo
 
 # Decompress FASTQ files
 echo "Decompressing FASTQ files at $(date)"
-parallel -j "${NCPU}" -X bunzip2 -v ::: "${FQDIR}"/*.bz2
+if [[ -n "$(find "${FQDIR}" -name '*.gz')" ]]; then
+	echo "Files are compressed by gzip"
+	parallel -j "${NCPU}" -X gunzip -v ::: "${FQDIR}"/*.gz
+	elif [[ -n "$(find "${FQDIR}" -name '*.bz2')" ]]; then
+		echo "Files are compressed by bzip2"
+		parallel -j "${NCPU}" -X bunzip2 -v ::: "${FQDIR}"/*.bz2
+	fi
 echo
 
 # Process all files
 for FASTQF in "${FQDIR}"/*.f*q*; do
 	# Names - variables
 	FASTQ="${FASTQF%.f*q*}" # Base name
-	TRM="$(basename "${FASTQ}.trm.fq")" # Trimmed, forward
-	NODUP="$(basename "${FASTQ}.dedup.fq")" # Without duplicates, forward
+	TRM="$(basename "${FASTQ}.trm.fq")" # Trimmed
+	NODUP="$(basename "${FASTQ}.dedup.fq")" # Without duplicates
 	echo "Processing ${FASTQ} at $(date)"
 	echo
 

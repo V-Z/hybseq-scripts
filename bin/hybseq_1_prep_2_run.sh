@@ -17,8 +17,8 @@
 ################################################################################
 
 # Initialize variables
-FQDIR='' # Input directory - it MUST contain directories named according to individuals and containing F and R FASTQ1 files for respective individual
-COUNTFASTQ='' # Test if input directory contains FASTQ1 files
+FQDIR='' # Input directory - it MUST contain forward and reverse FASTQ files for samples
+COUNTFASTQ='' # Test if input directory contains FASTQ files
 NUMTEST='^[0-9]+$' # Testing if provided value is an integer
 NCPU='' # Number of CPU threads for parallel operations
 TRIMDIR='' # Output directory for trimmed sequences
@@ -109,7 +109,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 		o) # Output directory for trimmed sequences
 			if [[ -d "${OPTARG}" ]]; then
 				TRIMDIR="${OPTARG}"
-				echo "Output directory: ${TRIMDIR}"
+				echo "Output directory for trimmed sequences: ${TRIMDIR}"
 				echo
 				elif [[ -n "${OPTARG}" ]]; then
 					TRIMDIR="${OPTARG}"
@@ -125,7 +125,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 		d) # Output directory for deduplicated sequences
 			if [[ -d "${OPTARG}" ]]; then
 				DEDUPDIR="${OPTARG}"
-				echo "Output directory: ${DEDUPDIR}"
+				echo "Output directory for deduplicated sequences: ${DEDUPDIR}"
 				echo
 				elif [[ -n "${OPTARG}" ]]; then
 					DEDUPDIR="${OPTARG}"
@@ -141,7 +141,7 @@ while getopts "hrvf:c:o:d:q:a:j:m:t:" INITARGS; do
 		q) # Output directory for quality reports
 			if [[ -d "${OPTARG}" ]]; then
 				QUALDIR="${OPTARG}"
-				echo "Output directory: ${QUALDIR}"
+				echo "Output directory for quality reports: ${QUALDIR}"
 				echo
 				elif [[ -n "${OPTARG}" ]]; then
 					QUALDIR="${OPTARG}"
@@ -227,7 +227,7 @@ toolcheck parallel
 
 # Checking if all required parameters are provided
 if [[ -z "${FQDIR}" ]]; then
-	echo "Error! Input directory with FASTQ1 files (-f) was not specified!"
+	echo "Error! Input directory with FASTQ files (-f) was not specified!"
 	echo "See usage options: \"$0 -h\""
 	echo
 	exit 1

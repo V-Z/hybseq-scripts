@@ -137,12 +137,16 @@ echo
 # run_in_os loads HybPiper/HybPiper-2.1.3.sif container and '<<END' marks "here document" containing block of HybPiper (within container) commands (ends with 'END')
 # If HybPiper is installed differently on your cluster, edit code below or section loading modules in hybseq_2_hybpiper_2_qsub.sh
 # NOTE Possible edit HybPiper parameters here, see https://github.com/mossmatters/HybPiper/wiki/Full-pipeline-parameters
+# NOTE Use variant of "hybpiper assemble" appropriate for pair-end (forward and reverse)/single-end FASTQ files
 ################################################################################
 
 run_in_os  HybPiper/HybPiper-2.1.3.sif <<END
 module add mambaforge
 mamba activate /conda/envs/hybpiper-2.1.3
+# Pair-end (forward and reverse) FASTQ files
 hybpiper assemble --readfiles "${SAMPLES}".R{1,2}.fq --targetfile_dna "${BAITFILE}" --bwa --cpu "${NCPU}" --prefix "${SAMPLES}" --run_intronerate
+# Single-end FASTQ files
+# hybpiper assemble --readfiles "${SAMPLES}".fq --targetfile_dna "${BAITFILE}" --bwa --cpu "${NCPU}" --prefix "${SAMPLES}" --run_intronerate
 END
 echo
 
