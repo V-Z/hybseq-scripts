@@ -53,6 +53,9 @@ if [[ -z "${NCPU}" ]]; then
 ################################################################################
 # Loading of application module
 # NOTE On another clusters than Czech MetaCentrum edit or remove the 'module' command below
+# On Czech MetaCentrum, HybPiper is installed as Apptainer (Singularity) container, see https://docs.metacentrum.cz/software/containers/
+# Container starts its own shell, so that it is loaded right before usage of HybPiper (see script hybseq_2_hybpiper_3_run.sh)
+# If HybPiper is installed differently on your cluster, edit code below or in hybseq_2_hybpiper_3_run.sh accordingly
 ################################################################################
 
 # Required modules

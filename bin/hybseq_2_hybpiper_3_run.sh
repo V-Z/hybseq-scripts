@@ -130,6 +130,15 @@ echo
 # Processing the sample by HybPiper
 echo "Processing ${SAMPLES} at $(date)"
 echo
+
+################################################################################
+# NOTE On Czech MetaCentrum, HybPiper is installed as Apptainer (Singularity) container, see https://docs.metacentrum.cz/software/containers/
+# Container starts its own shell, so that it is loaded right before usage of HybPiper - see code below
+# run_in_os loads HybPiper/HybPiper-2.1.3.sif container and '<<END' marks "here document" containing block of HybPiper (within container) commands (ends with 'END')
+# If HybPiper is installed differently on your cluster, edit code below or section loading modules in hybseq_2_hybpiper_2_qsub.sh
+# NOTE Possible edit HybPiper parameters here, see https://github.com/mossmatters/HybPiper/wiki/Full-pipeline-parameters
+################################################################################
+
 run_in_os  HybPiper/HybPiper-2.1.3.sif <<END
 module add mambaforge
 mamba activate /conda/envs/hybpiper-2.1.3

@@ -100,6 +100,14 @@ if [[ -z "${SAMPLES}" ]]; then
 # The calculation
 ################################################################################
 
+################################################################################
+# NOTE On Czech MetaCentrum, HybPiper is installed as Apptainer (Singularity) container, see https://docs.metacentrum.cz/software/containers/
+# Container starts its own shell, so that it is loaded right before usage of HybPiper - see code below
+# run_in_os loads HybPiper/HybPiper-2.1.3.sif container and '<<END' marks "here document" containing block of HybPiper (within container) commands (ends with 'END')
+# NOTE If HybPiper is installed differently on your cluster, edit code below or use "module add/load" according to documentation of your cluster
+# NOTE Possible edit HybPiper parameters here, see https://github.com/mossmatters/HybPiper/wiki/Full-pipeline-parameters
+################################################################################
+
 run_in_os  HybPiper/HybPiper-2.1.3.sif <<END
 module add mambaforge
 mamba activate /conda/envs/hybpiper-2.1.3
@@ -132,6 +140,11 @@ hybpiper paralog_retriever --targetfile_dna "${BAITFILE}" samples_list.txt
 echo
 END
 
+################################################################################
+# End of HybPiper
+# Following section performs cleanup and statistics
+################################################################################
+
 # Removing ".dedup*" from accession names
 echo "Removing \".dedup*\" from accession names"
 sed -i 's/\.dedup.*$//g' ./*.{FNA,fasta}
@@ -163,7 +176,7 @@ echo
 
 # Removing input data
 echo "Removing input directories and unneeded files"
-rm -rf  hybseq_3_hybpiper_postprocess_2_run.sh ref
+rm -rf hybseq_3_hybpiper_postprocess_2_run.sh ref
 echo
 
 exit
