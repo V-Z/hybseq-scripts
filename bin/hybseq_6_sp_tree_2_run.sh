@@ -20,8 +20,8 @@
 # Comment/uncomment command for selected species tree builder below
 ################################################################################
 
-ASTRAL="/storage/pruhonice1-ibot/home/${LOGNAME}/bin/Astral/astral.5.7.8.jar" # ASTRAL
-# ASTRALP="/storage/pruhonice1-ibot/home/${LOGNAME}/bin/astral-pro" # ASTRAL-Pro
+ASTRAL="/storage/brno2/home/${LOGNAME}/bin/Astral/astral.5.7.8.jar" # ASTRAL
+# ASTRALP="/storage/brno2/home/${LOGNAME}/bin/astral-pro" # ASTRAL-Pro
 
 # Species trees
 echo "Reconstructing species trees with ASTRAL"

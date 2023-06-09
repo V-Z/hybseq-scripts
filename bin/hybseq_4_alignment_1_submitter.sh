@@ -16,26 +16,10 @@
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
+WORKDIR="/storage/brno2/home/${LOGNAME}/hybseq"
 
 # Data to process
 DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/2_seqs"
-# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/cos"
-# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/kew"
-# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
-# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/2_seqs"
-# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/2_seqs"
-# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/2_seqs"
-# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_contigs"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/diploids_contigs"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/ingroup_contigs"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/placement_contigs"
-# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/alignments"
-# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta/red_samples"
-# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_mvftools_test/4_geneious_mapping/4_to_align"
-# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Zingiberaceae_HybSeq_flowering_genes/HybPiper/DNA_alignments"
-# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Zingiberaceae_HybSeq_flowering_genes/run_1/alignments"
 
 # Submitting individual tasks
 
