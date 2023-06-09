@@ -21,16 +21,6 @@
 # qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=4gb:scratch_local=1gb -m abe ~/hybseq/bin/hybseq_6_sp_tree_1_qsub.sh # NOTE HybSeq course with zingiberaceae test data
 
 ################################################################################
-# Cleanup of temporal (scratch) directory where the calculation was done
-# See https://docs.metacentrum.cz/advanced/job-tracking/#trap-command-usage
-# NOTE On another clusters than Czech MetaCentrum edit or remove the 'trap' commands below
-################################################################################
-
-# Clean-up of SCRATCH
-trap 'clean_scratch' TERM EXIT
-trap 'cp -a ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
-
-################################################################################
 # NOTE Edit variables below to fit your data
 ################################################################################
 
@@ -67,6 +57,16 @@ DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/5_sp_trees"
 echo "Loading modules"
 module add openjdk/17.0.0_35-gcc-8.3.0-rfe265h || exit 1
 echo
+
+################################################################################
+# Cleanup of temporal (scratch) directory where the calculation was done
+# See https://docs.metacentrum.cz/advanced/job-tracking/#trap-command-usage
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'trap' commands below
+################################################################################
+
+# Clean-up of SCRATCH
+trap 'clean_scratch' TERM EXIT
+trap 'cp -a ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
 
 ################################################################################
 # Switching to temporal (SCRATCH) directory and copying input data there

@@ -25,16 +25,6 @@
 # qsub -l walltime=48:0:0 -l select=1:ncpus=8:mem=256gb:scratch_local=1000gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh # WGS
 
 ################################################################################
-# Cleanup of temporal (scratch) directory where the calculation was done
-# See https://docs.metacentrum.cz/advanced/job-tracking/#trap-command-usage
-# NOTE On another clusters than Czech MetaCentrum edit or remove the 'trap' commands below
-################################################################################
-
-# Clean-up of SCRATCH
-trap 'clean_scratch' TERM EXIT
-trap 'cp -a ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
-
-################################################################################
 # NOTE Edit variables below to fit your data
 ################################################################################
 
@@ -91,6 +81,16 @@ module add bbmap/38.42 || exit 1
 module add fastqc/0.11.9-gcc-10.2.1-duxu5be || exit 1
 module add parallel/20200322 || exit 1
 echo
+
+################################################################################
+# Cleanup of temporal (scratch) directory where the calculation was done
+# See https://docs.metacentrum.cz/advanced/job-tracking/#trap-command-usage
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'trap' commands below
+################################################################################
+
+# Clean-up of SCRATCH
+trap 'clean_scratch' TERM EXIT
+trap 'cp -a ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
 
 ################################################################################
 # Switching to temporal (SCRATCH) directory and copying input data there

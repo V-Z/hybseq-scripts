@@ -19,10 +19,6 @@
 # qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=100gb -m abe ~/hybseq/bin/hybseq_3_hybpiper_postprocess_1_qsub.sh # NOTE HybSeq course with zingiberaceae test data
 # qsub -l walltime=24:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=500gb -q ibot -m abe ~/hybseq/bin/hybseq_3_hybpiper_postprocess_1_qsub.sh
 
-# Clean-up of SCRATCH
-trap 'clean_scratch' TERM EXIT
-trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
-
 ################################################################################
 # NOTE Edit variables below to fit your data
 ################################################################################
@@ -59,6 +55,16 @@ DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/2_seqs"
 # If merging multiple libraries, either merge the samples_list.txt from each library, or run something like:
 # find . -maxdepth 1 -type d | sed 's/^\.\///' | sort | tail -n+2 > samples_list.txt
 SAMPLES='samples_list.txt'
+
+################################################################################
+# Cleanup of temporal (scratch) directory where the calculation was done
+# See https://docs.metacentrum.cz/advanced/job-tracking/#trap-command-usage
+# NOTE On another clusters than Czech MetaCentrum edit or remove the 'trap' commands below
+################################################################################
+
+# Clean-up of SCRATCH
+trap 'clean_scratch' TERM EXIT
+trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
 
 # Change working directory
 echo "Going to working directory ${DATADIR}"
