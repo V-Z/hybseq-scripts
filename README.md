@@ -340,6 +340,12 @@ Software and tasks:
 We will get matrix of pairwise differences among trees (from multiple genes), we need display and analyze it:
 
 ```R
+# Install needed packages
+install.packages(pkgs=c("ape", "ade4", "distory", "gplots", "ggplot2",
+  "phangorn", "phytools"), repos="https://mirrors.nic.cz/R/", dependencies="Imports")
+install.packages(pkgs=
+  "https://cran.r-project.org/src/contrib/Archive/kdetrees/kdetrees_0.1.5.tar.gz",
+  repos=NULL)
 # Load libraries
 library(ape)
 library(ade4)
@@ -348,9 +354,11 @@ library(gplots)
 library(ggplot2)
 library(kdetrees)
 library(phangorn)
+library(phytools)
 # Load the list of trees
 trees <- read.tree(file="trees_ml_exons.nwk")
 trees # See it
+print(trees, details=TRUE)
 # Root all trees
 trees <- root.multiPhylo(phy=trees, outgroup="o_purpurascens_S482", resolve.root=TRUE)
 print(trees, details=TRUE)
@@ -378,12 +386,19 @@ s.label(dfxy=trees.pcoa$li)
 s.kde2d(dfxy=trees.pcoa$li, cpoint=0, add.plot=TRUE)
 add.scatter.eig(trees.pcoa[["eig"]], 3,1,2, posi="bottomleft")
 title("PCoA of matrix of pairwise trees distances")
+# Remove outlying trees
+trees
+trees[c("Assembly_1556", "Assembly_13627")] <- NULL # For example
+trees
 ```
+
+Now you can repeat recalculation of distance matrix and PCoA and possibly remove more trees...
 
 [Kdetrees](https://cran.r-project.org/package=kdetrees) finds discordant phylogenetic trees. It produces relative scores (and list of passing/discarded trees and graphical outputs) --- high are relatively similar to each other, low dissimilar (discordant with the others). In `kdetrees::kdetrees()`, value of `k` (see code below) is responsible for threshold for removal of outliers --- play with it.
 
 ```R
 # Run kdetrees to detect outliers - play with k
+?kdetrees # See options for kdetrees
 trees.kde <- kdetrees(trees=trees, k=0.5, distance="dissimilarity", topo.only=FALSE, greedy=TRUE) # Play with k!
 # See text results with list of outlying trees
 trees.kde
@@ -415,9 +430,9 @@ cd TreeShrink/
 # Install it
 python3 setup.py install --user # Or if using conda
 # Go to directory with input file trees_good.nwk and run TreeShrink
-python3 ~/bin/TreeShrink/run_treeshrink.py -r ~/bin/TreeShrink/ -t trees_good.nwk
+run_treeshrink.py -t trees_good.nwk -o treeshrink_exons -O treeshrink_exons | tee treeshrink.log
 # Find out how many times particular sample was removed from the list of the trees
-grep -o "\<[[:graph:]]\+\>" trees_good_RS_0.05.txt | sort | uniq -c | sort -r
+grep -o "\<[[:graph:]]\+\>" treeshrink_exons/treeshrink_exons.txt | sort | uniq -c | sort -gr
 ```
 
 ### 5.2. Species trees
@@ -431,7 +446,7 @@ It requires [ASTRAL](https://github.com/smirarab/ASTRAL).
 The tree lists created by `hybseq_5_gene_trees_4_postprocess.sh` contain on the beginning of each line name of respective genetic region (according to reference bait file). This is advantageous for loading the lists into `R`, but [ASTRAL](https://github.com/smirarab/ASTRAL) requires each line to start directly with the NEWICK record. Remove the names by something like:
 
 ```shell
-sed -i 's/^[[:graph:]]\+ //' *.nwk
+sed -i 's/^[[:graph:]]\+ //' trees_{cons,ml}_{exons,introns,supercontigs}.nwk
 ```
 
 Before running `hybseq_6_sp_tree_1_qsub.sh`. Tree lists exported from `R` or another software like TreeShrink above can be directly used for this script --- in such case **do not run the above command!**
@@ -439,8 +454,8 @@ Before running `hybseq_6_sp_tree_1_qsub.sh`. Tree lists exported from `R` or ano
 When ready, submit the job by something like:
 
 ```shell
-qsub -l walltime=1:0:0 -l select=1:ncpus=1:mem=4gb:scratch_local=1gb -q ibot -m abe \
-~/hybseq/bin/hybseq_6_sp_tree_1_qsub.sh
+qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=4gb:scratch_local=1gb -m abe \
+  ~/hybseq/bin/hybseq_6_sp_tree_1_qsub.sh
 ```
 
 Output files with species trees are prefixed by `sp_` and `*.log` files contain complete record of running ASTRAL.
@@ -449,21 +464,32 @@ There are plenty of options for species tree reconstruction. E.g. `R` has parsim
 
 ```R
 # Compute parsimony super tree
-tree.sp <- superTree(tree=trees.good, method="NNI", rooted=TRUE, trace=2, start=NULL, multicore=TRUE)
-# Rooting the species tree
-tree.sp <- root(phy=tree.sp, outgroup="o_purpurascens_S482", resolve.root=TRUE)
+?superTree # See help first...
+tree.sp <- superTree(tree=trees.good, method="NNI", rooted=TRUE, trace=2,
+  start=NULL, multicore=TRUE)
 tree.sp # See details
+# Root it
+tree.sp <- root(phy=tree.sp, outgroup=c("Riedelia-arfakensis_S49_L001",
+  "Zingiber-officinale_S242_L001"), resolve.root=TRUE)
 # Save parsimony super tree
 write.tree(phy=tree.sp, file="parsimony_sp_tree.nwk")
 # Plot parsimony super tree
 plot.phylo(x=tree.sp, type="phylogram", edge.width=2, label.offset=0.01, cex=1.2)
 add.scale.bar()
-# For ape::speciesTree all trees must be ultrametric - chronos scale them
-trees.ultra <- lapply(X=trees, FUN=chronos, model="correlated")
+# Tune display of the tree...
+# See help...
+?ape::speciesTree
+?phytools::mrp.supertree
+?phangorn::coalSpeciesTree
+# All trees must be ultrametric - chronos scale them
+trees.ultra <- lapply(X=trees.good, FUN=chronos, model="correlated")
 class(trees.ultra) <- "multiPhylo"
-# Calculate the species tree with different methods
-tree.sp.mean <- speciesTree(x=trees.ultra, FUN=mean)
-tree.sp2 <- mrp.supertree(tree=trees, method="optim.parsimony", rooted=TRUE)
+# Calculate the species tree
+# tree.sp.mean <- speciesTree(x=trees.ultra, FUN=mean)
+tree.sp2 <- mrp.supertree(tree=trees.good, method="optim.parsimony", rooted=TRUE)
+tree.sp2 <- root(phy=tree.sp2, outgroup=c("Riedelia-arfakensis_S49_L001",
+  "Zingiber-officinale_S242_L001"), resolve.root=TRUE)
+plot.phylo(x=tree.sp2, type="phylogram", edge.width=2, label.offset=0.01, cex=1.2)
 ```
 
 # Next steps
@@ -507,9 +533,9 @@ When the input file is ready (see also [tutorial and help](https://wiki.rice.edu
 
 ```shell
 # Download binary JAR file (ready to run)
-wget https://bioinfocs.rice.edu/sites/g/files/bxs266/f/kcfinder/files/PhyloNet_3.8.2.jar
+wget https://phylogenomics.rice.edu/media/PhyloNet.jar
 # Running PhyloNet
-java -Xmx8g -jar PhyloNet_3.8.0.jar file.nex | tee file.log
+java -Xmx8g -jar PhyloNet.jar trees_good.nex | tee phylonet_exons.log
 ```
 
 It does not save output file, the network in special NWK format for [Dendroscope](https://www.wsi.uni-tuebingen.de/lehrstuehle/algorithms-in-bioinformatics/software/dendroscope/) is on the end --- copy it from terminal (after `Visualize in Dendroscope :`) or log file and save as tiny TXT, which can be opened in [Dendroscope](https://www.wsi.uni-tuebingen.de/lehrstuehle/algorithms-in-bioinformatics/software/dendroscope/).
@@ -528,19 +554,28 @@ cd phyparts/
 ./mvn_cmdline.sh
 # Install PhyParts_PieCharts
 git clone https://github.com/mossmatters/MJPythonNotebooks.git
+# Or on MetaCentrum...
+module add phyparts/0.0.1
 # Split list of trees into individual files
 mkdir trees_good
 split -a 4 -d -l 1 trees_good.nwk trees_good/trees_good_
 ls trees_good/
+# If applicable, open parsimony_sp_tree.nwk and remove 'Root' directive
 # Remove IQTREE ultrafast bootstrap values from gene trees
 sed -i 's/\/[0-9]\{1,3\}//g' trees_good/trees_*
 # Analysis with phyparts
-java -jar ~/bin/phyparts/target/phyparts-0.0.1-SNAPSHOT-jar-with-dependencies.jar -a 1 -d trees_good -m parsimony_sp_tree.nwk -o trees_good_res -s 0.5 -v
+java -jar ~/bin/phyparts/target/phyparts-0.0.1-SNAPSHOT-jar-with-dependencies.jar --help
+java -jar ~/bin/phyparts/target/phyparts-0.0.1-SNAPSHOT-jar-with-dependencies.jar \
+  -a 1 -d trees_good -m parsimony_sp_tree.nwk -o trees_good_res -s 0.5 -v
 # Copy phypartspiecharts.py to directory with trees
 cp ~/bin/phyparts/MJPythonNotebooks/phypartspiecharts.py .
+# See help for phypartspiecharts.py
+python phypartspiecharts.py --help
+# Pie chart: concordance (blue) top conflict (green), other conflict (red),
+# no signal (gray)
 # Run phypartspiecharts.py to get the graphical output
-python phypartspiecharts.py --svg_name trees_good_res.svg parsimony_sp_tree.nwk trees_good_res 144
-# Pie chart: concordance (blue) top conflict (green), other conflict (red), no signal (gray)
+python phypartspiecharts.py --svg_name trees_good_res.svg parsimony_sp_tree.nwk \
+  trees_good_res 216
 ```
 
 ## 4. Comparing two or more trees
@@ -569,18 +604,23 @@ is.binary.multiPhylo(trees.ultra) # binary bifurcating
 # See help page
 ?phangorn::densiTree
 # Plotting density trees
-densiTree(x=trees.ultra[1:10], direction="downwards", scaleX=TRUE, col=rainbow(3), width=5, cex=1.5)
+densiTree(x=trees.ultra, scaleX=TRUE, col=rainbow(6), width=5, cex=1.5)
 densiTree(x=trees.ultra, direction="upwards", scaleX=TRUE, width=5)
 densiTree(x=trees.ultra, scaleX=TRUE, width=5, cex=1.5)
+densiTree(x=trees.ultra[1:10], scaleX=TRUE, width=5, cex=1.25)
 ```
 
 Different display for multiple trees phytools::densiTree requires same number of tips in all trees Note various ways how to select trees to display Nodes of the trees are not rotated (the display might be suboptimal)
 
 ```R
+?phytools::densityTree
 # Plotting density trees
-densityTree(trees=c(tree.sp, tree.sp2), fix.depth=TRUE, use.gradient=TRUE, alpha=0.5, lwd=4)
-densityTree(trees=trees.ultra, fix.depth=TRUE, use.gradient=TRUE, alpha=0.5, lwd=4)
-densityTree(trees=trees.ultra[1:3], fix.depth=TRUE, use.gradient=TRUE, alpha=0.5, lwd=4)
-densityTree(trees=trees.ultra[c(2,4,6,7)], fix.depth=TRUE, use.gradient=TRUE, alpha=0.5, lwd=4)
+densityTree(trees=c(tree.sp, tree.sp2), fix.depth=TRUE, lwd=4)
+densityTree(trees=trees.ultra, fix.depth=TRUE, use.gradient=TRUE, alpha=0.5,
+  lwd=4)
+densityTree(trees=trees.ultra[1:3], fix.depth=TRUE, use.gradient=TRUE,
+  alpha=0.5, lwd=4)
+densityTree(trees=trees.ultra[c(2, 4, 6)], fix.depth=TRUE, use.gradient=TRUE,
+  alpha=0.5, lwd=4)
 ```
 
