@@ -3,7 +3,7 @@ HybSeq scripts
 
 **Set of scripts to process HybSeq target enrichment HTS data** on computing grids like [MetaCentrum](https://www.metacentrum.cz/).
 
-Version: 1.0
+Version: 2.0
 
 # Author
 

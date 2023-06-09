@@ -28,7 +28,7 @@ while getopts "hva:" INITARGS; do
 			exit
 			;;
 		v) # Print script version and exit
-			echo "Version: 1.0"
+			echo "Version: 2.0"
 			echo "Author: Vojtěch Zeisek, https://trapa.cz/en"
 			echo "License: GNU GPLv3, https://www.gnu.org/licenses/gpl-3.0.html"
 			echo
