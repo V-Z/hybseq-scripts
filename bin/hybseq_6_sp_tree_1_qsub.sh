@@ -51,11 +51,12 @@ DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/5_sp_trees"
 ################################################################################
 # Loading of application module
 # NOTE On another clusters than Czech MetaCentrum edit or remove the 'module' command below
+# OpenJDK module is required for ASTRAL, not for ASTRAL-Pro (written in C) and others
 ################################################################################
 
 # Required modules
 echo "Loading modules"
-module add openjdk/17.0.0_35-gcc-8.3.0-rfe265h || exit 1
+module add openjdk/17.0.0_35-gcc-8.3.0-rfe265h || exit 1 # Required for ASTRAL
 echo
 
 ################################################################################

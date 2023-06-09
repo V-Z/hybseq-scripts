@@ -16,7 +16,12 @@
 
 ################################################################################
 # NOTE Edit variables below to fit your data
+# Select either ASTRAL or ASTRAL-Pro, edit path accordingly
+# Comment/uncomment command for selected species tree builder below
 ################################################################################
+
+ASTRAL="/storage/pruhonice1-ibot/home/${LOGNAME}/bin/Astral/astral.5.7.8.jar" # ASTRAL
+# ASTRALP="/storage/pruhonice1-ibot/home/${LOGNAME}/bin/astral-pro" # ASTRAL-Pro
 
 # Species trees
 echo "Reconstructing species trees with ASTRAL"
@@ -30,11 +35,12 @@ for GT in *.nwk; do
 	echo "Running ASTRAL"
 
 ################################################################################
-# NOTE Edit variables below to fit your data
+# NOTE Comment/uncomment command for selected species tree builder and possibly edit parameters
+# Edit appropriate variable above
 ################################################################################
 
-java -jar /storage/pruhonice1-ibot/home/"${LOGNAME}"/bin/Astral/astral.5.7.8.jar -i "${GT}" -o sp_"${GT}" -t 3 -g -r 10000 2>&1 | tee sp_"${GT%.nwk}".log
-# 	/storage/pruhonice1-ibot/home/"${LOGNAME}"/bin/astral-pro -o sp_"${GT}" -r 25 -s 25 -t 4 -u 1 "${GT}" 2>&1 | tee sp_"${GT%.nwk}".log
+	java -jar "${ASTRAL}" -i "${GT}" -o sp_"${GT}" -t 3 -g -r 10000 2>&1 | tee sp_"${GT%.nwk}".log
+# 	"${ASTRALP}" -o sp_"${GT}" -r 25 -s 25 -t 4 -u 1 "${GT}" 2>&1 | tee sp_"${GT%.nwk}".log
 	echo
 	echo "Removing input file"
 	rm "${GT}"
