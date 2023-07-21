@@ -25,7 +25,7 @@ while getopts "hvp:b:s:" INITARGS; do
 			echo -e "\t-v\tPrint script version, author and license and exit."
 			echo -e "\t-p\tDirectory with HybPiper. E.g. xxx/bin/HybPiper"
 			echo -e "\t-b\tReference bait FASTA file. E.g. ref/xxx.fasta"
-			echo -e "\t-s\tList of samples to process. E.g. samples_list.txt"
+			echo -e "\t-s\tList of samples to process. E.g. "${SAMPLES}""
 			echo
 			exit
 			;;
@@ -103,17 +103,17 @@ if [[ -z "${SAMPLES}" ]]; then
 ################################################################################
 # NOTE On Czech MetaCentrum, HybPiper is installed as Apptainer (Singularity) container, see https://docs.metacentrum.cz/software/containers/
 # Container starts its own shell, so that it is loaded right before usage of HybPiper - see code below
-# run_in_os loads HybPiper/HybPiper-2.1.3.sif container and '<<END' marks "here document" containing block of HybPiper (within container) commands (ends with 'END')
+# run_in_os loads HybPiper/HybPiper-2.1.5.sif container and '<<END' marks "here document" containing block of HybPiper (within container) commands (ends with 'END')
 # NOTE If HybPiper is installed differently on your cluster, edit code below or use "module add/load" according to documentation of your cluster
 # NOTE Possible edit HybPiper parameters here, see https://github.com/mossmatters/HybPiper/wiki/Full-pipeline-parameters
 ################################################################################
 
-run_in_os  HybPiper/HybPiper-2.1.3.sif <<END
+run_in_os  HybPiper/HybPiper-2.1.5.sif <<END
 module add mambaforge
-mamba activate /conda/envs/hybpiper-2.1.3
+mamba activate /conda/envs/hybpiper-2.1.5
 echo "Summary statistics"
 echo
-hybpiper stats --targetfile_dna "${BAITFILE}" gene samples_list.txt
+hybpiper stats --targetfile_dna "${BAITFILE}" gene "${SAMPLES}"
 echo
 echo "Plotting gene recovery heatmap"
 echo
@@ -124,19 +124,19 @@ echo "Retrieving sequences"
 echo
 echo "Exons"
 echo
-hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names samples_list.txt dna
+hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names "${SAMPLES}" dna
 echo
 echo "Introns"
 echo
-hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names samples_list.txt intron
+hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names "${SAMPLES}" intron
 echo
 echo "Supercontigs"
 echo
-hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names samples_list.txt supercontig
+hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names "${SAMPLES}" supercontig
 echo
 echo "Investigating paralogs"
 echo
-hybpiper paralog_retriever --targetfile_dna "${BAITFILE}" samples_list.txt
+hybpiper paralog_retriever --targetfile_dna "${BAITFILE}" --paralogs_list_threshold_percentage 0.1 "${SAMPLES}"
 echo
 END
 

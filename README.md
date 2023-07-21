@@ -110,9 +110,9 @@ See <https://github.com/mossmatters/HybPiper/wiki/Installation>
 On [MetaCentrum](https://www.metacentrum.cz/) it is installed as [container](https://docs.metacentrum.cz/software/containers/), so use it in scripts as
 
 ```shell
-run_in_os  HybPiper/HybPiper-2.1.3.sif <<END
+run_in_os  HybPiper/HybPiper-2.1.5.sif <<END
 module add mambaforge
-mamba activate /conda/envs/hybpiper-2.1.3
+mamba activate /conda/envs/hybpiper-2.1.5
 hybpiper check_dependencies
 END
 ```

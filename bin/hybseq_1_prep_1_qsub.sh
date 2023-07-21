@@ -31,7 +31,7 @@
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_01/0_data"
+# DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_01/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/brassicaceae/arabidopsis_plastome_hybrid_zone/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/h_alpinum_ont/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_01_sra/0_data"
@@ -45,7 +45,7 @@ DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/0_data"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_03/0_data"
+DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_03/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_04/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_05/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_06/0_data"
@@ -122,9 +122,9 @@ echo
 # Running the task
 echo "Preprocessing the FASTQ files..."
 # Pair-end (forward and reverse) FASTQ files
-./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log
+./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t /cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/trimmomatic-0.39-uuuagj7ae3wim6rdyxkncii4jiuikejy/bin/trimmomatic-0.39.jar | tee hybseq_prepare.log
 # Single-end FASTQ files
-# ./hybseq_1_prep_2_run_se.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t "${TRIMMOMATIC_BIN}" | tee hybseq_prepare.log
+# ./hybseq_1_prep_2_run_se.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t /cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/trimmomatic-0.39-uuuagj7ae3wim6rdyxkncii4jiuikejy/bin/trimmomatic-0.39.jar | tee hybseq_prepare.log
 echo
 
 ################################################################################
