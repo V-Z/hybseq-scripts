@@ -21,13 +21,40 @@
 WORKDIR="/storage/brno2/home/${LOGNAME}/hybseq" # Data and scripts for hybseq
 
 # Data to process
-DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_01/2_dedup"
+# DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_01/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/h_alpinum_ont/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_01_sra/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_02_tf/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_03_hieracium_rnaseq/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_04_pilosella_RNA/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/1_data/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/1_data/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_03/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_04/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_05/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_06/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups2/2_dedup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups3/2_dedup"
+DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/repetitions_merged/2_dedup"
 
 # List of samples to process
 SAMPLES='samples_list.txt' # samples_list.txt is created by hybseq_1_prep_2_run.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
 
 # Reference bait FASTA files - relative path within $WORKDIR
-BAITFILE='ref/zingiberaceae/curcuma_HybSeqProbes_first958_concat.fasta'
+# BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
+BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
+# BAITFILE='ref/oxalis/input_seq_without_cpdna_1086_loci_renamed_concat.fasta' # Reference for Oxalis incarnata
+# BAITFILE='ref/oxalis/input_seq_without_cpdna_renamed_concat.fasta' # Reference for Oxalis
+# BAITFILE='ref/oxalis/red_soa_probes_gen_comp_concat.fasta' # Reduced reference for Oxalis
+# BAITFILE='ref/zingiberaceae/curcuma_hybpiper_renamed_concat.fasta'
+# BAITFILE='ref/zingiberaceae/curcuma_HybSeqProbes_first958_concat.fasta'
 
 # Number of CPU threads to use in parallel operations
 NCPU='8'
@@ -60,7 +87,7 @@ echo "Processing all samples at $(date)..."
 echo
 while read -r SAMPLE; do
 	echo "Processing ${SAMPLE}"
-	qsub -l walltime=12:0:0 -l select=1:ncpus="${NCPU}":mem=16gb:scratch_local=15gb -N HybPiper."${SAMPLE}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",BAITFILE="${BAITFILE}",NCPU="${NCPU}",SAMPLE="${SAMPLE}" "${WORKDIR}"/bin/hybseq_2_hybpiper_2_qsub.sh || exit 1
+	qsub -l walltime=12:0:0 -l select=1:ncpus="${NCPU}":mem=16gb:scratch_local=15gb -N HybPiper."${SAMPLE}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",BAITFILE="${BAITFILE}",NCPU="${NCPU}",SAMPLE="${SAMPLE}" -q ibot "${WORKDIR}"/bin/hybseq_2_hybpiper_2_qsub.sh || exit 1
 	echo
 	done < "${SAMPLES}"
 

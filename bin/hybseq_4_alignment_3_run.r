@@ -12,9 +12,9 @@ options(error=expression(NULL))
 
 ## NOTE: Variables, custom settings
 # Set filtration threshold for maximal percentage of missing data in rows (samples)
-filtrow <- 0.3
+filtrow <- 0.4
 # Set filtration threshold for maximal percentage of missing data in columns (alignment positions)
-filtcol <- 0.3
+filtcol <- 0.4
 
 ## Packages
 # Install
