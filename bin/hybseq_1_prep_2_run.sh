@@ -324,7 +324,7 @@ if [[ -n "$(find "${FQDIR}" -name '*.gz')" ]]; then
 echo
 
 # Process all files
-for FASTQ1 in "${FQDIR}"/*[._]R1[._]*.f*q; do
+for FASTQ1 in "${FQDIR}"/*[._]R1[._]*f*q; do
 	# Names - variables
 	if [[ $FASTQ1 =~ \.R1\. ]]; then
 		FASTQ2="${FASTQ1//\.R1\./.R2.}" # Input, reverse (forward is in ${FASTQ1})
