@@ -16,7 +16,7 @@
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/storage/brno2/home/${LOGNAME}/hybseq"
+WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
 # DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/2_seqs"

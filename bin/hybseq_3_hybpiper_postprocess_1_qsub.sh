@@ -24,7 +24,7 @@
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/storage/brno2/home/${LOGNAME}/hybseq"
+WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Reference bait FASTA files - relative path within WORKDIR
 # BAITFILE='ref/kew_probes.fasta' # Universal Kew probes

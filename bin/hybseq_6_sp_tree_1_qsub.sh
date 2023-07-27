@@ -25,10 +25,27 @@
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/storage/brno2/home/${LOGNAME}/hybseq"
+WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/5_sp_trees"
+# DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/5_sp_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/4_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/4_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/4_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/4_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/4_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/4_gene_trees"
+DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/all_samples"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/diploids"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/ingroup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/ingroup_filt_025"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/ingroup_filt_035"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/placement"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta/diploids/trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments_july_2022/final_alns_for_sptree/diploids/trees/4_astral_sp_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments_july_2022/final_alns_for_sptree/trees/4_astral_sp_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_mvftools_test/6_gene_trees"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Zingiberaceae_HybSeq_flowering_genes/HybPiper/DNA_alignments/aligned/trees/4_sp_trees"
 
 ################################################################################
 # Loading of application module
