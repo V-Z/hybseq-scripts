@@ -155,17 +155,41 @@ echo
 
 # Calculating number of occurrences of each sample in all contigs
 echo "Calculating number of occurrences of each sample in all contigs..."
-echo "Results will be in file 'presence_of_samples_in_contigs.tsv'."
-echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.FNA" -o -name "*.fasta" | wc -l)" > presence_of_samples_in_contigs.tsv || operationfailed
-echo >> presence_of_samples_in_contigs.tsv || operationfailed
-echo -e "Sample\tNumber" >> presence_of_samples_in_contigs.tsv || operationfailed
+echo
+echo "Exons"
+echo
+echo "Results will be in file 'presence_of_samples_in_contigs_exons.tsv'."
+echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.FNA" | wc -l)" > presence_of_samples_in_contigs_exons.tsv || operationfailed
+echo >> presence_of_samples_in_contigs_exons.tsv || operationfailed
+echo -e "Sample\tNumber" >> presence_of_samples_in_contigs_exons.tsv || operationfailed
 while read -r SAMPLE; do
-	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta ./*.FNA | wc -l)" >> presence_of_samples_in_contigs.tsv || operationfailed
+	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.FNA | wc -l)" >> presence_of_samples_in_contigs_exons.tsv || operationfailed
 	done < <(sed 's/\.dedup$//' "${SAMPLES}" | sort)
-echo >> presence_of_samples_in_contigs.tsv || operationfailed
-echo "Note that for every probe sequence, three contigs are produced (for respective exon, intron and supercontig)."
-echo "Divide 'Total number of contigs' by three to get number of probes. Similarly divide number of occurrence of each sample by three."
-echo "You can calculate percentage of presence of each sample in all contigs (from total number of contigs)."
+echo >> presence_of_samples_in_contigs_exons.tsv || operationfailed
+echo
+echo "Introns"
+echo
+echo "Results will be in file 'presence_of_samples_in_contigs_introns.tsv'."
+echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*_introns.fasta" | wc -l)" > presence_of_samples_in_contigs_introns.tsv || operationfailed
+echo >> presence_of_samples_in_contigs_introns.tsv || operationfailed
+echo -e "Sample\tNumber" >> presence_of_samples_in_contigs_introns.tsv || operationfailed
+while read -r SAMPLE; do
+	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*_introns.fasta | wc -l)" >> presence_of_samples_in_contigs_introns.tsv || operationfailed
+	done < <(sed 's/\.dedup$//' "${SAMPLES}" | sort)
+echo >> presence_of_samples_in_contigs_introns.tsv || operationfailed
+echo
+echo "Supercontigs"
+echo
+echo "Results will be in file 'presence_of_samples_in_contigs_supercontigs.tsv'."
+echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*_supercontig.fasta" | wc -l)" > presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
+echo >> presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
+echo -e "Sample\tNumber" >> presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
+while read -r SAMPLE; do
+	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*_supercontig.fasta | wc -l)" >> presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
+	done < <(sed 's/\.dedup$//' "${SAMPLES}" | sort)
+echo >> presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
+echo
+echo "Note that for every probe sequence, three contigs are produced (for respective exon, intron and supercontig). Since HybPiper 2, number of introns is smaller."
 echo
 
 echo "Transposition of sequence lengths and paralogs"
