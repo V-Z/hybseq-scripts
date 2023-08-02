@@ -104,7 +104,7 @@ echo
 # Copy data
 echo "Copying..."
 echo "HybSeq data - ${WORKDIR}"
-cp "${WORKDIR}"/{adaptors.fa,bin/hybseq_1_prep_2_run.sh} "${SCRATCHDIR}"/ || exit 1
+cp "${WORKDIR}"/{adaptors.fa,bin/hybseq_1_prep_2_run*.sh} "${SCRATCHDIR}"/ || exit 1
 echo "Data to process - ${DATADIR}"
 cp -a "${DATADIR}" "${SCRATCHDIR}"/  || exit 1
 echo
@@ -135,7 +135,7 @@ echo
 
 # Remove unneeded file
 echo "Removing unneeded files"
-rm adaptors.fa hybseq_1_prep_2_run.sh
+rm adaptors.fa hybseq_1_prep_2_run*.sh
 echo
 
 # Copy results back to storage
