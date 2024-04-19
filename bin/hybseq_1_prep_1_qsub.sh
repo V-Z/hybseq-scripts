@@ -20,7 +20,7 @@
 # Edit qsub parameters if you need more resources, use particular cluster, etc.
 ################################################################################
 
-# qsub -l walltime=4:0:0 -l select=1:ncpus=4:mem=48gb:scratch_local=100gb -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh
+# qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=64gb:scratch_local=1000gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh
 
 ################################################################################
 # NOTE Edit variables below to fit your data
@@ -51,7 +51,6 @@ DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_06/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups/0_data"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups3/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/repetitions_merged/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/wgs/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/skimming/0_data"
@@ -75,9 +74,9 @@ DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib
 # Required modules
 echo "Loading modules"
 module add trimmomatic/0.39-gcc-10.2.1-uuuagj7 || exit 1
-module add bbmap/38.42 || exit 1
+module add bbmap/39.01-gcc-10.2.1-d3jpcp7 || exit 1
 module add fastqc/0.11.9-gcc-10.2.1-duxu5be || exit 1
-module add parallel/20200322 || exit 1
+module add parallel/20210922-gcc-10.2.1-iiyjqem || exit 1
 echo
 
 ################################################################################
@@ -122,9 +121,9 @@ echo
 # Running the task
 echo "Preprocessing the FASTQ files..."
 # Pair-end (forward and reverse) FASTQ files
-./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t /cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/trimmomatic-0.39-uuuagj7ae3wim6rdyxkncii4jiuikejy/bin/trimmomatic-0.39.jar | tee hybseq_prepare.log
+./hybseq_1_prep_2_run.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 16 -t /cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/trimmomatic-0.39-uuuagj7ae3wim6rdyxkncii4jiuikejy/bin/trimmomatic-0.39.jar | tee hybseq_prepare.log
 # Single-end FASTQ files
-# ./hybseq_1_prep_2_run_se.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 12 -t /cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/trimmomatic-0.39-uuuagj7ae3wim6rdyxkncii4jiuikejy/bin/trimmomatic-0.39.jar | tee hybseq_prepare.log
+# ./hybseq_1_prep_2_run_se.sh -f 0_data -c 4 -o 1_trimmed -d 2_dedup -q 3_qual_rep -a adaptors.fa -m 16 -t /cvmfs/software.metacentrum.cz/spack18/software/linux-debian11-x86_64_v2/gcc-10.2.1/trimmomatic-0.39-uuuagj7ae3wim6rdyxkncii4jiuikejy/bin/trimmomatic-0.39.jar | tee hybseq_prepare.log
 echo
 
 ################################################################################

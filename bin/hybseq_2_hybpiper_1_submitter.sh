@@ -40,8 +40,6 @@ DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_06/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups/2_dedup"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups2/2_dedup"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups3/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/repetitions_merged/2_dedup"
 
 # List of samples to process

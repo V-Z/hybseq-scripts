@@ -17,7 +17,7 @@
 # Edit qsub parameters if you need more resources, use particular cluster, etc.
 ################################################################################
 
-# qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=4gb:scratch_local=1gb -m abe ~/hybseq/bin/hybseq_6_sp_tree_1_qsub.sh
+# qsub -l walltime=24:0:0 -l select=1:ncpus=1:mem=4gb:scratch_local=1gb -q ibot -m abe ~/hybseq/bin/hybseq_6_sp_tree_1_qsub.sh
 
 ################################################################################
 # NOTE Edit variables below to fit your data
@@ -34,12 +34,10 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/4_gene_trees"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/4_gene_trees"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/4_gene_trees"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/4_gene_trees"
 DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/all_samples"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/diploids"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/evopoly"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/ingroup"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/ingroup_filt_025"
-# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/ingroup_filt_035"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/5_sp_trees/placement"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta/diploids/trees"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments_july_2022/final_alns_for_sptree/diploids/trees/4_astral_sp_trees"

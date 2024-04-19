@@ -29,6 +29,7 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_contigs"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/diploids_contigs"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/evopoly_contigs"
 DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/ingroup_contigs"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/placement_contigs"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/alignments"
@@ -70,7 +71,7 @@ echo
 for ALN in $(find . -maxdepth 1 -name "*.FNA" -o -name "*.fasta" | sort); do
 	ALNB="$(basename "${ALN}")"
 	echo "Processing ${ALNB}"
-	qsub -l walltime=4:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALNB}" "${WORKDIR}"/bin/hybseq_4_alignment_2_qsub.sh || { echo "Error! Submission of \"${ALNB}\" failed. Aborting."; echo; exit 1; }
+	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALNB}" "${WORKDIR}"/bin/hybseq_4_alignment_2_qsub.sh || { echo "Error! Submission of \"${ALNB}\" failed. Aborting."; echo; exit 1; }
 	echo
 	done
 

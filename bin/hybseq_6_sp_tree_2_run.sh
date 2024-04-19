@@ -39,8 +39,8 @@ for GT in *.nwk; do
 # Edit appropriate variable above
 ################################################################################
 
-	java -jar "${ASTRAL}" -i "${GT}" -o sp_"${GT}" -t 3 -g -r 10000 2>&1 | tee sp_"${GT%.nwk}".log
-# 	"${ASTRALP}" -o sp_"${GT}" -r 25 -s 25 -t 4 -u 1 "${GT}" 2>&1 | tee sp_"${GT%.nwk}".log
+	java -jar "${ASTRAL}" -i "${GT}" -o sp_"${GT}" -t 3 -g -r 10000 2>&1 | tee sp_"${GT%.nwk}".log # --outgroup Kalimeris_indica_SAMN11585377
+# 	"${ASTRALP}" -o sp_"${GT}" -r 25 -s 25 -t 4 -u 1 "${GT}" 2>&1 | tee sp_"${GT%.nwk}".log # --root Kalimeris_indica_SAMN11585377
 	echo
 	echo "Removing input file"
 	rm "${GT}"

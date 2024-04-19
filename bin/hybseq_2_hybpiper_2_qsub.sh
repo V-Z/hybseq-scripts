@@ -60,7 +60,7 @@ if [[ -z "${NCPU}" ]]; then
 
 # Required modules
 echo "Loading modules"
-module add parallel/20200322 || exit 1
+module add parallel/20210922-gcc-10.2.1-iiyjqem || exit 1
 echo
 
 ################################################################################
