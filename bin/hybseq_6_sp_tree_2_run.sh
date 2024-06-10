@@ -20,8 +20,8 @@
 # Comment/uncomment command for selected species tree builder below
 ################################################################################
 
-ASTRAL="/storage/pruhonice1-ibot/home/${LOGNAME}/bin/Astral/astral.5.7.8.jar" # ASTRAL
-# ASTRALP="/storage/pruhonice1-ibot/home/${LOGNAME}/bin/astral-pro" # ASTRAL-Pro
+ASTRAL="/storage/brno2/home/${LOGNAME}/bin/Astral/astral.5.7.8.jar" # ASTRAL
+# ASTRALP="/storage/brno2/home/${LOGNAME}/bin/astral-pro" # ASTRAL-Pro
 
 # Species trees
 echo "Reconstructing species trees with ASTRAL"
@@ -39,8 +39,8 @@ for GT in *.nwk; do
 # Edit appropriate variable above
 ################################################################################
 
-	java -jar "${ASTRAL}" -i "${GT}" -o sp_"${GT}" -t 3 -g -r 10000 2>&1 | tee sp_"${GT%.nwk}".log # --outgroup Kalimeris_indica_SAMN11585377
-# 	"${ASTRALP}" -o sp_"${GT}" -r 25 -s 25 -t 4 -u 1 "${GT}" 2>&1 | tee sp_"${GT%.nwk}".log # --root Kalimeris_indica_SAMN11585377
+	java -jar "${ASTRAL}" -i "${GT}" -o sp_"${GT}" -t 3 -g -r 10000 2>&1 | tee sp_"${GT%.nwk}".log # --outgroup Zingiber-officinale_S242_L001
+# 	"${ASTRALP}" -o sp_"${GT}" -r 25 -s 25 -t 4 -u 1 "${GT}" 2>&1 | tee sp_"${GT%.nwk}".log # --root Zingiber-officinale_S242_L001
 	echo
 	echo "Removing input file"
 	rm "${GT}"
