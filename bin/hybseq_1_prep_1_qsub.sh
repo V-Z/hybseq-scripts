@@ -20,7 +20,7 @@
 # Edit qsub parameters if you need more resources, use particular cluster, etc.
 ################################################################################
 
-# qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=64gb:scratch_local=1000gb -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh
+# qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=64gb:scratch_local=1000gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh
 
 ################################################################################
 # NOTE Edit variables below to fit your data
@@ -28,10 +28,43 @@
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/storage/brno2/home/${LOGNAME}/hybseq"
+WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_zingibers/1_data/lib_01/0_data"
+# DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_01/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/brassicaceae/arabidopsis_plastome_hybrid_zone/0_data"
+DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_01_sra/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_01_sra_se/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_02_tf/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_03_hieracium_rnaseq/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_04_pilosella_RNA/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/1_data/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/1_data/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/1_data/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/1_data/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/1_data/lib_01/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_01/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_02/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_03/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_04/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_05/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/lib_06/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/oritrophium_tf/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/outgroups/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/1_data/repetitions_merged/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/wgs/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/skimming/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_mvftools_test/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_01/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_02/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_03/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_04/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_05/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_06/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_07/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_08/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_09/0_data"
+# DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/mapping_vcf_vjt/1_data/lib_10/0_data"
 
 ################################################################################
 # Loading of application modules
