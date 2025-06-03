@@ -24,7 +24,7 @@
 
 # Set data directories
 # HybSeq scripts and data
-WORKDIR="/storage/brno2/${LOGNAME}/hybseq"
+WORKDIR="/storage/brno2/home/${LOGNAME}/hybseq"
 
 BAITFILE='ref/zingiberaceae/curcuma_hybpiper_renamed_concat.fasta'
 

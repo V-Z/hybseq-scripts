@@ -18,7 +18,7 @@
 ################################################################################
 
 # Set data directories
-WORKDIR="/storage/brno2/${LOGNAME}/hybseq" # Data and scripts for hybseq
+WORKDIR="/storage/brno2/home/${LOGNAME}/hybseq" # Data and scripts for hybseq
 
 # Data to process
 DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_zingibers/1_data/lib_01/2_dedup"
