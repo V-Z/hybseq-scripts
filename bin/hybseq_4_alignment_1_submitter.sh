@@ -19,7 +19,7 @@
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-# DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/2_seqs"
+# DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_zingibers/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/cos"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/kew"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"

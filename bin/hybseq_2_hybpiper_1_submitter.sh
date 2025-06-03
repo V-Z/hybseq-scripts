@@ -21,7 +21,7 @@
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq" # Data and scripts for hybseq
 
 # Data to process
-# DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_01/2_dedup"
+# DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_zingibers/1_data/lib_01/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_01_sra/2_dedup"
 DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_01_sra_se/2_dedup"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/1_data/lib_02_tf/2_dedup"

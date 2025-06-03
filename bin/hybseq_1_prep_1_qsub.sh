@@ -31,7 +31,7 @@
 WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
-# DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_2023_zingibers/1_data/lib_01/0_data"
+# DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_zingibers/1_data/lib_01/0_data"
 DATADIR="/storage/pruhonice1-ibot/home/gunnera/func_snp/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/anastatica/HiC_anast_coch/0_data"
 # DATADIR="/storage/pruhonice1-ibot/shared/brassicaceae/arabidopsis_plastome_hybrid_zone/0_data"
