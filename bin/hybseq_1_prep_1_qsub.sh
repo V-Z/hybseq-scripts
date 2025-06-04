@@ -20,7 +20,7 @@
 # Edit qsub parameters if you need more resources, use particular cluster, etc.
 ################################################################################
 
-# qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=64gb:scratch_local=1000gb -q ibot -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh
+# qsub -l walltime=24:0:0 -l select=1:ncpus=4:mem=64gb:scratch_local=1000gb -m abe ~/hybseq/bin/hybseq_1_prep_1_qsub.sh
 
 ################################################################################
 # NOTE Edit variables below to fit your data

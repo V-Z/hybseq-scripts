@@ -60,7 +60,7 @@ echo "Processing all samples at $(date)..."
 echo
 while read -r SAMPLE; do
 	echo "Processing ${SAMPLE}"
-	qsub -l walltime=12:0:0 -l select=1:ncpus="${NCPU}":mem=16gb:scratch_local=15gb -N HybPiper."${SAMPLE}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",BAITFILE="${BAITFILE}",NCPU="${NCPU}",SAMPLE="${SAMPLE}" -q ibot "${WORKDIR}"/bin/hybseq_2_hybpiper_2_qsub.sh || exit 1
+	qsub -l walltime=12:0:0 -l select=1:ncpus="${NCPU}":mem=16gb:scratch_local=15gb -N HybPiper."${SAMPLE}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",BAITFILE="${BAITFILE}",NCPU="${NCPU}",SAMPLE="${SAMPLE}" "${WORKDIR}"/bin/hybseq_2_hybpiper_2_qsub.sh || exit 1
 	echo
 	done < "${SAMPLES}"
 
