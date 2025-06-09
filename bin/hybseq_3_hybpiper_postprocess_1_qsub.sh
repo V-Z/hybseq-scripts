@@ -26,7 +26,7 @@
 # HybSeq scripts and data
 WORKDIR="/storage/brno2/home/${LOGNAME}/hybseq"
 
-BAITFILE='ref/zingiberaceae/curcuma_hybpiper_renamed_concat.fasta'
+BAITFILE='ref/zingiberaceae/curcuma_HybSeqProbes_first958_concat.fasta'
 
 # Data to process
 DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_zingibers/2_seqs"

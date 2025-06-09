@@ -27,7 +27,7 @@ DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_zingibers/1_data/lib_01/2_
 SAMPLES='samples_list.txt' # samples_list.txt is created by hybseq_1_prep_2_run.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
 
 # Reference bait FASTA files - relative path within $WORKDIR
-BAITFILE='ref/zingiberaceae/curcuma_hybpiper_renamed_concat.fasta'
+BAITFILE='ref/zingiberaceae/curcuma_HybSeqProbes_first958_concat.fasta'
 
 # Number of CPU threads to use in parallel operations
 NCPU='8'
