@@ -16,7 +16,7 @@
 # Edit qsub parameters if you need more resources, use particular cluster, etc.
 ################################################################################
 
-# qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=100gb -m abe ~/hybseq/bin/hybseq_3_hybpiper_postprocess_1_qsub.sh
+# qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1000gb -m abe ~/hybseq/bin/hybseq_3_hybpiper_postprocess_1_qsub.sh
 
 ################################################################################
 # NOTE Edit variables below to fit your data
@@ -28,7 +28,8 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Reference bait FASTA files - relative path within WORKDIR
 # BAITFILE='ref/kew_probes.fasta' # Universal Kew probes
-BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
+BAITFILE='ref/Brassicaceae_NikHay_Nikolov_genes_reference.fasta' # Brassicaceae https://github.com/KPHendriks/BrassiToL/blob/v2/Reference_genomes/NikHay_Nikolov_genes_reference.fasta
+# BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
 # BAITFILE='ref/oxalis/input_seq_without_cpdna_1086_loci_renamed_concat.fasta' # Reference for Oxalis incarnata
 # BAITFILE='ref/oxalis/input_seq_without_cpdna_renamed_concat.fasta' # Reference for Oxalis
 # BAITFILE='ref/oxalis/red_soa_probes_gen_comp_concat.fasta' # Reduced reference for Oxalis
@@ -37,6 +38,9 @@ BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
 
 # Data to process
 # DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_zingibers/2_seqs"
+DATADIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq_course_zingibers/2_seqs"
+# DATADIR="/storage/pruhonice1-ibot/shared/anastatica/hybseq/2_seqs_bra"
+# DATADIR="/storage/pruhonice1-ibot/shared/anastatica/hybseq/2_seqs_kew"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/cos"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/kew"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
@@ -44,12 +48,12 @@ BAITFILE='ref/asteraceae/cos_ref.fasta' # Reference for Pteronia
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/90_samples_kew_probes/2_seqs"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/incarnata/2_seqs"
-DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_hybpiper"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_hybpiper"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/diploids_hybpiper"
 
 # samples_list.txt is created by hybseq_1_prep.sh in the output directory for deduplicated sequences (it must be in in the directory with pre-processed input FASTQ sequences)
 # If merging multiple libraries, either merge the samples_list.txt from each library, or run something like:
-# find . -maxdepth 1 -type d | sed 's/^\.\///' | sort | tail -n+2 > samples_list.txt
+# find . -maxdepth 1 -name "*.dedup.tar.gz" | sed 's/^\.\///;s/\.tar\.gz$//' | sort > samples_list.txt
 SAMPLES='samples_list.txt'
 
 ################################################################################
@@ -63,14 +67,14 @@ trap 'clean_scratch' TERM EXIT
 trap 'cp -ar ${SCRATCHDIR} ${DATADIR}/ && clean_scratch' TERM
 
 # Change working directory
-echo "Going to working directory ${DATADIR}"
-cd "${DATADIR}"/ || exit 1
+echo "Going to working directory ${SCRATCHDIR}"
+cd "${SCRATCHDIR}"/ || exit 1
 echo
 
 # Copy data
 echo "Copying..."
 echo "HybSeq data - ${WORKDIR}"
-cp -a "${WORKDIR}"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref} . || exit 1
+cp -a "${WORKDIR}"/{bin/hybseq_3_hybpiper_postprocess_2_run.sh,ref} "${DATADIR}"/"${SAMPLES}" "${DATADIR}"/*.dedup.tar.gz "${SCRATCHDIR}"/ || exit 1
 echo
 
 ################################################################################
@@ -80,6 +84,11 @@ echo
 # Runing the task (HibPiper postprocessing)
 echo "Running HybPiper postprocessing..."
 ./hybseq_3_hybpiper_postprocess_2_run.sh -b "${BAITFILE}" -s "${SAMPLES}" | tee hybseq_hybpiper_postprocess.log
+echo
+
+# Copy results back to storage
+echo "Copying results back to ${DATADIR}"
+cp -a "${SCRATCHDIR}" "${DATADIR}"/ || export CLEAN_SCRATCH='false'
 echo
 
 exit

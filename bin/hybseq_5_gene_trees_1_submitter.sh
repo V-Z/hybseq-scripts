@@ -19,6 +19,8 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
 # DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_zingibers/3_aligned"
+DATADIR="/storage/pruhonice1-ibot/shared/anastatica/hybseq/3_aligned_bra"
+# DATADIR="/storage/pruhonice1-ibot/shared/anastatica/hybseq/3_aligned_kew"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/3_aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_red_soa_probes/3_aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_soa_probes/3_aligned"
@@ -27,7 +29,7 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/all_samples"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/diploids"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/evopoly"
-DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/ingroup"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/ingroup"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/3_aligned/placement"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/alignments/aligned"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta"
@@ -67,7 +69,7 @@ echo
 for ALN in $(find . -name "*.aln.fasta" | sed 's/^\.\///' | sort); do
 	ALNB="$(basename "${ALN}")"
 	echo "Processing ${ALNB}"
-	qsub -l walltime=336:0:0 -l select=1:ncpus=1:mem=16gb:scratch_local=1gb -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" "${WORKDIR}"/bin/hybseq_5_gene_trees_2_qsub.sh || { echo "Error! Submission of \"${ALNB}\" failed. Aborting."; echo; exit 1; }
+	qsub -l walltime=336:0:0 -l select=1:ncpus=1:mem=24gb:scratch_local=10gb -N HybSeq.genetree."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALN}" "${WORKDIR}"/bin/hybseq_5_gene_trees_2_qsub.sh || { echo "Error! Submission of \"${ALNB}\" failed. Aborting."; echo; exit 1; }
 	echo
 	done
 

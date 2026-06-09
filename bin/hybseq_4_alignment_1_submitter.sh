@@ -20,6 +20,8 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 
 # Data to process
 # DATADIR="/storage/brno2/home/${LOGNAME}/hybseq_course_zingibers/2_seqs"
+DATADIR="/storage/pruhonice1-ibot/shared/anastatica/hybseq/2_seqs_bra"
+# DATADIR="/storage/pruhonice1-ibot/shared/anastatica/hybseq/2_seqs_kew"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/cos"
 # DATADIR="/storage/pruhonice1-ibot/shared/hieracium/hyb_piper_phylogen/2_seqs/kew"
 # DATADIR="/storage/pruhonice1-ibot/shared/oxalis/genus_phylogeny_probes/40_samples_kew_probes/2_seqs"
@@ -30,7 +32,7 @@ WORKDIR="/storage/pruhonice1-ibot/home/${LOGNAME}/hybseq"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/all_samples_contigs"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/diploids_contigs"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/evopoly_contigs"
-DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/ingroup_contigs"
+# DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/ingroup_contigs"
 # DATADIR="/storage/pruhonice1-ibot/shared/pteronia/hybseq/2_seqs/placement_contigs"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/alignments"
 # DATADIR="/storage/pruhonice1-ibot/shared/zingiberaceae/Curcuma_HybSeq_for_anther_paper/Curcuma_HybPiper_after_ParalogWizard/data/__alignments/aligned_by_Vojta/red_samples"
@@ -47,7 +49,7 @@ echo
 
 # Removing zero size files
 echo "There are $(find . -maxdepth 1 -type f -size 0 | grep -c "\.fasta$\|\.FNA$") alignments with zero size - removing them"
-find . -maxdepth 1 -type f -size 0 -exec echo "Removing '{}'" \; -exec rm '{}' \;
+find . -type f -size 0 -exec echo "Removing '{}'" \; -exec rm '{}' \;
 echo
 
 # Make output directory
@@ -68,10 +70,10 @@ echo
 # Processing all samples
 echo "Processing all samples at $(date)..."
 echo
-for ALN in $(find . -maxdepth 1 -name "*.FNA" -o -name "*.fasta" | sort); do
+for ALN in exons/*.FNA introns/*.fasta supercontigs/*.fasta; do
 	ALNB="$(basename "${ALN}")"
-	echo "Processing ${ALNB}"
-	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -q ibot -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNF="${ALNB}" "${WORKDIR}"/bin/hybseq_4_alignment_2_qsub.sh || { echo "Error! Submission of \"${ALNB}\" failed. Aborting."; echo; exit 1; }
+	echo "Processing ${ALN}"
+	qsub -l walltime=12:0:0 -l select=1:ncpus=1:mem=8gb:scratch_local=1gb -N HybSeq.alignment."${ALNB%.*}" -v WORKDIR="${WORKDIR}",DATADIR="${DATADIR}",ALNS="${ALN}",ALNF="${ALNB}" "${WORKDIR}"/bin/hybseq_4_alignment_2_qsub.sh || { echo "Error! Submission of \"${ALNB}\" failed. Aborting."; echo; exit 1; }
 	echo
 	done
 
