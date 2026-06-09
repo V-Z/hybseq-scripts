@@ -17,13 +17,14 @@
 ################################################################################
 
 # Parse initial arguments
-while getopts "hva:" INITARGS; do
+while getopts "hva:i:" INITARGS; do
 	case "${INITARGS}" in
 		h) # Help and exit
 			echo "Usage options:"
 			echo -e "\t-h\tPrint this help and exit."
 			echo -e "\t-v\tPrint script version, author and license and exit."
 			echo -e "\t-a\tInput alignment in FASTA format to use for gene tree construction."
+			echo -e "\t-i\tCustom PATH to IQ-TREE 3 binary (if not provided, output of \"which iqtree3\" is used)."
 			echo
 			exit
 			;;
@@ -43,6 +44,18 @@ while getopts "hva:" INITARGS; do
 					echo "Error! You did not provide input alignment in FASTA format to use for gene tree construction (-a) \"${OPTARG}\"!"
 					echo
 					exit 1
+					fi
+			;;
+		i) # Path to custom IQ-TREE 3 binary
+			if [[ -x "${OPTARG}" ]]; then
+				IQTREE="$(realpath "${OPTARG}")"
+				echo "Custom path to 	IQ-TREE 3: ${IQTREE}"
+				echo
+				else
+					echo "You did not provide working path to IQ-TREE 3 binary (-i) \"${OPTARG}\"."
+					echo "Trying to find IQ-TREE in \$PATH..."
+					IQTREE="$(which iqtree3)"
+					echo
 					fi
 			;;
 		*)
@@ -97,7 +110,7 @@ if [[ -z "${ALN}" ]]; then
 
 # Construct gene trees with IQ-TREE from *.aln.fasta alignments
 echo "Constructing gene tree for ${ALN} with IQ-TREE at $(date)"
-/storage/pruhonice1-ibot/home/gunnera/bin/iqtree3 -s "${ALN}" -st DNA -nt 1 --runs 5 -m MFP+MERGE+I+R+P -cmax 100 -nstop 1000 -alrt 10000 -bb 10000 -bnni || { export CLEAN_SCRATCH='false'; operationfailed; }
+"${IQTREE}" -s "${ALN}" -st DNA -nt 1 --runs 5 -m MFP+MERGE+I+R+P -cmax 100 -nstop 1000 -alrt 10000 -bb 10000 -bnni || { export CLEAN_SCRATCH='false'; operationfailed; }
 # echo "Constructing gene tree for ${ALN} with RAxML-NG at $(date)"
 # raxml-ng --all --msa "${ALN}" --msa-format FASTA --data-type DNA --threads 1 --opt-model on --opt-branches on --model GTR+G+FO --bs-trees 1000 || { export CLEAN_SCRATCH='false'; operationfailed; }
 echo
