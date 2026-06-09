@@ -81,7 +81,7 @@ echo
 
 # Runing the task (trees from individual alignments)
 echo "Computing gene tree from ${ALNA}..."
-./hybseq_5_gene_trees_3_run.sh -a "${ALNA}" -i /storage/pruhonice1-ibot/home/gunnera/bin/iqtree3 | tee hybseq_gene_tree."${ALNA%.*}".log
+./hybseq_5_gene_trees_3_run.sh -a "${ALNA}" -i /storage/brno2/home/"${LOGNAME}"/bin/iqtree3 | tee hybseq_gene_tree."${ALNA%.*}".log
 
 ################################################################################
 # Input files are removed from temporal working directory
