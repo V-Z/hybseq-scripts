@@ -18,13 +18,14 @@ filtcol <- 0.4
 
 ## Packages
 # Install
-# NOTE: Required packages are ape, ips and scales. Packages codetools, cpp11, farver and RcppArmadillo are their dependencies which do not install automatically
-# install.packages(pkgs=c("ape", "codetools", "cpp11", "farver", "ips", "RcppArmadillo", "scales"), lib="rpackages", repos="https://mirrors.nic.cz/R/", dependencies="Imports") # Ensure to be in the directory with HybSeq scripts, e.g. '~/hybseq/'
+# NOTE: Required packages are ape, ips and scales. Packages lattice and rtools are their dependencies which do not install automatically
+# install.packages(pkgs = c("ape", "codetools", "digest", "fastmatch", "farver", "generics", "glue", "igraph", "ips", "lattice", "lifecycle", "magrittr", "Matrix","nlme", "phangorn", "pkgconfig", "plyr", "quadprog", "R6", "Rcpp", "RColorBrewer", "rlang", "scales"), lib = "rpackages", repos = "https://cloud.r-project.org/", dependencies = "Imports")
 # Load
 library(package=ape, lib.loc="rpackages")
 library(package=codetools, lib.loc="rpackages") # Required by ips, does not load automatically
-library(package=farver, lib.loc="rpackages") # Required by scales, does not load automatically
 library(package=ips, lib.loc="rpackages")
+library(package=farver, lib.loc="rpackages") # Required by scales, does not load automatically
+library(package=RColorBrewer, lib.loc="rpackages") # Required by scales, does not load automatically
 library(package=scales, lib.loc="rpackages")
 
 ## File names

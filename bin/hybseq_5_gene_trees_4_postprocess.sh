@@ -45,11 +45,11 @@ echo "Maximum-likelihood trees"
 echo
 echo "Creating lists of trees"
 echo "List of introns"
-find . -name "*.treefile" | sort | grep introns > trees_ml_list_introns.txt || operationfailed
+find . -name "*.treefile" | sort | grep intron > trees_ml_list_introns.txt || operationfailed
 echo "List of supercontigs"
 find . -name "*.treefile" | sort | grep supercontig > trees_ml_list_supercontig.txt || operationfailed
 echo "List of exons"
-find . -name "*.treefile" | sort | grep -v "introns\|supercontig" > trees_ml_list_exons.txt || operationfailed
+find . -name "*.treefile" | sort | grep -v "intron\|supercontig" > trees_ml_list_exons.txt || operationfailed
 echo "Extracting trees"
 echo "Extracting introns"
 while read -r T; do
@@ -77,11 +77,11 @@ echo "Consensus trees"
 echo
 echo "Creating lists of trees"
 echo "List of introns"
-find . -name "*.contree" | sort | grep introns > trees_cons_list_introns.txt || operationfailed
+find . -name "*.contree" | sort | grep intron > trees_cons_list_introns.txt || operationfailed
 echo "List of supercontigs"
 find . -name "*.contree" | sort | grep supercontig > trees_cons_list_supercontig.txt || operationfailed
 echo "List of exons"
-find . -name "*.contree" | sort | grep -v "introns\|supercontig" > trees_cons_list_exons.txt || operationfailed
+find . -name "*.contree" | sort | grep -v "intron\|supercontig" > trees_cons_list_exons.txt || operationfailed
 echo "Extracting trees"
 echo "Extracting introns"
 while read -r T; do
@@ -114,7 +114,7 @@ echo "Sorting into subdirectories"
 echo "Making directories"
 mkdir exons introns supercontigs || operationfailed
 echo "Moving introns"
-find . -maxdepth 1 -type f -name "*introns*" -exec mv '{}' introns/ \; || operationfailed
+find . -maxdepth 1 -type f -name "*intron*" -exec mv '{}' introns/ \; || operationfailed
 echo "Moving supercontigs"
 find . -maxdepth 1 -type f -name "*supercontig*" -exec mv '{}' supercontigs/ \; || operationfailed
 echo "Moving exons"

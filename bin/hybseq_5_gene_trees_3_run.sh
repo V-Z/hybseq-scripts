@@ -78,7 +78,7 @@ function toolcheck {
 # Checking if all required parameters are provided
 ################################################################################
 
-toolcheck iqtree2
+# toolcheck iqtree3
 # toolcheck raxml-ng
 
 # Checking if all required variables are provided
@@ -97,7 +97,7 @@ if [[ -z "${ALN}" ]]; then
 
 # Construct gene trees with IQ-TREE from *.aln.fasta alignments
 echo "Constructing gene tree for ${ALN} with IQ-TREE at $(date)"
-iqtree2 -s "${ALN}" -st DNA -nt 1 --runs 5 -m MFP+MERGE+I+R+P -cmax 100 -nstop 1000 -alrt 10000 -bb 10000 -bnni || { export CLEAN_SCRATCH='false'; operationfailed; }
+/storage/pruhonice1-ibot/home/gunnera/bin/iqtree3 -s "${ALN}" -st DNA -nt 1 --runs 5 -m MFP+MERGE+I+R+P -cmax 100 -nstop 1000 -alrt 10000 -bb 10000 -bnni || { export CLEAN_SCRATCH='false'; operationfailed; }
 # echo "Constructing gene tree for ${ALN} with RAxML-NG at $(date)"
 # raxml-ng --all --msa "${ALN}" --msa-format FASTA --data-type DNA --threads 1 --opt-model on --opt-branches on --model GTR+G+FO --bs-trees 1000 || { export CLEAN_SCRATCH='false'; operationfailed; }
 echo

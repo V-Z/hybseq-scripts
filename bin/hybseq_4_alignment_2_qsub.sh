@@ -48,7 +48,7 @@ if [[ -z "${DATADIR}" ]]; then
 # Required modules
 echo "Loading modules"
 module add mafft/7.520-gcc-10.2.1-hvrjqrq || exit 1 # mafft
-module add r/4.1.3-gcc-10.2.1-6xt26dl || exit 1 # R (ape, ips, scales)
+module add r/4.5.1-gcc-10.2.1-zmneq6c || exit 1 # R (ape, ips, scales)
 echo
 
 ################################################################################
@@ -67,7 +67,7 @@ echo "Copying..."
 echo "HybSeq data - ${WORKDIR}"
 cp -a "${WORKDIR}"/{bin/hybseq_4_alignment_3_run.r,rpackages} "${SCRATCHDIR}"/ || exit 1
 echo "Data to process - ${DATADIR}/${ALNF}"
-cp "${DATADIR}"/"${ALNF}" "${SCRATCHDIR}"/ || exit 1
+cp "${DATADIR}"/"${ALNS}" "${SCRATCHDIR}"/ || exit 1
 echo
 
 ################################################################################
@@ -84,7 +84,7 @@ R CMD BATCH --no-save --no-restore "--args ${ALNF} ${ALNF%.*}.aln.fasta ${ALNF%.
 # NOTE On another clusters than Czech MetaCentrum ensure that SCRATCH is the variable for temporal directory - if not, edit following code accordingly
 ################################################################################
 
-rm "${ALNF}" hybseq_4_alignment_3_run.r || { export CLEAN_SCRATCH='false'; exit 1; }
+rm -rf "${ALNF}" hybseq_4_alignment_3_run.r rpackages || { export CLEAN_SCRATCH='false'; exit 1; }
 echo
 
 # Copy results back to storage

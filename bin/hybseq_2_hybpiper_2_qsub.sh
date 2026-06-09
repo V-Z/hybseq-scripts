@@ -98,8 +98,8 @@ echo
 
 # Copy results back to storage
 echo "Copying results back to ${DATADIR}"
-cp -a "${SCRATCHDIR}"/"${SAMPLE}" "${DATADIR}"/ || export CLEAN_SCRATCH='false'
-cp "${SCRATCHDIR}"/hybseq_hybpiper."${SAMPLE}".log "${DATADIR}"/"${SAMPLE}"/ || export CLEAN_SCRATCH='false'
+cp -a "${SCRATCHDIR}"/"${SAMPLE}".tar.gz "${DATADIR}"/ || export CLEAN_SCRATCH='false'
+cp "${SCRATCHDIR}"/hybseq_hybpiper."${SAMPLE}".log "${DATADIR}"/ || export CLEAN_SCRATCH='false'
 echo
 
 # After everything is done, it's possible to move report files into their directories by 'while read L; do mv HybPiper."$L".[eo]* "$L"/; done < samples_list.txt' in DATADIR

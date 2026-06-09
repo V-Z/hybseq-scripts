@@ -64,6 +64,15 @@ while getopts "hvp:s:" INITARGS; do
 		esac
 	done
 
+# Exit on error
+function operationfailed {
+	echo "Error! Operation failed!"
+	echo
+	echo "See previous message(s) to be able to trace the problem."
+	echo
+	exit 1
+	}
+
 ################################################################################
 # The calculation
 ################################################################################
@@ -73,7 +82,7 @@ function alignstats {
 	# Number of sites with 1, 2, 3 or 4 observed bases
 	echo "Initializing files with statistics"
 	printf "\t\t\tNumbers of sites with 1, 2, 3 or 4 observed bases\n" > "$1" || operationfailed
-	printf "Alignment\tNumber of sequences\tNumber of sites\t1\t2\t3\t4\tNumber of potentially-informative sites\n" >> "$1" || operationfailed
+	printf "Alignment\tNumber of sequences\tNumber of sites\t1\t2\t3\t4\tNumber of potentially informative sites\n" >> "$1" || operationfailed
 	echo
 	for L in *.log; do
 		echo "Processing ${L%.*}"
@@ -115,11 +124,11 @@ echo
 # Inserting trees into tree lists
 echo "Creating lists of trees"
 echo "List of introns"
-find . -name "*.nwk" | sort | grep introns > trees_list_introns.txt || operationfailed
+find . -name "*.nwk" | sort | grep intron > trees_list_introns.txt || operationfailed
 echo "List of supercontigs"
 find . -name "*.nwk" | sort | grep supercontig > trees_list_supercontig.txt || operationfailed
 echo "List of exons"
-find . -name "*.nwk" | sort | grep -v "introns\|supercontig" > trees_list_exons.txt || operationfailed
+find . -name "*.nwk" | sort | grep -v "intron\|supercontig" > trees_list_exons.txt || operationfailed
 echo "Extracting trees"
 echo "Extracting introns"
 while read -r T; do
@@ -151,7 +160,7 @@ echo "Sorting into subdirectories"
 echo "Making directories"
 mkdir exons introns supercontigs || operationfailed
 echo "Moving introns"
-find . -maxdepth 1 -type f -name "*introns*" -exec mv '{}' introns/ \; || operationfailed
+find . -maxdepth 1 -type f -name "*intron*" -exec mv '{}' introns/ \; || operationfailed
 echo "Moving supercontigs"
 find . -maxdepth 1 -type f -name "*supercontig*" -exec mv '{}' supercontigs/ \; || operationfailed
 echo "Moving exons"

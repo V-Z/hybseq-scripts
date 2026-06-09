@@ -103,40 +103,41 @@ if [[ -z "${SAMPLES}" ]]; then
 ################################################################################
 # NOTE On Czech MetaCentrum, HybPiper is installed as Apptainer (Singularity) container, see https://docs.metacentrum.cz/software/containers/
 # Container starts its own shell, so that it is loaded right before usage of HybPiper - see code below
-# run_in_os loads HybPiper/HybPiper-2.1.5.sif container and '<<END' marks "here document" containing block of HybPiper (within container) commands (ends with 'END')
+# run_in_os loads HybPiper/HybPiper-2.3.4.sif container and '<<END' marks "here document" containing block of HybPiper (within container) commands (ends with 'END')
 # NOTE If HybPiper is installed differently on your cluster, edit code below or use "module add/load" according to documentation of your cluster
 # NOTE Possible edit HybPiper parameters here, see https://github.com/mossmatters/HybPiper/wiki/Full-pipeline-parameters
 ################################################################################
 
-run_in_os  HybPiper/HybPiper-2.1.5.sif <<END
-module add mambaforge
-mamba activate /conda/envs/hybpiper-2.1.5
+run_in_os  HybPiper/HybPiper-2.3.4.sif <<END
+mamba activate /conda/envs/hybpiper-2.3.4
 echo "Summary statistics"
 echo
-hybpiper stats --targetfile_dna "${BAITFILE}" gene "${SAMPLES}"
+hybpiper stats -t_dna "${BAITFILE}" --seq_lengths_filename seq_lengths --stats_filename hybpiper_stats --cpu 1 --gene_read_counts_filename gene_read_counts --heatmap_filename gene_read_counts_all_heatmap --heatmap_filetype png gene "${SAMPLES}"
+hybpiper stats -t_dna "${BAITFILE}" --seq_lengths_filename seq_lengths_supercontig --stats_filename hybpiper_stats_supercontig --cpu 1 --gene_read_counts_filename gene_read_counts_supercontig --heatmap_filename gene_read_counts_all_heatmap_supercontig --heatmap_filetype png supercontig "${SAMPLES}"
 echo
 echo "Plotting gene recovery heatmap"
 echo
-hybpiper recovery_heatmap seq_lengths.tsv
+hybpiper recovery_heatmap seq_lengths.tsv --heatmap_filename recovery_heatmap --heatmap_filetype png
+hybpiper recovery_heatmap seq_lengths_supercontig.tsv --heatmap_filename recovery_heatmap_supercontig --heatmap_filetype png
 echo
 # Fetch the sequences recovered from the same gene for many samples and generates an unaligned multi-FASTA file for each gene
 echo "Retrieving sequences"
 echo
 echo "Exons"
 echo
-hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names "${SAMPLES}" dna
+hybpiper retrieve_sequences -t_dna "${BAITFILE}" --sample_names "${SAMPLES}" --fasta_dir exons --skip_chimeric_genes --cpu 1 dna
 echo
 echo "Introns"
 echo
-hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names "${SAMPLES}" intron
+hybpiper retrieve_sequences -t_dna "${BAITFILE}" --sample_names "${SAMPLES}" --fasta_dir introns --skip_chimeric_genes --cpu 1 intron
 echo
 echo "Supercontigs"
 echo
-hybpiper retrieve_sequences --targetfile_dna "${BAITFILE}" --sample_names "${SAMPLES}" supercontig
+hybpiper retrieve_sequences -t_dna "${BAITFILE}" --sample_names "${SAMPLES}" --fasta_dir supercontigs --skip_chimeric_genes --cpu 1 supercontig
 echo
 echo "Investigating paralogs"
 echo
-hybpiper paralog_retriever --targetfile_dna "${BAITFILE}" --paralogs_list_threshold_percentage 0.1 "${SAMPLES}"
+hybpiper paralog_retriever -t_dna "${BAITFILE}" --paralog_report_filename paralog_report --paralogs_list_threshold_percentage 0.1 --heatmap_filename paralog_heatmap --heatmap_filetype png "${SAMPLES}"
 echo
 END
 
@@ -147,16 +148,25 @@ END
 
 # Removing ".dedup*" from accession names
 echo "Removing \".dedup*\" from accession names"
-sed -i 's/\.dedup.*$//g' ./*.{FNA,fasta}
+sed -i 's/\.dedup.*$//g' ./exons/*.FNA ./introns/*.fasta ./supercontigs/*.fasta
 echo
 echo "Removing \".dedup*\" from statistics"
 sed -i 's/\.dedup//g' ./*.tsv
 echo
 
+# Remove contigs with duplicated entries (multiple genes for a probe)
+for F in exons/*.FNA introns/*.fasta supercontigs/*.fasta; do
+	[ -f "${F}" ] || continue
+	if awk '/^>/ { count[$0]++ } END { for (i in count) if (count[i] > 1) exit 0; exit 1 }' "${F}"; then
+		{ rm "${F}" && echo "Removed ${F} containing duplicates."; } || echo "Removal of ${F} failed!"
+		fi
+	done
+
 # Calculating number of occurrences of each sample in all contigs
 echo "Calculating number of occurrences of each sample in all contigs..."
 echo
 echo "Exons"
+cd exons/
 echo
 echo "Results will be in file 'presence_of_samples_in_contigs_exons.tsv'."
 echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.FNA" | wc -l)" > presence_of_samples_in_contigs_exons.tsv || operationfailed
@@ -164,43 +174,56 @@ echo >> presence_of_samples_in_contigs_exons.tsv || operationfailed
 echo -e "Sample\tNumber" >> presence_of_samples_in_contigs_exons.tsv || operationfailed
 while read -r SAMPLE; do
 	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.FNA | wc -l)" >> presence_of_samples_in_contigs_exons.tsv || operationfailed
-	done < <(sed 's/\.dedup$//' "${SAMPLES}" | sort)
+	done < <(sed 's/\.dedup$//' ../"${SAMPLES}" | sort)
 echo >> presence_of_samples_in_contigs_exons.tsv || operationfailed
+mv presence_of_samples_in_contigs_exons.tsv ../
 echo
 echo "Introns"
+cd ../introns/
+echo
+echo "Rename the contigs to contain \"intron\" string"
+for F in ./*.fasta; do mv "${F}" "${F%.fasta}_intron.fasta"; done
 echo
 echo "Results will be in file 'presence_of_samples_in_contigs_introns.tsv'."
-echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*_introns.fasta" | wc -l)" > presence_of_samples_in_contigs_introns.tsv || operationfailed
+echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.fasta" | wc -l)" > presence_of_samples_in_contigs_introns.tsv || operationfailed
 echo >> presence_of_samples_in_contigs_introns.tsv || operationfailed
 echo -e "Sample\tNumber" >> presence_of_samples_in_contigs_introns.tsv || operationfailed
 while read -r SAMPLE; do
-	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*_introns.fasta | wc -l)" >> presence_of_samples_in_contigs_introns.tsv || operationfailed
-	done < <(sed 's/\.dedup$//' "${SAMPLES}" | sort)
+	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta | wc -l)" >> presence_of_samples_in_contigs_introns.tsv || operationfailed
+	done < <(sed 's/\.dedup$//' ../"${SAMPLES}" | sort)
 echo >> presence_of_samples_in_contigs_introns.tsv || operationfailed
+mv presence_of_samples_in_contigs_introns.tsv ../
 echo
 echo "Supercontigs"
+cd ../supercontigs/
+echo
+echo "Rename the contigs to contain \"supercontig\" string"
+for F in ./*.fasta; do mv "${F}" "${F%.fasta}_supercontig.fasta"; done
 echo
 echo "Results will be in file 'presence_of_samples_in_contigs_supercontigs.tsv'."
-echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*_supercontig.fasta" | wc -l)" > presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
+echo -e "Total number of contigs:\t$(find . -maxdepth 1 -name "*.fasta" | wc -l)" > presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
 echo >> presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
 echo -e "Sample\tNumber" >> presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
 while read -r SAMPLE; do
-	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*_supercontig.fasta | wc -l)" >> presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
-	done < <(sed 's/\.dedup$//' "${SAMPLES}" | sort)
+	echo -e "${SAMPLE}\t$(grep "^>${SAMPLE}$" ./*.fasta | wc -l)" >> presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
+	done < <(sed 's/\.dedup$//' ../"${SAMPLES}" | sort)
 echo >> presence_of_samples_in_contigs_supercontigs.tsv || operationfailed
+mv presence_of_samples_in_contigs_supercontigs.tsv ../
 echo
+cd ../
 echo "Note that for every probe sequence, three contigs are produced (for respective exon, intron and supercontig). Since HybPiper 2, number of introns is smaller."
 echo
 
 echo "Transposition of sequence lengths and paralogs"
 perl -F'\t' -lane 'push @rows, [@F]; END { for $row (0..$#{$rows[0]}) { print join("\t", map {$_->[$row] // ""} @rows) } }' seq_lengths.tsv > seq_lengths_transp.tsv
+perl -F'\t' -lane 'push @rows, [@F]; END { for $row (0..$#{$rows[0]}) { print join("\t", map {$_->[$row] // ""} @rows) } }' seq_lengths_supercontig.tsv > seq_lengths_supercontig_transp.tsv
 perl -F'\t' -lane 'push @rows, [@F]; END { for $row (0..$#{$rows[0]}) { print join("\t", map {$_->[$row] // ""} @rows) } }' paralog_report.tsv > paralog_report_transp.tsv
 sed -i 's/^Species[[:blank:]]/Gene\/Species\t/' paralog_report_transp.tsv seq_lengths_transp.tsv
 echo
 
 # Removing input data
 echo "Removing input directories and unneeded files"
-rm -rf hybseq_3_hybpiper_postprocess_2_run.sh ref
+rm -rf hybseq_3_hybpiper_postprocess_2_run.sh ref ./*.dedup.tar.gz fontconfig matplotlib
 echo
 
 exit
