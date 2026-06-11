@@ -5,10 +5,10 @@ Required [R](https://www.r-project.org/) packages are `ape`, `ips` and `scales` 
 Within `R` command line started in `hybseq` directory use e.g. command
 
 ```R
-install.packages(pkgs = c("ape", "codetools", "digest", "fastmatch", "farver",
-  "generics", "glue", "igraph", "ips", "lattice", "lifecycle", "magrittr",
-  "Matrix","nlme", "phangorn", "pkgconfig", "plyr", "quadprog", "R6", "Rcpp",
-  "RColorBrewer", "rlang", "scales"), lib = "rpackages",
+install.packages(pkgs = c("ape", "codetools", "cpp11", "digest", "fastmatch",
+  "farver", "generics", "glue", "igraph", "ips", "lattice", "lifecycle",
+  "magrittr", "Matrix","nlme", "phangorn", "pkgconfig", "plyr", "quadprog",
+  "R6", "Rcpp", "RColorBrewer", "rlang", "scales"), lib = "rpackages",
   repos = "https://cloud.r-project.org/", dependencies = "Imports")
 ```
 
